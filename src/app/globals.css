@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* ─── Brand colours ─────────────────────────── */
+  --color-yellow:       #FFC512;
+  --color-yellow-hover: #e6b010;
+  --color-dark:         #222222;
+  --color-dark-2:       #2d2d2d;
+  --color-dark-3:       #1a1a1a;
+  --color-white:        #FFFFFF;
+  --color-gray-light:   #f5f5f5;
+  --color-gray-mid:     #999999;
+  --color-gray-dark:    #555555;
+
+  /* ─── Typography ────────────────────────────── */
+  --font-sans:    var(--font-inter, 'Inter', sans-serif);
+  --font-display: var(--font-sora, 'Sora', sans-serif);
+
+  /* ─── Background / foreground ───────────────── */
+  --color-background: #222222;
+  --color-foreground: #FFFFFF;
+}
+
+/* ══════════════════════════════════════════════════
+   BASE
+══════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: #ffffff;
+  color: #222222;
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ══════════════════════════════════════════════════
+   FONT HELPERS
+══════════════════════════════════════════════════ */
+.font-display {
+  font-family: var(--font-sora, 'Sora', sans-serif);
+}
+
+/* ══════════════════════════════════════════════════
+   HERO TYPOGRAPHY
+══════════════════════════════════════════════════ */
+.hero-headline {
+  font-family: var(--font-sora, 'Sora', sans-serif);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-size: clamp(36px, 10vw, 56px);
+}
+@media (min-width: 768px) {
+  .hero-headline { font-size: clamp(48px, 6vw, 96px); }
+}
+
+.hero-headline-accent {
+  font-size: clamp(44px, 12vw, 68px);
+  display: block;
+}
+@media (min-width: 768px) {
+  .hero-headline-accent { font-size: clamp(60px, 7.5vw, 116px); }
+}
+
+/* ══════════════════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════════════════ */
+
+/* Hero entrance — fires on load, no observer needed */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Scroll-reveal keyframes (triggered by .visible class) */
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes revealLeft {
+  from { opacity: 0; transform: translateX(-48px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+@keyframes revealRight {
+  from { opacity: 0; transform: translateX(48px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+@keyframes revealScale {
+  from { opacity: 0; transform: scale(0.92) translateY(20px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+/* Testimonial slide transitions */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+/* ══════════════════════════════════════════════════
+   HERO ENTRANCE  (CSS-only, fires immediately)
+══════════════════════════════════════════════════ */
+.hero-enter {
+  opacity: 0;
+  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-enter-1  { animation-delay: 80ms;  }
+.hero-enter-2  { animation-delay: 220ms; }
+.hero-enter-3  { animation-delay: 380ms; }
+.hero-enter-4  { animation-delay: 560ms; }
+.hero-enter-5  { animation-delay: 720ms; }
+.hero-enter-6  { animation-delay: 880ms; }
+.hero-enter-7  { animation-delay: 1020ms;}
+
+/* ══════════════════════════════════════════════════
+   SCROLL REVEAL  (toggled by IntersectionObserver)
+   All variants share initial invisible state.
+   Adding .visible triggers the keyframe.
+══════════════════════════════════════════════════ */
+
+/* Base — used for backwards compat with existing code */
+.reveal {
+  opacity: 0;
+}
+.reveal.visible {
+  animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Directional variants */
+.reveal-left {
+  opacity: 0;
+}
+.reveal-left.visible {
+  animation: revealLeft 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reveal-right {
+  opacity: 0;
+}
+.reveal-right.visible {
+  animation: revealRight 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reveal-scale {
+  opacity: 0;
+}
+.reveal-scale.visible {
+  animation: revealScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Stagger delays via data-delay attribute ──── */
+[data-delay="0"].visible { animation-delay: 0ms;   }
+[data-delay="1"].visible { animation-delay: 80ms;  }
+[data-delay="2"].visible { animation-delay: 160ms; }
+[data-delay="3"].visible { animation-delay: 240ms; }
+[data-delay="4"].visible { animation-delay: 320ms; }
+[data-delay="5"].visible { animation-delay: 400ms; }
+[data-delay="6"].visible { animation-delay: 480ms; }
+
+/* ══════════════════════════════════════════════════
+   TESTIMONIAL SLIDE
+══════════════════════════════════════════════════ */
+.testimonial-slide-left {
+  animation: slideInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.testimonial-slide-right {
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ══════════════════════════════════════════════════
+   HONEYCOMB BACKGROUND
+══════════════════════════════════════════════════ */
+.bg-honeycomb {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34zm0-92L0 -26V8L28 24l28-16V-8z' fill='none' stroke='%23FFC512' stroke-width='1' stroke-opacity='0.08'/%3E%3C/svg%3E");
+}
+
+/* ══════════════════════════════════════════════════
+   YELLOW UNDERLINE ACCENT
+══════════════════════════════════════════════════ */
+.yellow-underline {
+  position: relative;
+  display: inline-block;
+}
+.yellow-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: #FFC512;
+  border-radius: 2px;
+}
+
+/* ══════════════════════════════════════════════════
+   CUSTOM SCROLLBAR
+══════════════════════════════════════════════════ */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #222222; }
+::-webkit-scrollbar-thumb { background: #FFC512; border-radius: 3px; }
+
+/* ══════════════════════════════════════════════════
+   REDUCED MOTION  — respect user OS preference
+   Disables all animations and transitions.
+══════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay:    0ms    !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero-enter,
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
