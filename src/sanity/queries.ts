@@ -1,5 +1,5 @@
 import { client } from './client'
-import type { BlogPost, ServiceDoc, CaseStudyDoc, PageDoc, Category } from './types'
+import type { BlogPost, ServiceDoc, CaseStudyDoc, PageDoc, Category, LocationPageDoc, AreasWeServeDoc } from './types'
 
 // ── SEO fragment (reused in every query) ──────────────────────────────────────
 
@@ -148,5 +148,38 @@ export async function getPage(slug: string): Promise<PageDoc | null> {
       ${SEO_FRAGMENT}
     }`,
     { slug }
+  )
+}
+
+// ── Location Pages ────────────────────────────────────────────────────────────
+
+export async function getAllLocationSlugs(): Promise<string[]> {
+  const results: { slug: { current: string } }[] = await client.fetch(
+    `*[_type == "locationPage"] { slug }`
+  )
+  return results.map((r) => r.slug.current)
+}
+
+export async function getLocationPage(slug: string): Promise<LocationPageDoc | null> {
+  return client.fetch(
+    `*[_type == "locationPage" && slug.current == $slug][0] {
+      _id, _type, cityName, slug, heroHeadline, heroSubtext, servicesOffered, body, faqItems,
+      ${SEO_FRAGMENT}
+    }`,
+    { slug }
+  )
+}
+
+// ── Areas We Serve (singleton) ────────────────────────────────────────────────
+
+export async function getAreasWeServe(): Promise<AreasWeServeDoc | null> {
+  return client.fetch(
+    `*[_type == "areasWeServe" && _id == "areasWeServe"][0] {
+      _id, _type, sectionHeading, sectionSubtext,
+      areas[] {
+        cityName, shortDescription,
+        locationPage-> { _id, cityName, slug { current } }
+      }
+    }`
   )
 }

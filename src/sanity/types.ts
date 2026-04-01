@@ -105,3 +105,43 @@ export interface PageDoc {
   body?: unknown[]
   seo?: SeoFields
 }
+
+// ── Location Page ─────────────────────────────────────────────────────────────
+
+export interface FaqItem {
+  question: string
+  answer?: string
+}
+
+export interface LocationPageDoc {
+  _id: string
+  _type: 'locationPage'
+  cityName: string
+  slug: SanitySlug
+  heroHeadline?: string
+  heroSubtext?: string
+  servicesOffered?: string[]
+  body?: unknown[]
+  faqItems?: FaqItem[]
+  seo?: SeoFields
+}
+
+// ── Areas We Serve ────────────────────────────────────────────────────────────
+
+export interface AreaItem {
+  cityName: string
+  shortDescription?: string
+  locationPage?: {
+    _id: string
+    cityName: string
+    slug: { current: string }
+  }
+}
+
+export interface AreasWeServeDoc {
+  _id: string
+  _type: 'areasWeServe'
+  sectionHeading?: string
+  sectionSubtext?: string
+  areas?: AreaItem[]
+}

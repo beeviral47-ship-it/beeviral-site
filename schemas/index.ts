@@ -5,5 +5,7 @@ import { page } from './page'
 import { category } from './category'
 import { seo } from './seo'
 import { blockContent } from './blockContent'
+import { locationPage } from './locationPage'
+import { areasWeServe } from './areasWeServe'
 
-export const schemaTypes = [blog, service, caseStudy, page, category, seo, blockContent]
+export const schemaTypes = [blog, service, caseStudy, page, category, seo, blockContent, locationPage, areasWeServe]
