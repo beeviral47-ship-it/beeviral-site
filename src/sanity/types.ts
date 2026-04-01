@@ -13,11 +13,17 @@ export interface SanityImageAsset {
 }
 
 export interface SeoFields {
+  // Search
   metaTitle?: string
   metaDescription?: string
-  ogImage?: SanityImageAsset
   canonicalUrl?: string
   noindex?: boolean
+  // Open Graph
+  ogTitle?: string
+  ogDescription?: string
+  ogImage?: SanityImageAsset
+  // Advanced
+  schemaType?: string
   structuredData?: string
 }
 
