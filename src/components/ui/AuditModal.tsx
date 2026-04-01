@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { X, ArrowRight, CheckCircle2, Loader2 } from 'lucide-react'
+import { trackFormSubmit } from '@/lib/analytics'
 
 const packageOptions = [
   'Starter — £120/mo',
@@ -82,6 +83,7 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
         const msg = json.error ? `[${json.step ?? 'error'}] ${json.error}` : 'Failed'
         throw new Error(msg)
       }
+      trackFormSubmit(isPackageMode ? 'book_package' : 'audit_request', 'audit_modal')
       setSuccess(true)
     } catch {
       setError('Something went wrong. Please call us on 07723 079 176.')

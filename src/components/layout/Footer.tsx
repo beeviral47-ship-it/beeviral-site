@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { navLinks, serviceLinks, locations, socials } from '@/lib/data'
 import { InstagramIcon, FacebookIcon } from '@/components/ui/SocialIcons'
 import { useStaggerReveal } from '@/hooks/useScrollReveal'
+import { trackLinkClick } from '@/lib/analytics'
 
 const socialIcons: Record<string, React.ReactNode> = {
   Instagram: <InstagramIcon size={18} />,
@@ -122,9 +123,21 @@ export default function Footer() {
               <li>
                 <a
                   href="tel:07723079176"
+                  onClick={() => trackLinkClick('tel:07723079176', 'Phone Call')}
                   className="text-white/60 hover:text-[#FFC512] text-sm transition-colors font-normal"
                 >
                   07723 079 176
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/447723079176"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackLinkClick('https://wa.me/447723079176', 'WhatsApp')}
+                  className="text-white/60 hover:text-[#FFC512] text-sm transition-colors font-normal"
+                >
+                  WhatsApp Us
                 </a>
               </li>
               <li className="text-white/60 text-sm font-normal">South Yorkshire, UK</li>

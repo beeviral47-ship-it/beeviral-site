@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import ContactForm from '@/components/contact/ContactForm'
-import { MapPin, Mail, Phone, Clock } from 'lucide-react'
+import { TrackedPhoneLink, TrackedWhatsAppLink } from '@/components/contact/TrackedContactLinks'
+import { MapPin, Mail, Phone, MessageCircle, Clock } from 'lucide-react'
 import { InstagramIcon, FacebookIcon } from '@/components/ui/SocialIcons'
 
 export const metadata: Metadata = {
@@ -11,28 +12,39 @@ export const metadata: Metadata = {
 
 const contactDetails = [
   {
-    icon: <Mail size={20} />,
-    label: 'Email',
-    value: 'info@beeviral.co.uk',
-    href:  'mailto:info@beeviral.co.uk',
+    icon:    <Mail size={20} />,
+    label:   'Email',
+    value:   'info@beeviral.co.uk',
+    href:    'mailto:info@beeviral.co.uk',
+    tracked: false,
   },
   {
-    icon: <Phone size={20} />,
-    label: 'Phone',
-    value: '07723 079 176',
-    href:  'tel:07723079176',
+    icon:    <Phone size={20} />,
+    label:   'Phone',
+    value:   '07723 079 176',
+    href:    'tel:07723079176',
+    tracked: 'phone' as const,
   },
   {
-    icon: <MapPin size={20} />,
-    label: 'Area',
-    value: 'Wath · Rotherham · Barnsley · South Yorkshire',
-    href:  null,
+    icon:    <MessageCircle size={20} />,
+    label:   'WhatsApp',
+    value:   'Message us on WhatsApp',
+    href:    'https://wa.me/447723079176',
+    tracked: 'whatsapp' as const,
   },
   {
-    icon: <Clock size={20} />,
-    label: 'Office Hours',
-    value: 'Mon – Fri, 9am – 5:30pm',
-    href:  null,
+    icon:    <MapPin size={20} />,
+    label:   'Area',
+    value:   'Wath · Rotherham · Barnsley · South Yorkshire',
+    href:    null,
+    tracked: false,
+  },
+  {
+    icon:    <Clock size={20} />,
+    label:   'Office Hours',
+    value:   'Mon – Fri, 9am – 5:30pm',
+    href:    null,
+    tracked: false,
   },
 ]
 
@@ -94,7 +106,11 @@ export default function ContactPage() {
                       <p className="text-white/40 text-xs font-medium uppercase tracking-widest mb-1">
                         {item.label}
                       </p>
-                      {item.href ? (
+                      {item.tracked === 'phone' ? (
+                        <TrackedPhoneLink />
+                      ) : item.tracked === 'whatsapp' ? (
+                        <TrackedWhatsAppLink />
+                      ) : item.href ? (
                         <a
                           href={item.href}
                           className="text-white text-sm font-medium hover:text-[#FFC512] transition-colors"

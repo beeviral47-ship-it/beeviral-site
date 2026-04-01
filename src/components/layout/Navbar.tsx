@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { navLinks, serviceLinks } from '@/lib/data'
 import { useAuditModal } from '@/components/providers/AuditModalProvider'
+import { trackButtonClick } from '@/lib/analytics'
 
 export default function Navbar() {
   const [scrolled, setScrolled]             = useState(false)
@@ -169,7 +170,7 @@ export default function Navbar() {
             {/* CTA + hamburger */}
             <div className="flex items-center gap-4">
               <button
-                onClick={() => openAuditModal('service')}
+                onClick={() => { trackButtonClick('Get a Free Audit', 'navbar'); openAuditModal('service') }}
                 className="hidden lg:inline-flex items-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-sm tracking-wide px-5 py-2.5 rounded-md transition-all duration-200 hover:scale-105 active:scale-95"
               >
                 Get a Free Audit
@@ -265,7 +266,7 @@ export default function Navbar() {
 
           <div className="mt-8">
             <button
-              onClick={() => { openAuditModal('service'); setMenuOpen(false) }}
+              onClick={() => { trackButtonClick('Get a Free Audit', 'navbar_mobile'); openAuditModal('service'); setMenuOpen(false) }}
               className="inline-flex items-center justify-center w-full bg-[#FFC512] text-[#222222] font-semibold text-lg px-6 py-4 rounded-md hover:bg-[#e6b010] transition-colors tracking-wide"
             >
               Get a Free Audit
