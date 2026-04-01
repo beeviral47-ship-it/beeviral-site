@@ -24,7 +24,7 @@ export default function Footer() {
 
           {/* Brand column */}
           <div className="reveal" data-delay="0">
-            <Link href="/">
+            <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <Image
                 src="/images/logo-transparent.png"
                 alt="Bee Viral"

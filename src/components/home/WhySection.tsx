@@ -53,13 +53,25 @@ export default function WhySection() {
                 className="absolute top-0 right-0 w-24 h-24 bg-[#FFC512]"
                 style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
               />
-              <div className="absolute bottom-6 left-6 bg-[#FFC512] text-[#222222] font-semibold text-sm px-4 py-2 rounded-md tracking-wide">
+              {/* Since 2014 badge — desktop only (inside the card) */}
+              <div className="hidden lg:block absolute bottom-6 left-6 bg-[#FFC512] text-[#222222] font-semibold text-sm px-4 py-2 rounded-md tracking-wide">
                 Since 2014
               </div>
             </div>
 
-            {/* Floating stat card — centered on mobile, absolute on desktop */}
-            <div className="relative mt-4 mx-auto w-fit lg:mx-0 lg:absolute lg:mt-0 lg:-bottom-4 lg:right-0 bg-[#FFC512] text-[#222222] rounded-xl px-6 py-4 shadow-xl">
+            {/* Mobile-only: both badges side by side, visually anchored below the card */}
+            <div className="flex items-stretch justify-center gap-3 mt-4 lg:hidden">
+              <div className="flex items-center bg-[#FFC512] text-[#222222] font-semibold text-sm px-4 py-2.5 rounded-md tracking-wide shadow-lg">
+                Since 2014
+              </div>
+              <div className="bg-[#FFC512] text-[#222222] rounded-xl px-5 py-3 shadow-lg">
+                <div className="font-display text-2xl font-extrabold tracking-tight leading-none mb-0.5">10+</div>
+                <div className="text-[10px] font-medium uppercase tracking-widest opacity-70">Years in Business</div>
+              </div>
+            </div>
+
+            {/* Desktop-only: 10+ stat card, absolute-positioned overlapping bottom-right of card */}
+            <div className="hidden lg:block absolute -bottom-4 right-0 bg-[#FFC512] text-[#222222] rounded-xl px-6 py-4 shadow-xl">
               <div className="font-display text-3xl font-extrabold tracking-tight">10+</div>
               <div className="text-xs font-medium uppercase tracking-widest opacity-70">Years in Business</div>
             </div>

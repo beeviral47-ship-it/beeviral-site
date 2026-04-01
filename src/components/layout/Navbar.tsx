@@ -73,7 +73,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-20 lg:h-24">
 
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0 relative z-10">
+            <Link href="/" onClick={handleLinkClick} className="flex-shrink-0 relative z-10">
               <Image
                 src="/images/logo-transparent.png"
                 alt="Bee Viral"
