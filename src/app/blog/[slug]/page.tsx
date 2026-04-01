@@ -113,8 +113,8 @@ export default async function BlogPostPage({
   const post = await getBlogPost(slug)
   if (!post) notFound()
 
-  const coverUrl = post.coverImage
-    ? urlFor(post.coverImage).width(1600).height(700).url()
+  const coverUrl = post.featuredImage
+    ? urlFor(post.featuredImage).width(1600).height(700).url()
     : null
 
   return (
@@ -125,7 +125,7 @@ export default async function BlogPostPage({
         <div className="relative w-full h-64 sm:h-96 overflow-hidden">
           <Image
             src={coverUrl}
-            alt={post.coverImage?.alt ?? post.title}
+            alt={post.featuredImage?.alt ?? post.title}
             fill
             sizes="100vw"
             priority

@@ -4,74 +4,125 @@ export const blog = defineType({
   name: 'blog',
   title: 'Blog Post',
   type: 'document',
+  groups: [
+    { name: 'content',  title: 'Content',  default: true },
+    { name: 'meta',     title: 'Meta'                    },
+    { name: 'seo',      title: 'SEO'                     },
+  ],
   fields: [
+    // ── Status ─────────────────────────────────────────────────────────────
     defineField({
-      name: 'title',
+      name:  'status',
+      title: 'Status',
+      type:  'string',
+      group: 'meta',
+      options: {
+        list: [
+          { title: 'Draft',     value: 'draft'     },
+          { title: 'Published', value: 'published' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'draft',
+      validation: (Rule) => Rule.required(),
+    }),
+
+    // ── Core content ────────────────────────────────────────────────────────
+    defineField({
+      name:  'title',
       title: 'Title',
-      type: 'string',
+      type:  'string',
+      group: 'content',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
+      name:    'slug',
+      title:   'Slug',
+      type:    'slug',
+      group:   'content',
       options: { source: 'title', maxLength: 96 },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'author',
-      title: 'Author',
-      type: 'string',
-      initialValue: 'Bee Viral',
-    }),
-    defineField({
-      name: 'publishedAt',
-      title: 'Published At',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString(),
-    }),
-    defineField({
-      name: 'excerpt',
-      title: 'Excerpt',
-      type: 'text',
-      rows: 3,
-      description: 'Short summary shown on the blog listing page and in search results',
-    }),
-    defineField({
-      name: 'coverImage',
-      title: 'Cover Image',
-      type: 'image',
-      options: { hotspot: true },
+      name:         'featuredImage',
+      title:        'Featured Image',
+      type:         'image',
+      group:        'content',
+      options:      { hotspot: true },
+      description:  'Used on listing cards, social sharing, and as the OG image fallback.',
       fields: [
-        { name: 'alt', type: 'string', title: 'Alt Text' },
+        { name: 'alt', type: 'string', title: 'Alt Text', description: 'Describe the image for screen readers and SEO' },
       ],
     }),
     defineField({
-      name: 'body',
-      title: 'Body',
-      type: 'blockContent',
+      name:  'excerpt',
+      title: 'Excerpt',
+      type:  'text',
+      rows:  3,
+      group: 'content',
+      description: 'Short summary shown on listing cards and in search results (120–160 chars)',
     }),
     defineField({
-      name: 'seo',
+      name:  'body',
+      title: 'Body',
+      type:  'blockContent',
+      group: 'content',
+    }),
+
+    // ── Meta ────────────────────────────────────────────────────────────────
+    defineField({
+      name:         'author',
+      title:        'Author',
+      type:         'string',
+      group:        'meta',
+      initialValue: 'Bee Viral',
+    }),
+    defineField({
+      name:         'publishedAt',
+      title:        'Published At',
+      type:         'datetime',
+      group:        'meta',
+      initialValue: () => new Date().toISOString(),
+    }),
+    defineField({
+      name:  'categories',
+      title: 'Categories',
+      type:  'array',
+      group: 'meta',
+      of:    [{ type: 'reference', to: [{ type: 'category' }] }],
+      description: 'Assign one or more categories to this post',
+    }),
+
+    // ── SEO ─────────────────────────────────────────────────────────────────
+    defineField({
+      name:  'seo',
       title: 'SEO',
-      type: 'seo',
+      type:  'seo',
+      group: 'seo',
     }),
   ],
   preview: {
     select: {
-      title: 'title',
+      title:  'title',
+      status: 'status',
       author: 'author',
-      media: 'coverImage',
+      media:  'featuredImage',
     },
-    prepare({ title, author, media }) {
-      return { title, subtitle: `By ${author ?? 'Bee Viral'}`, media }
+    prepare({ title, status, author, media }) {
+      const badge = status === 'published' ? '✅' : '📝'
+      return { title: `${badge} ${title}`, subtitle: `By ${author ?? 'Bee Viral'}`, media }
     },
   },
   orderings: [
     {
       title: 'Published: Newest First',
-      name: 'publishedAtDesc',
-      by: [{ field: 'publishedAt', direction: 'desc' }],
+      name:  'publishedAtDesc',
+      by:    [{ field: 'publishedAt', direction: 'desc' }],
+    },
+    {
+      title: 'Status',
+      name:  'statusAsc',
+      by:    [{ field: 'status', direction: 'asc' }],
     },
   ],
 })

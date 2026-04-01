@@ -4,55 +4,89 @@ export const caseStudy = defineType({
   name: 'caseStudy',
   title: 'Case Study',
   type: 'document',
+  groups: [
+    { name: 'content',  title: 'Content',  default: true },
+    { name: 'meta',     title: 'Meta'                    },
+    { name: 'seo',      title: 'SEO'                     },
+  ],
   fields: [
+    // ── Status ─────────────────────────────────────────────────────────────
     defineField({
-      name: 'title',
+      name:  'status',
+      title: 'Status',
+      type:  'string',
+      group: 'meta',
+      options: {
+        list: [
+          { title: 'Draft',     value: 'draft'     },
+          { title: 'Published', value: 'published' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'draft',
+      validation: (Rule) => Rule.required(),
+    }),
+
+    // ── Core content ────────────────────────────────────────────────────────
+    defineField({
+      name:  'title',
       title: 'Title',
-      type: 'string',
+      type:  'string',
+      group: 'content',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
+      name:    'slug',
+      title:   'Slug',
+      type:    'slug',
+      group:   'content',
       options: { source: 'title', maxLength: 96 },
       validation: (Rule) => Rule.required(),
     }),
-    defineField({ name: 'client',   title: 'Client Name', type: 'string' }),
-    defineField({ name: 'industry', title: 'Industry',    type: 'string' }),
-    defineField({ name: 'location', title: 'Location',    type: 'string' }),
     defineField({
-      name: 'tagline',
-      title: 'Tagline',
-      type: 'string',
+      name:        'featuredImage',
+      title:       'Featured Image',
+      type:        'image',
+      group:       'content',
+      options:     { hotspot: true },
+      description: 'Used on listing cards, social sharing, and as the OG image fallback.',
+      fields: [
+        { name: 'alt', type: 'string', title: 'Alt Text', description: 'Describe the image for screen readers and SEO' },
+      ],
+    }),
+    defineField({ name: 'client',   title: 'Client Name', type: 'string', group: 'content' }),
+    defineField({ name: 'industry', title: 'Industry',    type: 'string', group: 'content' }),
+    defineField({ name: 'location', title: 'Location',    type: 'string', group: 'content' }),
+    defineField({
+      name:        'tagline',
+      title:       'Tagline',
+      type:        'string',
+      group:       'content',
       description: 'One-line summary of the result',
     }),
     defineField({
-      name: 'coverImage',
-      title: 'Cover Image',
-      type: 'image',
-      options: { hotspot: true },
-      fields: [{ name: 'alt', type: 'string', title: 'Alt Text' }],
-    }),
-    defineField({
-      name: 'challenge',
+      name:  'challenge',
       title: 'The Challenge',
-      type: 'blockContent',
+      type:  'blockContent',
+      group: 'content',
     }),
     defineField({
-      name: 'approach',
+      name:  'approach',
       title: 'Our Approach',
-      type: 'blockContent',
+      type:  'blockContent',
+      group: 'content',
     }),
     defineField({
-      name: 'results',
+      name:  'results',
       title: 'The Results',
-      type: 'blockContent',
+      type:  'blockContent',
+      group: 'content',
     }),
     defineField({
-      name: 'metrics',
+      name:  'metrics',
       title: 'Key Metrics',
-      type: 'array',
+      type:  'array',
+      group: 'content',
       of: [
         {
           type: 'object',
@@ -68,18 +102,30 @@ export const caseStudy = defineType({
       ],
     }),
     defineField({
-      name: 'testimonial',
+      name:  'testimonial',
       title: 'Testimonial',
-      type: 'object',
+      type:  'object',
+      group: 'content',
       fields: [
-        { name: 'quote',  title: 'Quote',            type: 'text', rows: 4 },
-        { name: 'author', title: 'Author Name',      type: 'string' },
+        { name: 'quote',  title: 'Quote',             type: 'text', rows: 4 },
+        { name: 'author', title: 'Author Name',       type: 'string' },
         { name: 'role',   title: 'Author Role/Title', type: 'string' },
       ],
     }),
-    defineField({ name: 'seo', title: 'SEO', type: 'seo' }),
+
+    // ── SEO ─────────────────────────────────────────────────────────────────
+    defineField({
+      name:  'seo',
+      title: 'SEO',
+      type:  'seo',
+      group: 'seo',
+    }),
   ],
   preview: {
-    select: { title: 'title', subtitle: 'client', media: 'coverImage' },
+    select: { title: 'title', status: 'status', subtitle: 'client', media: 'featuredImage' },
+    prepare({ title, status, subtitle, media }) {
+      const badge = status === 'published' ? '✅' : '📝'
+      return { title: `${badge} ${title}`, subtitle, media }
+    },
   },
 })

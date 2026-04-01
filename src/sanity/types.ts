@@ -12,6 +12,8 @@ export interface SanityImageAsset {
   caption?: string
 }
 
+export type PublishStatus = 'draft' | 'published'
+
 export interface SeoFields {
   // Search
   metaTitle?: string
@@ -27,17 +29,29 @@ export interface SeoFields {
   structuredData?: string
 }
 
+// ── Category ──────────────────────────────────────────────────────────────────
+
+export interface Category {
+  _id: string
+  _type: 'category'
+  name: string
+  slug: SanitySlug
+  description?: string
+}
+
 // ── Blog ──────────────────────────────────────────────────────────────────────
 
 export interface BlogPost {
   _id: string
   _type: 'blog'
+  status: PublishStatus
   title: string
   slug: SanitySlug
   author: string
   publishedAt: string
   excerpt?: string
-  coverImage?: SanityImageAsset
+  featuredImage?: SanityImageAsset
+  categories?: Category[]
   body?: unknown[]
   seo?: SeoFields
 }
@@ -47,8 +61,10 @@ export interface BlogPost {
 export interface ServiceDoc {
   _id: string
   _type: 'service'
+  status: PublishStatus
   title: string
   slug: SanitySlug
+  featuredImage?: SanityImageAsset
   tagline?: string
   description?: string
   icon?: string
@@ -62,13 +78,14 @@ export interface ServiceDoc {
 export interface CaseStudyDoc {
   _id: string
   _type: 'caseStudy'
+  status: PublishStatus
   title: string
   slug: SanitySlug
+  featuredImage?: SanityImageAsset
   client?: string
   industry?: string
   location?: string
   tagline?: string
-  coverImage?: SanityImageAsset
   challenge?: unknown[]
   approach?: unknown[]
   results?: unknown[]
@@ -82,6 +99,7 @@ export interface CaseStudyDoc {
 export interface PageDoc {
   _id: string
   _type: 'page'
+  status: PublishStatus
   title: string
   slug: SanitySlug
   body?: unknown[]

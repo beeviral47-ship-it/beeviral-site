@@ -47,8 +47,8 @@ export default async function BlogPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post) => {
-                const coverUrl = post.coverImage
-                  ? urlFor(post.coverImage).width(800).height(450).url()
+                const coverUrl = post.featuredImage
+                  ? urlFor(post.featuredImage).width(800).height(450).url()
                   : null
 
                 return (
@@ -62,7 +62,7 @@ export default async function BlogPage() {
                       {coverUrl ? (
                         <Image
                           src={coverUrl}
-                          alt={post.coverImage?.alt ?? post.title}
+                          alt={post.featuredImage?.alt ?? post.title}
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover group-hover:scale-105 transition-transform duration-500"
