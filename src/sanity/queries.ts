@@ -173,13 +173,19 @@ export async function getLocationPage(slug: string): Promise<LocationPageDoc | n
 // ── Areas We Serve (singleton) ────────────────────────────────────────────────
 
 export async function getAreasWeServe(): Promise<AreasWeServeDoc | null> {
+  // No _id filter — matches the document regardless of whether it was created
+  // through the singleton pane (id="areasWeServe") or with a generated id.
+  // useCdn: false bypasses the Sanity CDN so newly published content is visible
+  // immediately without waiting for CDN propagation.
   return client.fetch(
-    `*[_type == "areasWeServe" && _id == "areasWeServe"][0] {
+    `*[_type == "areasWeServe"][0] {
       _id, _type, sectionHeading, sectionSubtext,
       areas[] {
         cityName, shortDescription,
         locationPage-> { _id, cityName, slug { current } }
       }
-    }`
+    }`,
+    {},
+    { useCdn: false }
   )
 }
