@@ -77,7 +77,11 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, mode }),
       })
-      if (!res.ok) throw new Error('Failed')
+      const json = await res.json()
+      if (!res.ok || json.success === false) {
+        const msg = json.error ? `[${json.step ?? 'error'}] ${json.error}` : 'Failed'
+        throw new Error(msg)
+      }
       setSuccess(true)
     } catch {
       setError('Something went wrong. Please call us on 07723 079 176.')

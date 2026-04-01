@@ -328,8 +328,9 @@ export default function PackagesContent() {
             </h2>
           </div>
 
-          <div ref={tableRef} className="reveal overflow-x-auto rounded-2xl border border-white/8">
-            <table className="w-full min-w-[560px]">
+          <div ref={tableRef} className="reveal overflow-x-auto">
+            <div className="rounded-2xl border border-white/8 min-w-[560px]">
+            <table className="w-full">
               <thead>
                 <tr className="border-b border-white/8">
                   <th className="text-left px-6 py-4 text-white/40 text-xs font-medium uppercase tracking-widest w-1/2">
@@ -358,6 +359,7 @@ export default function PackagesContent() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
       </section>

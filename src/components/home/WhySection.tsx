@@ -58,8 +58,9 @@ export default function WhySection() {
               </div>
             </div>
 
-            {/* Floating stat card */}
-            <div className="absolute -bottom-4 -right-4 lg:right-0 bg-[#FFC512] text-[#222222] rounded-xl px-6 py-4 shadow-xl">
+            {/* Floating stat card — inline on mobile to avoid overlapping the image text,
+                absolute-positioned on desktop (lg+) where the two-column grid gives room */}
+            <div className="relative mt-3 w-fit ml-auto lg:absolute lg:mt-0 lg:-bottom-4 lg:right-0 bg-[#FFC512] text-[#222222] rounded-xl px-6 py-4 shadow-xl">
               <div className="font-display text-3xl font-extrabold tracking-tight">10+</div>
               <div className="text-xs font-medium uppercase tracking-widest opacity-70">Years in Business</div>
             </div>

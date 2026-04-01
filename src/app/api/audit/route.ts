@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { checkRateLimit } from '@/lib/rate-limit'
 
-const resend      = new Resend(process.env.RESEND_API_KEY)
 const TO_EMAIL    = 'beeviral47@gmail.com'
 const FROM_NOTIFY = 'Bee Viral Website <noreply@beeviral.co.uk>'
 const FROM_CONFIRM= 'Bee Viral <noreply@beeviral.co.uk>'
@@ -234,6 +233,8 @@ function buildConfirmationEmail(data: {
 // ─── Route handler ─────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
+  console.log('[audit] POST received')
+
   // ── Rate limiting ────────────────────────────────────────────────────────
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim()
           || req.headers.get('x-real-ip')
@@ -289,6 +290,18 @@ export async function POST(req: NextRequest) {
       ? `New Package Booking — ${String(business)} (${String(service) || 'Package not selected'})`
       : `New Audit Request — ${String(business)} (${String(service) || 'General'})`
 
+    console.log('[audit] validation passed — name:', String(name).trim(), '| email:', String(email).trim())
+
+    const apiKey = process.env.RESEND_API_KEY
+    if (!apiKey) {
+      console.error('[audit] RESEND_API_KEY is not set')
+      return NextResponse.json({ error: 'Email service is not configured.' }, { status: 500 })
+    }
+    console.log('[audit] RESEND_API_KEY present, length:', apiKey.length)
+
+    const resend = new Resend(apiKey)
+    console.log('[audit] Resend initialised')
+
     const emailData = {
       name:     String(name).trim(),
       business: String(business).trim(),
@@ -301,7 +314,12 @@ export async function POST(req: NextRequest) {
       isPackage,
     }
 
-    await resend.emails.send({
+    // ── Email 1: internal notification ────────────────────────────────────
+    console.log('[audit] EMAIL 1 — from:', FROM_NOTIFY)
+    console.log('[audit] EMAIL 1 — to:  ', TO_EMAIL)
+    console.log('[audit] EMAIL 1 — subject:', subject)
+
+    const notifyResult = await resend.emails.send({
       from:    FROM_NOTIFY,
       to:      TO_EMAIL,
       replyTo: emailData.email,
@@ -309,18 +327,46 @@ export async function POST(req: NextRequest) {
       html:    buildInternalEmail(emailData),
     })
 
-    await resend.emails.send({
+    console.log('[audit] EMAIL 1 — raw result:', JSON.stringify(notifyResult))
+
+    if (notifyResult.error) {
+      console.error('[audit] EMAIL 1 — FAILED:', JSON.stringify(notifyResult.error))
+      return NextResponse.json({ success: false, step: 'notify', error: notifyResult.error.message ?? 'Resend rejected the notification email.' }, { status: 500 })
+    }
+    console.log('[audit] EMAIL 1 — SUCCESS, id:', notifyResult.data?.id)
+
+    // ── Email 2: confirmation to visitor ──────────────────────────────────
+    const confirmSubject = isPackage
+      ? `Your package booking is confirmed — Bee Viral`
+      : `We've received your enquiry — Bee Viral`
+
+    console.log('[audit] EMAIL 2 — from:', FROM_CONFIRM)
+    console.log('[audit] EMAIL 2 — to:  ', emailData.email)
+    console.log('[audit] EMAIL 2 — subject:', confirmSubject)
+
+    const confirmResult = await resend.emails.send({
       from:    FROM_CONFIRM,
       to:      emailData.email,
-      subject: isPackage
-        ? `Your package booking is confirmed — Bee Viral`
-        : `We've received your enquiry — Bee Viral`,
-      html: buildConfirmationEmail(emailData),
+      subject: confirmSubject,
+      html:    buildConfirmationEmail(emailData),
     })
 
-    return NextResponse.json({ success: true })
+    console.log('[audit] EMAIL 2 — raw result:', JSON.stringify(confirmResult))
+
+    if (confirmResult.error) {
+      console.error('[audit] EMAIL 2 — FAILED:', JSON.stringify(confirmResult.error))
+      return NextResponse.json({ success: false, step: 'confirm', error: confirmResult.error.message ?? 'Resend rejected the confirmation email.' }, { status: 500 })
+    }
+    console.log('[audit] EMAIL 2 — SUCCESS, id:', confirmResult.data?.id)
+
+    console.log('[audit] DONE — both emails sent')
+    return NextResponse.json({
+      success: true,
+      notifyId: notifyResult.data?.id,
+      confirmId: confirmResult.data?.id,
+    })
   } catch (err) {
-    console.error('[Audit API Error]', err)
+    console.error('[audit] unexpected error:', err)
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
   }
 }
