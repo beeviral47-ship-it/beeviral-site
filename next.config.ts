@@ -20,11 +20,30 @@ const cspHeader = [
   "upgrade-insecure-requests",
 ].join('; ')
 
+// Sanity Studio requires relaxed CSP (blob: workers, eval for hot reload, etc.)
+const studioCspHeader = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data: https://fonts.gstatic.com https://fonts.googleapis.com",
+  "connect-src 'self' https://*.sanity.io wss://*.sanity.io https://fonts.googleapis.com",
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+].join('; ')
+
 const nextConfig: NextConfig = {
   // ── Images ─────────────────────────────────────────────────────────────────
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+    ],
   },
 
   // ── Production hardening ───────────────────────────────────────────────────
@@ -33,8 +52,16 @@ const nextConfig: NextConfig = {
   // ── Security headers ───────────────────────────────────────────────────────
   async headers() {
     return [
+      // Studio route — relaxed CSP required for Sanity Studio
       {
-        source: '/(.*)',
+        source: '/studio/:path*',
+        headers: [
+          { key: 'Content-Security-Policy', value: studioCspHeader },
+        ],
+      },
+      // All other routes — strict CSP
+      {
+        source: '/((?!studio).*)',
         headers: [
           { key: 'X-Content-Type-Options',  value: 'nosniff' },
           { key: 'X-Frame-Options',          value: 'DENY' },
