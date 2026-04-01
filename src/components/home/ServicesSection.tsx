@@ -1,6 +1,7 @@
 'use client'
 
 import { TrendingUp, Video, Search, BarChart2, MessageCircle } from 'lucide-react'
+import Link from 'next/link'
 import { InstagramIcon } from '@/components/ui/SocialIcons'
 import { services } from '@/lib/data'
 import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
@@ -43,9 +44,10 @@ export default function ServicesSection() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {services.map((service, i) => (
-            <div
+            <Link
               key={service.title}
-              className="reveal-scale group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#FFC512]/5 cursor-default"
+              href={service.href}
+              className="reveal-scale group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#FFC512]/5 block"
               data-delay={i}
               style={{ transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease' }}
             >
@@ -58,7 +60,7 @@ export default function ServicesSection() {
               <p className="text-white/55 text-sm leading-relaxed font-normal">
                 {service.description}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

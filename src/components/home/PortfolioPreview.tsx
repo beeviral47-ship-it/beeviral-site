@@ -8,6 +8,7 @@ import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
 const projects = [
   {
     client:   'The Blossom Café',
+    slug:     'the-blossom-cafe',
     location: 'Wath',
     platform: 'Instagram',
     result:   '+1,340% reach increase',
@@ -17,6 +18,7 @@ const projects = [
   },
   {
     client:   'Hartley Roofing',
+    slug:     'hartley-roofing',
     location: 'Rotherham',
     platform: 'Facebook',
     result:   '40+ leads per month',
@@ -26,6 +28,7 @@ const projects = [
   },
   {
     client:   'Spice Garden',
+    slug:     'spice-garden',
     location: 'Barnsley',
     platform: 'Instagram + TikTok',
     result:   '8,200 new followers',
@@ -68,18 +71,19 @@ export default function PortfolioPreview() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
         >
           {projects.map((p, i) => (
-            <div
+            <Link
               key={p.client}
-              className="reveal-scale group relative rounded-xl overflow-hidden bg-[#2d2d2d] border border-white/5 hover:border-[#FFC512]/40 cursor-pointer"
+              href={`/case-studies/${p.slug}`}
+              className="reveal-scale group relative rounded-xl overflow-hidden bg-[#2d2d2d] border border-white/5 hover:border-[#FFC512]/40 block"
               data-delay={i}
               style={{ transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease' }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)'
-                e.currentTarget.style.boxShadow = '0 20px 40px rgba(255,197,18,0.1)'
+                (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 20px 40px rgba(255,197,18,0.1)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = ''
-                e.currentTarget.style.boxShadow = ''
+                (e.currentTarget as HTMLElement).style.transform = '';
+                (e.currentTarget as HTMLElement).style.boxShadow = ''
               }}
             >
               {/* Gradient tile */}
@@ -105,7 +109,7 @@ export default function PortfolioPreview() {
                 </h3>
                 <p className="text-[#FFC512] font-semibold text-sm tracking-wide">{p.result}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

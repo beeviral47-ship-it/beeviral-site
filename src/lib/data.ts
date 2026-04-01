@@ -22,31 +22,37 @@ export const services = [
   {
     icon: 'Instagram',
     title: 'Social Media Management',
+    href: '/services/social-media-management',
     description: 'Full-service management of your Instagram, Facebook and TikTok — content, captions, scheduling, and community management.',
   },
   {
     icon: 'TrendingUp',
     title: 'Paid Advertising',
+    href: '/services/paid-advertising',
     description: 'Targeted Meta and TikTok ad campaigns that put your brand in front of the right local audience at the right time.',
   },
   {
     icon: 'Video',
     title: 'Content Creation',
+    href: '/services/content-creation',
     description: 'Scroll-stopping photos, Reels, and graphics crafted specifically for your brand voice and local audience.',
   },
   {
     icon: 'Search',
     title: 'SEO & Local Search',
+    href: '/services/local-seo',
     description: 'Dominate local search results. We optimise your Google profile and website so customers in South Yorkshire find you first.',
   },
   {
     icon: 'BarChart2',
     title: 'Analytics & Reporting',
+    href: '/services/social-media-audit',
     description: 'Clear monthly reports showing exactly what\'s working — growth, reach, engagement, and return on investment.',
   },
   {
     icon: 'MessageCircle',
     title: 'Brand Strategy',
+    href: '/services/social-media-strategy',
     description: 'We help you define your brand story, tone of voice, and visual identity so every post feels consistent and premium.',
   },
 ]
