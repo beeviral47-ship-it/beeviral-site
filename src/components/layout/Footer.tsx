@@ -76,7 +76,7 @@ export default function Footer() {
           </div>
 
           {/* Services */}
-          <div className="reveal" data-delay="2">
+          <div className="reveal hidden md:block" data-delay="2">
             <h3 className="font-display font-semibold text-[#FFC512] text-xs uppercase tracking-widest mb-5">
               Services
             </h3>
@@ -96,17 +96,19 @@ export default function Footer() {
 
           {/* Locations + Contact */}
           <div className="reveal" data-delay="3">
-            <h3 className="font-display font-semibold text-[#FFC512] text-xs uppercase tracking-widest mb-5">
-              We Serve
-            </h3>
-            <ul className="space-y-3 mb-8">
-              {locations.map((loc) => (
-                <li key={loc} className="text-white/60 text-sm flex items-center gap-2 font-normal">
-                  <span className="text-[#FFC512]">◆</span>
-                  {loc}
-                </li>
-              ))}
-            </ul>
+            <div className="hidden md:block mb-8">
+              <h3 className="font-display font-semibold text-[#FFC512] text-xs uppercase tracking-widest mb-5">
+                We Serve
+              </h3>
+              <ul className="space-y-3">
+                {locations.map((loc) => (
+                  <li key={loc} className="text-white/60 text-sm flex items-center gap-2 font-normal">
+                    <span className="text-[#FFC512]">◆</span>
+                    {loc}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <h3 className="font-display font-semibold text-[#FFC512] text-xs uppercase tracking-widest mb-5">
               Contact
