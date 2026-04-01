@@ -99,54 +99,73 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-// ─── Structured Data — LocalBusiness schema ───────────────────────────────────
+// ─── Structured Data — MarketingAgency / LocalBusiness schema ────────────────
 const localBusinessSchema = {
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
+  '@type': ['MarketingAgency', 'LocalBusiness'],
+  '@id': 'https://www.beeviral.co.uk/#business',
   name: 'Bee Viral',
-  url: SITE_URL,
+  alternateName: 'Bee Viral Social Media Agency',
+  url: 'https://www.beeviral.co.uk',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://www.beeviral.co.uk/images/logo-transparent.png',
+    width: 280,
+    height: 140,
+  },
+  image: 'https://www.beeviral.co.uk/og-image.png',
   email: 'info@beeviral.co.uk',
-  telephone: '07723079176',
+  telephone: '+447723079176',
   description:
-    'We help local businesses in Wath, Rotherham and Barnsley grow through social media management, paid advertising and content creation.',
-  areaServed: [
-    { '@type': 'City', name: 'Wath-upon-Dearne' },
-    { '@type': 'City', name: 'Rotherham' },
-    { '@type': 'City', name: 'Barnsley' },
-    { '@type': 'AdministrativeArea', name: 'South Yorkshire' },
-  ],
+    'Bee Viral is a social media marketing agency based in South Yorkshire, helping local businesses grow through social media management, paid advertising, content creation, and SEO.',
+  foundingDate: '2014',
   address: {
     '@type': 'PostalAddress',
+    addressLocality: 'Wath-upon-Dearne',
     addressRegion: 'South Yorkshire',
     addressCountry: 'GB',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 53.5025,
+    longitude: -1.3428,
+  },
+  areaServed: [
+    { '@type': 'City',                name: 'Wath-upon-Dearne' },
+    { '@type': 'City',                name: 'Rotherham'        },
+    { '@type': 'City',                name: 'Barnsley'         },
+    { '@type': 'City',                name: 'Sheffield'        },
+    { '@type': 'AdministrativeArea',  name: 'South Yorkshire'  },
+  ],
+  priceRange: '££',
+  currenciesAccepted: 'GBP',
+  openingHoursSpecification: [
+    {
+      '@type':   'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens:     '09:00',
+      closes:    '17:30',
+    },
+  ],
+  contactPoint: {
+    '@type':             'ContactPoint',
+    telephone:           '+447723079176',
+    email:               'info@beeviral.co.uk',
+    contactType:         'customer service',
+    areaServed:          'GB',
+    availableLanguage:   'English',
   },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Social Media Marketing Services',
     itemListElement: [
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Social Media Management' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Paid Advertising' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Content Creation' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'SEO & Local Search' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Analytics & Reporting' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Brand Strategy' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Social Media Management',  url: 'https://www.beeviral.co.uk/services/social-media-management'  } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Paid Advertising',         url: 'https://www.beeviral.co.uk/services/paid-advertising'         } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Content Creation',         url: 'https://www.beeviral.co.uk/services/content-creation'         } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'SEO & Local Search',       url: 'https://www.beeviral.co.uk/services/local-seo'                } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Analytics & Reporting',    url: 'https://www.beeviral.co.uk/services/social-media-audit'       } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Brand Strategy',           url: 'https://www.beeviral.co.uk/services/social-media-strategy'    } },
     ],
-  },
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '09:00',
-      closes: '17:30',
-    },
-  ],
-  contactPoint: {
-    '@type': 'ContactPoint',
-    telephone: '07723079176',
-    email: 'info@beeviral.co.uk',
-    contactType: 'customer service',
-    areaServed: 'GB',
-    availableLanguage: 'English',
   },
   sameAs: [
     'https://www.instagram.com/beeviralltd/',
