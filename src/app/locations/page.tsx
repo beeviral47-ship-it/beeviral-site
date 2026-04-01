@@ -15,7 +15,7 @@ export default async function LocationsPage() {
   return (
     <main className="bg-[#1a1a1a] min-h-screen">
       {/* Hero */}
-      <section className="bg-[#222222] py-20 border-b border-white/5">
+      <section className="bg-[#222222] py-20 lg:pt-32 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <span className="text-[#FFC512] text-sm font-medium uppercase tracking-widest">
             Areas We Cover
