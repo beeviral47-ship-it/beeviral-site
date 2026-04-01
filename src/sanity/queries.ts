@@ -160,6 +160,14 @@ export async function getAllLocationSlugs(): Promise<string[]> {
   return results.map((r) => r.slug.current)
 }
 
+export async function getAllLocationPages(): Promise<Pick<LocationPageDoc, '_id' | 'cityName' | 'slug' | 'heroSubtext'>[]> {
+  return client.fetch(
+    `*[_type == "locationPage"] | order(cityName asc) {
+      _id, cityName, slug, heroSubtext
+    }`
+  )
+}
+
 export async function getLocationPage(slug: string): Promise<LocationPageDoc | null> {
   return client.fetch(
     `*[_type == "locationPage" && slug.current == $slug][0] {

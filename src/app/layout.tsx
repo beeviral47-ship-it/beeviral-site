@@ -1,10 +1,8 @@
 import type { Metadata } from 'next'
 import { Sora, Inter } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
+import LayoutShell from '@/components/layout/LayoutShell'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
-import { AuditModalProvider } from '@/components/providers/AuditModalProvider'
 
 // ─── Fonts ───────────────────────────────────────────────────────────────────
 const sora = Sora({
@@ -188,11 +186,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-full antialiased flex flex-col">
         <GoogleAnalytics />
-        <AuditModalProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </AuditModalProvider>
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   )

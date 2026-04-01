@@ -26,6 +26,11 @@ export default function Navbar() {
 
   useEffect(() => { setMenuOpen(false); setMobileServOpen(false) }, [pathname])
 
+  const handleLinkClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setMenuOpen(false)
+  }
+
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -124,6 +129,7 @@ export default function Navbar() {
                         <Link
                           href="/services"
                           role="menuitem"
+                          onClick={handleLinkClick}
                           className="flex items-center px-4 py-3 text-[10px] font-semibold text-[#FFC512] uppercase tracking-widest border-b border-white/8 hover:bg-white/5 transition-colors"
                         >
                           All Services →
@@ -133,6 +139,7 @@ export default function Navbar() {
                             key={s.href}
                             href={s.href}
                             role="menuitem"
+                            onClick={handleLinkClick}
                             className={`block px-4 py-2.5 text-sm font-normal transition-colors duration-150 ${
                               pathname === s.href
                                 ? 'text-[#FFC512] bg-white/5'
@@ -152,6 +159,7 @@ export default function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
+                    onClick={handleLinkClick}
                     className={`relative px-4 py-2 text-sm font-medium tracking-wide transition-colors duration-200 rounded-md group ${
                       active ? 'text-[#FFC512]' : 'text-white/80 hover:text-white'
                     }`}
@@ -228,6 +236,7 @@ export default function Navbar() {
                     <div className="border-b border-white/10 py-2 pl-2">
                       <Link
                         href="/services"
+                        onClick={handleLinkClick}
                         className="block py-2.5 px-2 text-xs font-semibold text-[#FFC512] uppercase tracking-widest"
                       >
                         All Services
@@ -236,6 +245,7 @@ export default function Navbar() {
                         <Link
                           key={s.href}
                           href={s.href}
+                          onClick={handleLinkClick}
                           className={`block py-2.5 px-2 text-base font-medium transition-colors duration-150 ${
                             pathname === s.href ? 'text-[#FFC512]' : 'text-white/65 hover:text-[#FFC512]'
                           }`}
@@ -254,6 +264,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={handleLinkClick}
                 style={{ transitionDelay: menuOpen ? `${i * 40}ms` : '0ms' }}
                 className={`font-display font-bold text-2xl py-4 border-b border-white/10 transition-colors duration-200 tracking-tight ${
                   active ? 'text-[#FFC512]' : 'text-white hover:text-[#FFC512]'
