@@ -6,7 +6,7 @@ import AuditModal from '@/components/ui/AuditModal'
 type ModalMode = 'service' | 'book-package'
 
 interface AuditModalContextValue {
-  openAuditModal: (mode?: ModalMode, defaultService?: string) => void
+  openAuditModal: (mode?: ModalMode, defaultService?: string, serviceKey?: string) => void
 }
 
 const AuditModalContext = createContext<AuditModalContextValue | null>(null)
@@ -18,13 +18,15 @@ export function useAuditModal() {
 }
 
 export function AuditModalProvider({ children }: { children: React.ReactNode }) {
-  const [open, setOpen]                   = useState(false)
-  const [mode, setMode]                   = useState<ModalMode>('service')
+  const [open, setOpen]                     = useState(false)
+  const [mode, setMode]                     = useState<ModalMode>('service')
   const [defaultService, setDefaultService] = useState('')
+  const [serviceKey, setServiceKey]         = useState<string | undefined>(undefined)
 
-  const openAuditModal = useCallback((m: ModalMode = 'service', ds = '') => {
+  const openAuditModal = useCallback((m: ModalMode = 'service', ds = '', sk?: string) => {
     setMode(m)
     setDefaultService(ds)
+    setServiceKey(sk)
     setOpen(true)
   }, [])
 
@@ -36,6 +38,7 @@ export function AuditModalProvider({ children }: { children: React.ReactNode }) 
         onClose={() => setOpen(false)}
         mode={mode}
         defaultService={defaultService}
+        serviceKey={serviceKey}
       />
     </AuditModalContext.Provider>
   )

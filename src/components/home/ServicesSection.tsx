@@ -1,23 +1,65 @@
 'use client'
 
-import { TrendingUp, Video, Search, BarChart2, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
-import { InstagramIcon } from '@/components/ui/SocialIcons'
-import { services } from '@/lib/data'
+import { TrendingUp, Search, BarChart2, MessageCircle, Monitor, Calendar } from 'lucide-react'
 import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
 
-const iconMap: Record<string, React.ReactNode> = {
-  Instagram:     <InstagramIcon size={28} />,
-  TrendingUp:    <TrendingUp size={28} />,
-  Video:         <Video size={28} />,
-  Search:        <Search size={28} />,
-  BarChart2:     <BarChart2 size={28} />,
-  MessageCircle: <MessageCircle size={28} />,
-}
+// ── Service data ──────────────────────────────────────────────────────────────
+
+const group1 = [
+  {
+    title: 'Social Media Management',
+    description:
+      'Full-service management of your Instagram, Facebook and TikTok — content, captions, scheduling, and community management.',
+    href: '/services/social-media-management',
+    icon: <MessageCircle size={28} />,
+  },
+  {
+    title: 'Paid Advertising',
+    description:
+      'Targeted Meta and TikTok ad campaigns that put your brand in front of the right local audience at the right time.',
+    href: '/services/paid-advertising',
+    icon: <TrendingUp size={28} />,
+  },
+  {
+    title: 'SEO & Content Marketing',
+    description:
+      'Monthly blog content and local SEO that gets your business found on Google by customers in South Yorkshire.',
+    href: '/services/local-seo',
+    icon: <Search size={28} />,
+  },
+]
+
+const group2 = [
+  {
+    title: 'Website Design & Build',
+    description:
+      'Custom, mobile-first websites built on Next.js — fast, professional, and designed to convert visitors into customers.',
+    href: '/services/website-design',
+    icon: <Monitor size={28} />,
+  },
+  {
+    title: 'Booking Systems & Automation',
+    description:
+      'Online booking, automated reminders, confirmation emails and cancellation management — all built into your website.',
+    href: '/services/booking-systems',
+    icon: <Calendar size={28} />,
+  },
+  {
+    title: 'Analytics & Reporting',
+    description:
+      'Clear monthly reports showing exactly what\'s working — growth, reach, engagement, leads, and return on investment.',
+    href: '/services/analytics',
+    icon: <BarChart2 size={28} />,
+  },
+]
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function ServicesSection() {
   const headingRef = useScrollReveal<HTMLDivElement>(0.2)
-  const gridRef    = useStaggerReveal<HTMLDivElement>(0.05)
+  const group1Ref  = useStaggerReveal<HTMLDivElement>(0.05)
+  const group2Ref  = useStaggerReveal<HTMLDivElement>(0.05)
 
   return (
     <section className="bg-[#222222] py-24 overflow-hidden">
@@ -33,36 +75,81 @@ export default function ServicesSection() {
             <span className="text-[#FFC512]">Dominate Your Market</span>
           </h2>
           <p className="text-white/55 text-lg max-w-2xl mx-auto font-normal leading-relaxed">
-            From daily posting to full paid ad campaigns — we handle your entire
-            social media presence so you can focus on running your business.
+            From daily social posts to full websites with booking systems — we handle
+            your entire digital presence so you can focus on running your business.
           </p>
         </div>
 
-        {/* Grid — staggerReveal observes this, data-delay staggers children */}
-        <div
-          ref={gridRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {services.map((service, i) => (
-            <Link
-              key={service.title}
-              href={service.href}
-              className="reveal-scale group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#FFC512]/5 block"
-              data-delay={i}
-              style={{ transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease' }}
-            >
-              <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
-                {iconMap[service.icon]}
-              </div>
-              <h3 className="font-display font-semibold text-white text-lg mb-3 group-hover:text-[#FFC512] transition-colors tracking-tight">
-                {service.title}
-              </h3>
-              <p className="text-white/55 text-sm leading-relaxed font-normal">
-                {service.description}
-              </p>
-            </Link>
-          ))}
+        {/* Group 1 */}
+        <div className="mb-12">
+          <div className="flex items-center gap-4 mb-8">
+            <span className="text-[#FFC512] text-xs font-semibold uppercase tracking-widest flex-shrink-0">
+              Social Media &amp; Marketing
+            </span>
+            <div className="flex-1 h-px bg-white/8" />
+          </div>
+
+          <div
+            ref={group1Ref}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {group1.map((service, i) => (
+              <Link
+                key={service.title}
+                href={service.href}
+                className="reveal-scale group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#FFC512]/5 block"
+                data-delay={i}
+                style={{ transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease' }}
+              >
+                <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
+                  {service.icon}
+                </div>
+                <h3 className="font-display font-semibold text-white text-lg mb-3 group-hover:text-[#FFC512] transition-colors tracking-tight">
+                  {service.title}
+                </h3>
+                <p className="text-white/55 text-sm leading-relaxed font-normal">
+                  {service.description}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
+
+        {/* Group 2 */}
+        <div>
+          <div className="flex items-center gap-4 mb-8">
+            <span className="text-[#FFC512] text-xs font-semibold uppercase tracking-widest flex-shrink-0">
+              Web Design &amp; Automation
+            </span>
+            <div className="flex-1 h-px bg-white/8" />
+          </div>
+
+          <div
+            ref={group2Ref}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {group2.map((service, i) => (
+              <Link
+                key={service.title}
+                href={service.href}
+                className="reveal-scale group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#FFC512]/5 block"
+                data-delay={i}
+                style={{ transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease' }}
+              >
+                <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
+                  {service.icon}
+                </div>
+                <h3 className="font-display font-semibold text-white text-lg mb-3 group-hover:text-[#FFC512] transition-colors tracking-tight">
+                  {service.title}
+                </h3>
+                <p className="text-white/55 text-sm leading-relaxed font-normal">
+                  {service.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+
       </div>
     </section>
   )

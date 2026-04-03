@@ -1,111 +1,172 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import { ArrowRight, Check, X, ChevronDown } from 'lucide-react'
+import { ArrowRight, Check, ChevronDown } from 'lucide-react'
 import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
 import { trackButtonClick } from '@/lib/analytics'
 import { useAuditModal } from '@/components/providers/AuditModalProvider'
 
-// ── Package data ──────────────────────────────────────────────────────────────
-const plans = [
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+interface Plan {
+  name: string
+  monthly: number
+  setup?: number
+  badge: string | null
+  features: string[]
+  ctaService: string
+  serviceKey: string
+}
+
+// ── Data ──────────────────────────────────────────────────────────────────────
+
+const lane1Plans: Plan[] = [
   {
-    name:    'Starter',
-    tagline: 'Get your business visible online with consistent, branded content.',
-    price:   120,
-    color:   'border-white/10',
-    badge:   null,
+    name: 'Starter',
+    monthly: 120,
+    badge: null,
+    ctaService: 'Starter — £120/mo',
+    serviceKey: 'social-only',
     features: [
       '12 branded posts per month',
       'Facebook & Instagram',
-      '3 posts per week',
-      'Custom content & graphics',
-      'Your logo on every post',
-      'Professional captions & hashtags',
+      'Custom graphics & captions',
       'Scheduling & publishing',
       'Monthly performance report',
-      'No setup fees',
-      'Cancel anytime — no contract',
+      'No contract',
     ],
-    missing: [
-      'Dedicated account manager',
-      'Priority support',
-      'TikTok',
-      'SEO blog posts',
-    ],
-    cta: 'Get Started',
   },
   {
-    name:    'Growth',
-    tagline: 'More content, more reach, more customers — with a dedicated manager.',
-    price:   150,
-    color:   'border-[#FFC512]',
-    badge:   'Most Popular',
+    name: 'Growth',
+    monthly: 150,
+    badge: 'Most Popular',
+    ctaService: 'Growth — £150/mo',
+    serviceKey: 'social-only',
     features: [
       '16 branded posts per month',
       'Facebook & Instagram',
-      '4 posts per week',
-      'Custom content & graphics',
-      'Your logo on every post',
-      'Professional captions & hashtags',
-      'Scheduling & publishing',
-      'Monthly performance report',
+      'Custom graphics & captions',
       'Dedicated account manager',
       '2 SEO blog posts per month',
-      'No setup fees',
-      'Cancel anytime — no contract',
+      'Monthly performance report',
+      'No contract',
     ],
-    missing: [
-      'Priority support',
-      'TikTok',
-    ],
-    cta: 'Get Started',
   },
   {
-    name:    'Hive',
-    tagline: 'Maximum reach across every major platform — the complete package.',
-    price:   200,
-    color:   'border-[#FFC512]/40',
-    badge:   'All-Inclusive',
+    name: 'Hive',
+    monthly: 200,
+    badge: null,
+    ctaService: 'Hive — £200/mo',
+    serviceKey: 'social-only',
     features: [
       '20 branded posts per month',
       'Facebook, Instagram & TikTok',
-      '~5 posts per week',
-      'Custom content & graphics',
-      'Your logo on every post',
-      'Professional captions & hashtags',
-      'Scheduling & publishing',
-      'Monthly performance report',
+      'Custom graphics & captions',
       'Dedicated account manager',
       'Priority support',
       '4 SEO blog posts per month',
-      'No setup fees',
-      'Cancel anytime — no contract',
+      'Monthly performance report',
+      'No contract',
     ],
-    missing: [],
-    cta: 'Get Started',
   },
 ]
 
-// ── Comparison table rows ─────────────────────────────────────────────────────
-const compareRows = [
-  { feature: 'Posts per month',              starter: '12',       growth: '16',        hive: '20' },
-  { feature: 'Platforms',                    starter: 'FB & IG',  growth: 'FB & IG',   hive: 'FB, IG & TikTok' },
-  { feature: 'Posting frequency',            starter: '3/week',   growth: '4/week',    hive: '~5/week' },
-  { feature: 'Custom content & graphics',    starter: true,       growth: true,        hive: true },
-  { feature: 'Logo on every post',           starter: true,       growth: true,        hive: true },
-  { feature: 'Captions & hashtags',          starter: true,       growth: true,        hive: true },
-  { feature: 'Scheduling & publishing',      starter: true,       growth: true,        hive: true },
-  { feature: 'Monthly performance report',   starter: true,       growth: true,        hive: true },
-  { feature: 'Dedicated account manager',    starter: false,      growth: true,        hive: true },
-  { feature: 'Priority support',             starter: false,      growth: false,       hive: true },
-  { feature: 'TikTok',                       starter: false,      growth: false,       hive: true },
-  { feature: 'SEO blog posts per month',     starter: false,      growth: '2',         hive: '4' },
-  { feature: 'No setup fees',               starter: true,       growth: true,        hive: true },
-  { feature: 'No contract',                 starter: true,       growth: true,        hive: true },
+const lane2Plans: Plan[] = [
+  {
+    name: 'Buzz',
+    monthly: 250,
+    badge: null,
+    ctaService: 'Buzz — £250/mo',
+    serviceKey: 'social-seo',
+    features: [
+      '10 social posts per month',
+      'Facebook & Instagram',
+      '2 SEO blog posts per month',
+      'Google Business profile optimisation',
+      'Custom graphics & captions',
+      'Monthly performance report',
+      'No contract',
+    ],
+  },
+  {
+    name: 'Swarm',
+    monthly: 350,
+    badge: 'Best Value',
+    ctaService: 'Swarm — £350/mo',
+    serviceKey: 'social-seo',
+    features: [
+      '14 social posts per month',
+      'Facebook & Instagram',
+      '4 SEO blog posts per month',
+      'Local SEO optimisation',
+      'Google Business profile management',
+      'Dedicated account manager',
+      'Priority support',
+      'Monthly performance report',
+      'No contract',
+    ],
+  },
+]
+
+const lane3Plans: Plan[] = [
+  {
+    name: 'Brochure',
+    monthly: 200,
+    setup: 800,
+    badge: null,
+    ctaService: 'Brochure — £800 setup + £200/mo',
+    serviceKey: 'brochure',
+    features: [
+      'Professional website design & build',
+      'Sanity CMS included',
+      'Hosting & domain setup',
+      'Local SEO foundation',
+      '8–10 social posts per month',
+      '2 SEO blog posts per month',
+      'Website maintenance',
+      'Monthly performance report',
+      'No contract',
+    ],
+  },
+  {
+    name: 'Booking Pro',
+    monthly: 250,
+    setup: 1500,
+    badge: 'Most Popular',
+    ctaService: 'Booking Pro — £1,500 setup + £250/mo',
+    serviceKey: 'booking-pro',
+    features: [
+      'Everything in Brochure',
+      'Online booking system',
+      'Automated confirmation emails',
+      '24hr reminder emails',
+      'Cancellation management',
+      'Admin notification system',
+      'Mobile optimised booking flow',
+      'No contract',
+    ],
+  },
+  {
+    name: 'Booking Elite',
+    monthly: 300,
+    setup: 2500,
+    badge: 'All Inclusive',
+    ctaService: 'Booking Elite — £2,500 setup + £300/mo',
+    serviceKey: 'booking-elite',
+    features: [
+      'Everything in Booking Pro',
+      'Multi-service booking',
+      'SMS reminders via Twilio',
+      'Advanced admin dashboard',
+      'Attendance confirmation system',
+      'Priority support & onboarding',
+      'No contract',
+    ],
+  },
 ]
 
 // ── FAQ data ──────────────────────────────────────────────────────────────────
+
 const faqs = [
   {
     q: 'Do you tie me into a long-term contract?',
@@ -113,27 +174,32 @@ const faqs = [
   },
   {
     q: 'How quickly can we get started?',
-    a: 'We typically onboard new clients within 5–7 working days of your first call. We\'ll walk you through everything before we start posting.',
+    a: "We typically onboard new clients within 5–7 working days of your first call. We'll walk you through everything before we start.",
   },
   {
     q: 'Can I upgrade or change my package?',
     a: 'Absolutely. You can move between packages at the end of any billing month. Many clients start on Starter and upgrade once they see results.',
   },
   {
-    q: 'What\'s included in the free audit?',
-    a: 'A full review of your current social media presence, competitor benchmarking, and a clear set of recommendations — with no obligation to proceed.',
+    q: "What's included in the free Digital Health Check?",
+    a: 'A full review of your current online presence, competitor benchmarking, and a clear set of recommendations — with no obligation to proceed.',
   },
   {
     q: 'Do the prices include VAT?',
-    a: 'All prices shown are exclusive of VAT. We\'ll confirm the full breakdown on your proposal before you commit to anything.',
+    a: "All prices shown are exclusive of VAT. We'll confirm the full breakdown on your proposal before you commit to anything.",
   },
   {
     q: 'What are the SEO blog posts?',
-    a: 'These are professionally written, keyword-targeted blog articles published to your website. They improve your Google rankings and drive organic traffic alongside your social media campaigns.',
+    a: 'Professionally written, keyword-targeted articles published to your website. They improve your Google rankings and drive organic traffic alongside your social media campaigns.',
+  },
+  {
+    q: 'What does the setup fee cover on Full Digital Partner plans?',
+    a: 'The one-time setup fee covers the design, build, and launch of your website — and booking system where included. The monthly retainer then covers ongoing maintenance, social media, and SEO.',
   },
 ]
 
-// ── FAQ item component ────────────────────────────────────────────────────────
+// ── FAQ item ──────────────────────────────────────────────────────────────────
+
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false)
   return (
@@ -160,20 +226,118 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   )
 }
 
-// ── Cell helper ───────────────────────────────────────────────────────────────
-function Cell({ value }: { value: string | boolean }) {
-  if (value === true)  return <Check size={18} className="text-[#FFC512] mx-auto" />
-  if (value === false) return <X size={16} className="text-white/20 mx-auto" />
-  return <span className="text-white/70 text-sm font-medium">{value}</span>
+// ── Plan card ─────────────────────────────────────────────────────────────────
+
+function PlanCard({
+  plan,
+  index,
+  onCta,
+}: {
+  plan: Plan
+  index: number
+  onCta: () => void
+}) {
+  const isPrimary      = plan.badge === 'Most Popular' || plan.badge === 'Best Value'
+  const isAllInclusive = plan.badge === 'All Inclusive'
+  const borderColor    = isPrimary
+    ? 'border-[#FFC512]'
+    : isAllInclusive
+    ? 'border-[#FFC512]/40'
+    : 'border-white/10'
+
+  return (
+    <div
+      className={`reveal-scale relative flex flex-col rounded-2xl border-2 ${borderColor} bg-[#222222] overflow-hidden transition-all duration-300 ${
+        isPrimary ? 'shadow-2xl shadow-[#FFC512]/15 lg:-translate-y-4' : ''
+      }`}
+      data-delay={index}
+    >
+      {/* Badge */}
+      {plan.badge && (
+        <div
+          className={`absolute top-0 right-0 text-xs font-bold px-4 py-1.5 rounded-bl-xl tracking-widest uppercase ${
+            isPrimary ? 'bg-[#FFC512] text-[#222222]' : 'bg-white/10 text-white/70'
+          }`}
+        >
+          {plan.badge}
+        </div>
+      )}
+
+      {/* Header */}
+      <div className={`px-8 pt-8 pb-6 ${isPrimary ? 'bg-[#FFC512]/5' : ''}`}>
+        <h3
+          className={`font-display font-extrabold text-2xl tracking-tight mb-4 ${
+            isPrimary ? 'text-[#FFC512]' : 'text-white'
+          }`}
+        >
+          {plan.name}
+        </h3>
+
+        {/* Setup fee pill — Lane 3 only */}
+        {plan.setup !== undefined && (
+          <div className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 text-white/50 text-xs font-medium px-3 py-1.5 rounded-full mb-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FFC512]/60" />
+            £{plan.setup.toLocaleString()} one-time setup
+          </div>
+        )}
+
+        {/* Monthly price */}
+        <div className="flex items-baseline gap-1">
+          <span className="text-white/40 text-xl font-medium">£</span>
+          <span
+            className="font-display font-extrabold text-white tracking-tight"
+            style={{ fontSize: '3.5rem', lineHeight: 1 }}
+          >
+            {plan.monthly}
+          </span>
+          <span className="text-white/40 text-sm font-normal ml-1">/ month + VAT</span>
+        </div>
+      </div>
+
+      {isPrimary && <div className="h-px bg-[#FFC512]/20 mx-8" />}
+
+      {/* Features */}
+      <div className="flex flex-col flex-1 px-8 py-6 gap-3">
+        {plan.features.map((f) => (
+          <div key={f} className="flex items-start gap-3">
+            <Check size={16} className="text-[#FFC512] flex-shrink-0 mt-0.5" />
+            <span className="text-white/75 text-sm font-normal leading-snug">{f}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* CTA */}
+      <div className="px-8 pb-8">
+        <button
+          onClick={onCta}
+          className={`w-full inline-flex items-center justify-center gap-2 font-semibold text-sm px-6 py-3.5 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 tracking-wide ${
+            isPrimary
+              ? 'bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] shadow-lg shadow-[#FFC512]/25'
+              : 'bg-white/8 hover:bg-white/15 text-white border border-white/10'
+          }`}
+        >
+          Get Started
+          <ArrowRight size={16} />
+        </button>
+        <p className="text-white/30 text-xs text-center mt-3 font-normal">
+          No contract required
+        </p>
+      </div>
+    </div>
+  )
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
+
 export default function PackagesContent() {
-  const cardsRef  = useStaggerReveal<HTMLDivElement>(0.1)
-  const tableRef  = useScrollReveal<HTMLDivElement>(0.1)
-  const trustRef  = useStaggerReveal<HTMLDivElement>(0.15)
-  const faqRef    = useScrollReveal<HTMLDivElement>(0.1)
-  const ctaRef    = useScrollReveal<HTMLDivElement>(0.2)
+  const lane1Ref = useStaggerReveal<HTMLDivElement>(0.1)
+  const lane2Ref = useStaggerReveal<HTMLDivElement>(0.1)
+  const lane3Ref = useStaggerReveal<HTMLDivElement>(0.1)
+  const trustRef = useStaggerReveal<HTMLDivElement>(0.15)
+  const noteRef  = useScrollReveal<HTMLDivElement>(0.15)
+  const faqRef   = useScrollReveal<HTMLDivElement>(0.1)
+  const ctaRef   = useScrollReveal<HTMLDivElement>(0.2)
+
   const { openAuditModal } = useAuditModal()
 
   return (
@@ -192,15 +356,14 @@ export default function PackagesContent() {
             className="font-display font-extrabold text-white mb-6 max-w-4xl mx-auto"
             style={{ fontSize: 'clamp(32px, 5.5vw, 72px)', lineHeight: 0.92, letterSpacing: '-0.02em' }}
           >
-            Transparent Pricing.<br />
-            <span className="text-[#FFC512]">No Surprises.</span>
+            Simple, Transparent<br />
+            <span className="text-[#FFC512]">Pricing.</span>
           </h1>
           <p className="text-white/60 text-lg max-w-2xl mx-auto font-normal leading-relaxed mb-8">
-            Three clear packages built for local businesses at different stages of growth.
+            Choose the service that fits where your business is right now.
             No contracts. No hidden fees. Cancel anytime.
           </p>
 
-          {/* Trust pills */}
           <div className="flex flex-wrap justify-center gap-3">
             {['No contracts', 'Cancel anytime', 'UK-based team', 'Free onboarding'].map((t) => (
               <span
@@ -215,152 +378,145 @@ export default function PackagesContent() {
         </div>
       </section>
 
-      {/* ── Pricing cards ─────────────────────────────────────────────────── */}
+      {/* ── Lane 1: Social Media Management ───────────────────────────────── */}
       <section className="bg-[#1a1a1a] py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div ref={cardsRef} className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-            {plans.map((plan, i) => {
-              const isGrowth = plan.name === 'Growth'
-              const isHive   = plan.name === 'Hive'
-              return (
-                <div
-                  key={plan.name}
-                  className={`reveal-scale relative flex flex-col rounded-2xl border-2 ${plan.color} overflow-hidden transition-all duration-300 ${
-                    isGrowth ? 'shadow-2xl shadow-[#FFC512]/15 lg:-translate-y-4' : ''
-                  } ${isHive ? 'bg-[#1c1c1c]' : 'bg-[#222222]'}`}
-                  data-delay={i}
-                >
-                  {/* Badge */}
-                  {plan.badge && (
-                    <div className={`absolute top-0 right-0 text-xs font-bold px-4 py-1.5 rounded-bl-xl tracking-widest uppercase ${
-                      isGrowth ? 'bg-[#FFC512] text-[#222222]' : 'bg-white/10 text-white/70'
-                    }`}>
-                      {plan.badge}
-                    </div>
-                  )}
-
-                  {/* Header */}
-                  <div className={`px-8 pt-8 pb-6 ${isGrowth ? 'bg-[#FFC512]/5' : ''}`}>
-                    <h2 className={`font-display font-extrabold text-2xl tracking-tight mb-1 ${
-                      isGrowth ? 'text-[#FFC512]' : isHive ? 'text-white' : 'text-white'
-                    }`}>
-                      {plan.name}
-                    </h2>
-                    <p className="text-white/50 text-sm font-normal leading-relaxed mb-6">
-                      {plan.tagline}
-                    </p>
-
-                    {/* Price */}
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-white/40 text-xl font-medium">£</span>
-                      <span className="font-display font-extrabold text-white tracking-tight" style={{ fontSize: '3.5rem', lineHeight: 1 }}>
-                        {plan.price}
-                      </span>
-                      <span className="text-white/40 text-sm font-normal ml-1">/ month + VAT</span>
-                    </div>
-                  </div>
-
-                  {isGrowth && <div className="h-px bg-[#FFC512]/20 mx-8" />}
-
-                  {/* Features */}
-                  <div className="flex flex-col flex-1 px-8 py-6 gap-3">
-                    {plan.features.map((f) => (
-                      <div key={f} className="flex items-start gap-3">
-                        <Check size={16} className="text-[#FFC512] flex-shrink-0 mt-0.5" />
-                        <span className={`text-sm font-normal leading-snug ${
-                          f.includes('SEO blog') ? 'text-[#FFC512] font-medium' : 'text-white/75'
-                        }`}>
-                          {f}
-                        </span>
-                      </div>
-                    ))}
-                    {plan.missing.map((f) => (
-                      <div key={f} className="flex items-start gap-3 opacity-40">
-                        <X size={16} className="text-white/50 flex-shrink-0 mt-0.5" />
-                        <span className="text-white/50 text-sm font-normal leading-snug line-through">
-                          {f}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CTA */}
-                  <div className="px-8 pb-8">
-                    <button
-                      onClick={() => { trackButtonClick(`${plan.cta} — ${plan.name}`, 'packages'); openAuditModal('book-package', `${plan.name} — £${plan.price}/mo`) }}
-                      className={`w-full inline-flex items-center justify-center gap-2 font-semibold text-sm px-6 py-3.5 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 tracking-wide ${
-                        isGrowth
-                          ? 'bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] shadow-lg shadow-[#FFC512]/25'
-                          : 'bg-white/8 hover:bg-white/15 text-white border border-white/10'
-                      }`}
-                    >
-                      {plan.cta}
-                      <ArrowRight size={16} />
-                    </button>
-                    <p className="text-white/30 text-xs text-center mt-3 font-normal">
-                      No contract required
-                    </p>
-                  </div>
-                </div>
-              )
-            })}
+          <div className="text-center mb-14">
+            <span className="text-[#FFC512] text-sm font-medium uppercase tracking-widest">
+              Social Media
+            </span>
+            <h2
+              className="font-display font-bold text-white mt-3 tracking-tight leading-tight"
+              style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}
+            >
+              Social Media Management
+            </h2>
+            <p className="text-white/50 text-base font-normal mt-3 max-w-2xl mx-auto leading-relaxed">
+              For businesses that want consistent, professional social media without the hassle.
+            </p>
+            <p className="text-white/30 text-sm mt-2 font-normal">
+              No setup fee. Monthly retainer only.
+            </p>
           </div>
 
-          <p className="text-center text-white/30 text-sm mt-8 font-normal">
-            Not sure which package is right for you?{' '}
-            <Link href="/contact" className="text-[#FFC512] hover:underline">
-              Book a free audit
-            </Link>{' '}
-            and we'll recommend the best fit.
-          </p>
+          <div ref={lane1Ref} className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+            {lane1Plans.map((plan, i) => (
+              <PlanCard
+                key={plan.name}
+                plan={plan}
+                index={i}
+                onCta={() => {
+                  trackButtonClick(`Get Started — ${plan.name}`, 'packages')
+                  openAuditModal('book-package', plan.ctaService, plan.serviceKey)
+                }}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── Comparison table ──────────────────────────────────────────────── */}
+      {/* ── Lane divider ──────────────────────────────────────────────────── */}
+      <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      {/* ── Lane 2: Social Media + SEO ────────────────────────────────────── */}
       <section className="bg-[#222222] py-24">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="text-[#FFC512] text-sm font-medium uppercase tracking-widest">
-              Compare
+              Social + SEO
             </span>
-            <h2 className="font-display font-bold text-4xl sm:text-5xl text-white mt-3 tracking-tight leading-tight">
-              What's included in each plan
+            <h2
+              className="font-display font-bold text-white mt-3 tracking-tight leading-tight"
+              style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}
+            >
+              Social Media + SEO
             </h2>
+            <p className="text-white/50 text-base font-normal mt-3 max-w-2xl mx-auto leading-relaxed">
+              For businesses that want to grow on social AND rank higher on Google — no website needed.
+            </p>
+            <p className="text-white/30 text-sm mt-2 font-normal">
+              No setup fee. Monthly retainer only.
+            </p>
           </div>
 
-          <div ref={tableRef} className="reveal overflow-x-auto">
-            <div className="rounded-2xl border border-white/8 min-w-[560px]">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-white/8">
-                  <th className="text-left px-6 py-4 text-white/40 text-xs font-medium uppercase tracking-widest w-1/2">
-                    Feature
-                  </th>
-                  {['Starter', 'Growth', 'Hive'].map((p) => (
-                    <th key={p} className={`px-4 py-4 text-center text-sm font-display font-bold tracking-tight ${
-                      p === 'Growth' ? 'text-[#FFC512]' : 'text-white'
-                    }`}>
-                      {p}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {compareRows.map((row, i) => (
-                  <tr
-                    key={row.feature}
-                    className={`border-b border-white/5 last:border-0 ${i % 2 === 0 ? 'bg-white/2' : ''}`}
-                  >
-                    <td className="px-6 py-4 text-white/60 text-sm font-normal">{row.feature}</td>
-                    <td className="px-4 py-4 text-center"><Cell value={row.starter} /></td>
-                    <td className="px-4 py-4 text-center bg-[#FFC512]/3"><Cell value={row.growth} /></td>
-                    <td className="px-4 py-4 text-center"><Cell value={row.hive} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            </div>
+          <div ref={lane2Ref} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch max-w-3xl mx-auto">
+            {lane2Plans.map((plan, i) => (
+              <PlanCard
+                key={plan.name}
+                plan={plan}
+                index={i}
+                onCta={() => {
+                  trackButtonClick(`Get Started — ${plan.name}`, 'packages')
+                  openAuditModal('book-package', plan.ctaService, plan.serviceKey)
+                }}
+              />
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Lane divider ──────────────────────────────────────────────────── */}
+      <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      {/* ── Lane 3: Full Digital Partner ──────────────────────────────────── */}
+      <section className="bg-[#1a1a1a] py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <span className="text-[#FFC512] text-sm font-medium uppercase tracking-widest">
+              Full Service
+            </span>
+            <h2
+              className="font-display font-bold text-white mt-3 tracking-tight leading-tight"
+              style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}
+            >
+              Full Digital Partner
+            </h2>
+            <p className="text-white/50 text-base font-normal mt-3 max-w-2xl mx-auto leading-relaxed">
+              For businesses that want everything handled — website, booking system, social media, SEO, and maintenance.
+            </p>
+            <p className="text-white/30 text-sm mt-2 font-normal">
+              One-time setup fee + monthly retainer.
+            </p>
+          </div>
+
+          <div ref={lane3Ref} className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+            {lane3Plans.map((plan, i) => (
+              <PlanCard
+                key={plan.name}
+                plan={plan}
+                index={i}
+                onCta={() => {
+                  trackButtonClick(`Get Started — ${plan.name}`, 'packages')
+                  openAuditModal('book-package', plan.ctaService, plan.serviceKey)
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Bottom note ───────────────────────────────────────────────────── */}
+      <section className="bg-[#222222] py-16 border-t border-white/5">
+        <div
+          ref={noteRef}
+          className="reveal max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+        >
+          <p className="text-white/60 text-lg font-normal leading-relaxed mb-6">
+            Not sure which is right for you?
+          </p>
+          <button
+            onClick={() => {
+              trackButtonClick('Get a Free Digital Health Check', 'packages_note')
+              openAuditModal('service')
+            }}
+            className="inline-flex items-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-base px-8 py-4 rounded-md transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-[#FFC512]/20"
+          >
+            Get a Free Digital Health Check
+            <ArrowRight size={18} />
+          </button>
+          <p className="text-white/25 text-sm mt-5 font-normal">
+            We'll recommend the best fit for your business. Free. No commitment.
+          </p>
         </div>
       </section>
 
@@ -428,11 +584,14 @@ export default function PackagesContent() {
             Get a free audit first.
           </h2>
           <p className="text-white/60 text-lg leading-relaxed font-normal mb-10">
-            We'll review your current social media, tell you exactly what's holding
+            We'll review your current online presence, tell you exactly what's holding
             you back, and recommend the right package — with zero obligation.
           </p>
           <button
-            onClick={() => { trackButtonClick('Book Your Free Audit', 'packages_cta'); openAuditModal('service') }}
+            onClick={() => {
+              trackButtonClick('Book Your Free Audit', 'packages_cta')
+              openAuditModal('service')
+            }}
             className="inline-flex items-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-base px-8 py-4 rounded-md transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-[#FFC512]/20"
           >
             Book Your Free Audit

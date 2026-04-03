@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { ArrowRight, MapPin } from 'lucide-react'
-import { locations } from '@/lib/data'
 import { trackButtonClick } from '@/lib/analytics'
 import { useAuditModal } from '@/components/providers/AuditModalProvider'
 
@@ -74,14 +73,14 @@ export default function HeroSection() {
           {/* ── Headline — each line cascades in independently ── */}
           <h1 className="hero-headline text-white mb-8">
             <span className="block hero-enter hero-enter-2">
-              We Make
+              We Build, Market
             </span>
             <span className="block hero-enter hero-enter-3">
-              Local Businesses
+              & Grow Local
             </span>
-            {/* "Go Viral." is larger + enters last */}
+            {/* "Businesses Online." is larger + enters last */}
             <span className="hero-headline-accent hero-enter hero-enter-4 text-[#FFC512] relative mt-1">
-              Go Viral.
+              Businesses Online.
               {/* Wavy underline — decorative, hidden from screen readers */}
               <svg
                 aria-hidden="true"
@@ -104,31 +103,27 @@ export default function HeroSection() {
 
           {/* ── Subheadline ── */}
           <p className="hero-enter hero-enter-5 text-white/70 text-lg sm:text-xl leading-relaxed max-w-2xl mb-10 font-normal">
-            Premium social media management, content creation, and paid advertising
-            for local businesses across{' '}
-            {locations.map((loc, i) => (
-              <span key={loc}>
-                <span className="text-white font-medium">{loc}</span>
-                {i < locations.length - 1 ? ', ' : '.'}
-              </span>
-            ))}
+            From your website to your social media — we handle your entire digital
+            presence so you can focus on running your business.{' '}
+            <span className="text-white font-medium">Based in South Yorkshire</span>,
+            trusted by 200+ local businesses.
           </p>
 
           {/* ── CTAs ── */}
           <div className="hero-enter hero-enter-6 flex flex-col sm:flex-row gap-4 mb-16">
             <button
-              onClick={() => { trackButtonClick('Get Your Free Audit', 'hero'); openAuditModal('service') }}
+              onClick={() => { trackButtonClick('Get Your Free Health Check', 'hero'); openAuditModal('service') }}
               className="inline-flex items-center justify-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-base px-8 py-4 rounded-md transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-[#FFC512]/20"
             >
-              Get Your Free Audit
+              Get Your Free Health Check
               <ArrowRight size={18} />
             </button>
             <Link
-              href="/portfolio"
-              onClick={() => trackButtonClick('See Our Work', 'hero')}
+              href="/packages"
+              onClick={() => trackButtonClick('See Our Packages', 'hero')}
               className="inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white font-semibold text-base px-8 py-4 rounded-md transition-all duration-200"
             >
-              See Our Work
+              See Our Packages
             </Link>
           </div>
 
