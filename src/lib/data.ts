@@ -160,12 +160,14 @@ export const packages = [
 
 // ─── Service sub-pages ────────────────────────────────────────────────────────
 export const serviceLinks = [
-  { label: 'Social Media Management', href: '/services/social-media-management' },
-  { label: 'Paid Advertising',        href: '/services/paid-advertising' },
-  { label: 'Content Creation',        href: '/services/content-creation' },
-  { label: 'Local SEO',               href: '/services/local-seo' },
-  { label: 'Social Media Strategy',   href: '/services/social-media-strategy' },
-  { label: 'Social Media Audit',      href: '/services/social-media-audit' },
+  { label: 'Social Media Management',   href: '/services/social-media-management' },
+  { label: 'Paid Advertising',          href: '/services/paid-advertising' },
+  { label: 'Content Creation',          href: '/services/content-creation' },
+  { label: 'Local SEO',                 href: '/services/local-seo' },
+  { label: 'Website Design & Build',    href: '/services/website-design' },
+  { label: 'Booking Systems',           href: '/services/booking-systems' },
+  { label: 'Social Media Strategy',     href: '/services/social-media-strategy' },
+  { label: 'Social Media Audit',        href: '/services/social-media-audit' },
 ]
 
 // ─── Locations ────────────────────────────────────────────────────────────────

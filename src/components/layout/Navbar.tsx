@@ -5,9 +5,29 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown } from 'lucide-react'
-import { navLinks, serviceLinks } from '@/lib/data'
+import { navLinks } from '@/lib/data'
 import { useAuditModal } from '@/components/providers/AuditModalProvider'
 import { trackButtonClick } from '@/lib/analytics'
+
+const navServiceGroups = [
+  {
+    label: 'Social & Marketing',
+    links: [
+      { label: 'Social Media Management', href: '/services/social-media-management' },
+      { label: 'Paid Advertising',        href: '/services/paid-advertising' },
+      { label: 'Content Creation',        href: '/services/content-creation' },
+      { label: 'SEO & Content Marketing', href: '/services/local-seo' },
+    ],
+  },
+  {
+    label: 'Web & Automation',
+    links: [
+      { label: 'Website Design & Build',  href: '/services/website-design' },
+      { label: 'Booking Systems',         href: '/services/booking-systems' },
+      { label: 'Analytics & Reporting',   href: '/services/analytics' },
+    ],
+  },
+]
 
 export default function Navbar() {
   const [scrolled, setScrolled]             = useState(false)
@@ -122,7 +142,7 @@ export default function Navbar() {
                       <div
                         role="menu"
                         aria-label="Services submenu"
-                        className={`absolute top-full left-1/2 -translate-x-1/2 mt-1 w-60 bg-[#2a2a2a] border border-white/10 rounded-xl shadow-2xl shadow-black/60 overflow-hidden transition-all duration-200 origin-top ${
+                        className={`absolute top-full left-1/2 -translate-x-1/2 mt-1 w-64 bg-[#2a2a2a] border border-white/10 rounded-xl shadow-2xl shadow-black/60 overflow-hidden transition-all duration-200 origin-top ${
                           servicesOpen ? 'opacity-100 scale-y-100 pointer-events-auto' : 'opacity-0 scale-y-95 pointer-events-none'
                         }`}
                       >
@@ -134,21 +154,32 @@ export default function Navbar() {
                         >
                           All Services →
                         </Link>
-                        {serviceLinks.map((s) => (
-                          <Link
-                            key={s.href}
-                            href={s.href}
-                            role="menuitem"
-                            onClick={handleLinkClick}
-                            className={`block px-4 py-2.5 text-sm font-normal transition-colors duration-150 ${
-                              pathname === s.href
-                                ? 'text-[#FFC512] bg-white/5'
-                                : 'text-white/70 hover:text-white hover:bg-white/5'
-                            }`}
-                          >
-                            {s.label}
-                          </Link>
+                        {navServiceGroups.map((group, gi) => (
+                          <div key={group.label}>
+                            {gi > 0 && <div className="border-t border-white/8 mx-4 mt-1" />}
+                            <div className="px-4 pt-3 pb-1">
+                              <span className="text-white/30 text-[10px] font-semibold uppercase tracking-widest">
+                                {group.label}
+                              </span>
+                            </div>
+                            {group.links.map((s) => (
+                              <Link
+                                key={s.href}
+                                href={s.href}
+                                role="menuitem"
+                                onClick={handleLinkClick}
+                                className={`block px-4 py-2 text-sm font-normal transition-colors duration-150 ${
+                                  pathname === s.href
+                                    ? 'text-[#FFC512] bg-white/5'
+                                    : 'text-white/70 hover:text-white hover:bg-white/5'
+                                }`}
+                              >
+                                {s.label}
+                              </Link>
+                            ))}
+                          </div>
                         ))}
+                        <div className="pb-2" />
                       </div>
                     </div>
                   )
@@ -178,10 +209,10 @@ export default function Navbar() {
             {/* CTA + hamburger */}
             <div className="flex items-center gap-4">
               <button
-                onClick={() => { trackButtonClick('Get a Free Audit', 'navbar'); openAuditModal('service') }}
+                onClick={() => { trackButtonClick('Free Health Check', 'navbar'); openAuditModal('service') }}
                 className="hidden lg:inline-flex items-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-sm tracking-wide px-5 py-2.5 rounded-md transition-all duration-200 hover:scale-105 active:scale-95"
               >
-                Get a Free Audit
+                Free Health Check
               </button>
 
               <button
@@ -241,17 +272,25 @@ export default function Navbar() {
                       >
                         All Services
                       </Link>
-                      {serviceLinks.map((s) => (
-                        <Link
-                          key={s.href}
-                          href={s.href}
-                          onClick={handleLinkClick}
-                          className={`block py-2.5 px-2 text-base font-medium transition-colors duration-150 ${
-                            pathname === s.href ? 'text-[#FFC512]' : 'text-white/65 hover:text-[#FFC512]'
-                          }`}
-                        >
-                          {s.label}
-                        </Link>
+                      {navServiceGroups.map((group, gi) => (
+                        <div key={group.label}>
+                          {gi > 0 && <div className="border-t border-white/8 mx-2 mt-2 mb-1" />}
+                          <p className="px-2 pt-2 pb-1 text-[10px] font-semibold text-white/30 uppercase tracking-widest">
+                            {group.label}
+                          </p>
+                          {group.links.map((s) => (
+                            <Link
+                              key={s.href}
+                              href={s.href}
+                              onClick={handleLinkClick}
+                              className={`block py-2 px-2 text-base font-medium transition-colors duration-150 ${
+                                pathname === s.href ? 'text-[#FFC512]' : 'text-white/65 hover:text-[#FFC512]'
+                              }`}
+                            >
+                              {s.label}
+                            </Link>
+                          ))}
+                        </div>
                       ))}
                     </div>
                   )}
@@ -277,10 +316,10 @@ export default function Navbar() {
 
           <div className="mt-8">
             <button
-              onClick={() => { trackButtonClick('Get a Free Audit', 'navbar_mobile'); openAuditModal('service'); setMenuOpen(false) }}
+              onClick={() => { trackButtonClick('Free Health Check', 'navbar_mobile'); openAuditModal('service'); setMenuOpen(false) }}
               className="inline-flex items-center justify-center w-full bg-[#FFC512] text-[#222222] font-semibold text-lg px-6 py-4 rounded-md hover:bg-[#e6b010] transition-colors tracking-wide"
             >
-              Get a Free Audit
+              Free Health Check
             </button>
           </div>
         </nav>
