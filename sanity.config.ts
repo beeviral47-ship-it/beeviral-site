@@ -15,22 +15,16 @@ function OpenPreviewAction(props: DocumentActionProps) {
   if (!slug) return null
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.beeviral.co.uk'
+  const secret  = process.env.NEXT_PUBLIC_SANITY_PREVIEW_SECRET ?? ''
 
-  const pathMap: Record<string, string> = {
-    blog:         `/blog/${slug}`,
-    caseStudy:    `/case-studies/${slug}`,
-    service:      `/services/${slug}`,
-    locationPage: `/locations/${slug}`,
-    page:         `/${slug}`,
-  }
+  if (!secret) return null
 
-  const path = pathMap[type]
-  if (!path) return null
+  const previewUrl = `${siteUrl}/api/draft?secret=${encodeURIComponent(secret)}&slug=${encodeURIComponent(slug)}&type=${encodeURIComponent(type)}`
 
   return {
     label:    'Open Preview',
     tone:     'primary' as const,
-    onHandle: () => { window.open(siteUrl + path, '_blank') },
+    onHandle: () => { window.open(previewUrl, '_blank') },
   }
 }
 

@@ -1,4 +1,4 @@
-import { client } from './client'
+import { client, previewClient } from './client'
 import type { BlogPost, ServiceDoc, CaseStudyDoc, PageDoc, Category, LocationPageDoc, AreasWeServeDoc } from './types'
 
 // ── SEO fragment (reused in every query) ──────────────────────────────────────
@@ -44,11 +44,9 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
   )
 }
 
-export async function getBlogPost(slug: string): Promise<BlogPost | null> {
-  // useCdn: false ensures a freshly published post is always found.
-  // The Sanity CDN can take up to 60 s to propagate new content; bypassing
-  // it here prevents false 404s immediately after publishing.
-  return client.withConfig({ useCdn: false }).fetch(
+export async function getBlogPost(slug: string, preview = false): Promise<BlogPost | null> {
+  const c = preview ? previewClient : client.withConfig({ useCdn: false })
+  return c.fetch(
     `*[_type == "blog" && slug.current == $slug][0] {
       _id, _type, status, title, slug, author, publishedAt, excerpt,
       ${IMAGE_FRAGMENT},
@@ -57,7 +55,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
       ${SEO_FRAGMENT}
     }`,
     { slug },
-    { next: { revalidate: 300 } }
+    preview ? { cache: 'no-store' } : { next: { revalidate: 300 } }
   )
 }
 

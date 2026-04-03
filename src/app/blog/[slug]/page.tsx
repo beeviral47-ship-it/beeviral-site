@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -118,7 +119,8 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = await getBlogPost(slug)
+  const { isEnabled: preview } = await draftMode()
+  const post = await getBlogPost(slug, preview)
   if (!post) notFound()
 
   const coverUrl = post.featuredImage
@@ -127,6 +129,16 @@ export default async function BlogPostPage({
 
   return (
     <main className="bg-[#1a1a1a] min-h-screen">
+
+      {/* Draft mode banner */}
+      {preview && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#FFC512] text-[#1a1a1a] text-sm font-semibold px-5 py-2.5 rounded-full shadow-lg">
+          <span>Draft preview</span>
+          <a href="/api/disable-draft" className="underline underline-offset-2 opacity-70 hover:opacity-100">
+            Exit
+          </a>
+        </div>
+      )}
 
       {/* Navbar spacer */}
       <div className="h-20 lg:h-24" aria-hidden="true" />
