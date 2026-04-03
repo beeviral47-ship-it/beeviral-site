@@ -356,12 +356,10 @@ export default function PackagesContent() {
             className="font-display font-extrabold text-white mb-6 max-w-4xl mx-auto"
             style={{ fontSize: 'clamp(32px, 5.5vw, 72px)', lineHeight: 0.92, letterSpacing: '-0.02em' }}
           >
-            Simple, Transparent<br />
-            <span className="text-[#FFC512]">Pricing.</span>
+            Simple, Transparent Pricing
           </h1>
           <p className="text-white/60 text-lg max-w-2xl mx-auto font-normal leading-relaxed mb-8">
-            Choose the service that fits where your business is right now.
-            No contracts. No hidden fees. Cancel anytime.
+            From social media management to full website builds and booking systems — choose the package that fits where your business is right now. No contracts. No hidden fees. Cancel anytime.
           </p>
 
           <div className="flex flex-wrap justify-center gap-3">

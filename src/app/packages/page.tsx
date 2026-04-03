@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import PackagesContent from './PackagesContent'
 
 export const metadata: Metadata = {
-  title: 'Packages & Pricing',
+  title: 'Pricing & Packages | Bee Viral — South Yorkshire',
   description:
-    'Transparent social media marketing packages for local businesses in South Yorkshire. Starter from £120/mo, Growth from £150/mo, Hive from £200/mo. No contracts. Cancel anytime.',
+    'Simple, transparent pricing for local businesses in South Yorkshire. Social media management from £120/month. Full website and booking systems from £800. No contracts, cancel anytime.',
 }
 
 export default function PackagesPage() {
