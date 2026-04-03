@@ -7,6 +7,7 @@ import { getBlogPost, getAllBlogSlugs } from '@/sanity/queries'
 import { urlFor } from '@/sanity/image'
 import { buildMetadata } from '@/sanity/metadata'
 import { Calendar, User, ArrowLeft } from 'lucide-react'
+import BlogCTA from '@/components/blog/BlogCTA'
 
 // ── Static params ─────────────────────────────────────────────────────────────
 
@@ -113,8 +114,10 @@ export default async function BlogPostPage({
   const post = await getBlogPost(slug)
   if (!post) notFound()
 
+  // 1200×630 matches OG-image ratio (1.9:1). Sanity uses the hotspot data to crop
+  // intelligently server-side — one crop, no additional browser-side zoom.
   const coverUrl = post.featuredImage
-    ? urlFor(post.featuredImage).width(1600).url()
+    ? urlFor(post.featuredImage).width(1200).height(630).url()
     : null
 
   return (
@@ -123,16 +126,17 @@ export default async function BlogPostPage({
       {/* Navbar spacer — pushes all content below the fixed header */}
       <div className="h-20 lg:h-24" aria-hidden="true" />
 
-      {/* Cover image — full height visible below navbar */}
+      {/* Cover image — natural ratio, no browser-side zoom */}
       {coverUrl && (
-        <div className="relative w-full h-[240px] sm:h-[340px] md:h-[420px] lg:h-[480px] overflow-hidden">
+        <div className="relative w-full max-h-[560px] overflow-hidden">
           <Image
             src={coverUrl}
             alt={post.featuredImage?.alt ?? post.title}
-            fill
+            width={1200}
+            height={630}
             sizes="100vw"
             priority
-            className="object-cover object-center"
+            className="w-full h-auto block"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1a1a1a]" />
         </div>
@@ -177,6 +181,9 @@ export default async function BlogPostPage({
             <PortableText value={post.body as Parameters<typeof PortableText>[0]['value']} components={ptComponents} />
           </div>
         )}
+
+        {/* CTA — appears on every post automatically */}
+        <BlogCTA />
 
         {/* Footer */}
         <div className="mt-16 pt-8 border-t border-white/8 flex items-center justify-between flex-wrap gap-4">
