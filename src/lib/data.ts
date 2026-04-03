@@ -4,9 +4,9 @@ export const navLinks = [
   { label: 'About Us',     href: '/about' },
   { label: 'Services',     href: '/services' },
   { label: 'Portfolio',    href: '/portfolio' },
+  { label: 'Packages',     href: '/packages' },
   { label: 'Case Studies', href: '/case-studies' },
   { label: 'Blog',         href: '/blog' },
-  { label: 'Packages',     href: '/packages' },
   { label: 'Contact',      href: '/contact' },
 ]
 
