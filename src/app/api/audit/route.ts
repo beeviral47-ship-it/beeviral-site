@@ -100,14 +100,46 @@ function emailShell(headerSubtitle: string, bodyHtml: string) {
 
 // ─── Internal notification email (to Bee Viral) ───────────────────────────────
 
+function sectionHeading(title: string) {
+  return `<div style="font-size:11px;font-weight:700;color:#999999;text-transform:uppercase;letter-spacing:2px;margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid #e8e8e8;">${e(title)}</div>`
+}
+
 function buildInternalEmail(data: {
   name: string; business: string; email: string
   phone: string; service: string; website: string; social: string; message: string
-  isPackage: boolean
+  isPackage: boolean; serviceKey: string
+  currentPlatforms: string; postingFrequency: string; socialGoal: string
+  hasWebsite: string; googleBusiness: string; seoGoal: string; industry: string
+  needsBooking: string; businessType: string; currentBooking: string
+  bookingNeeds: string; needsSMS: string; interests: string
+  budget: string; discovery: string
 }) {
   const selectLabel = data.isPackage ? 'Package Selected' : 'Service Interested In'
   const notifLabel  = data.isPackage ? 'New Package Booking' : 'New Lead Notification'
   const mailtoHref  = `mailto:${encodeURIComponent(data.email)}?subject=Re%3A%20Your%20Bee%20Viral%20Enquiry`
+
+  // Conditional fields — only render rows that have a value
+  const condFields: Array<[string, string]> = [
+    ['Current Platforms',      data.currentPlatforms],
+    ['Posting Frequency',      data.postingFrequency],
+    ['Social Goal',            data.socialGoal],
+    ['Has Website',            data.hasWebsite],
+    ['Google Business',        data.googleBusiness],
+    ['SEO Goal',               data.seoGoal],
+    ['Industry',               data.industry],
+    ['Needs Booking System',   data.needsBooking],
+    ['Business Type',          data.businessType],
+    ['Current Booking Method', data.currentBooking],
+    ['Booking Needs',          data.bookingNeeds],
+    ['Needs SMS',              data.needsSMS],
+    ['Interests',              data.interests],
+    ['Monthly Budget',         data.budget],
+    ['How They Find Customers',data.discovery],
+  ]
+  const condRows = condFields
+    .filter(([, v]) => v && v.trim())
+    .map(([label, value]) => field(label, value))
+    .join('')
 
   const body = `
     <p style="margin:0 0 28px;font-size:15px;color:#444444;line-height:1.65;">
@@ -118,12 +150,17 @@ function buildInternalEmail(data: {
     ${field('Business', data.business)}
     ${field('Email',    data.email, `mailto:${data.email}`)}
     ${field('Phone',    data.phone || '—')}
-    ${data.isPackage ? field(selectLabel, data.service || '—') : ''}
+
+    ${sectionHeading('Service Information')}
+    ${data.serviceKey ? field('Service Key', data.serviceKey) : ''}
+    ${data.service ? field(selectLabel, data.service) : ''}
     ${!data.isPackage && data.website ? field('Website', data.website, safeHref(data.website) ? data.website : undefined) : ''}
     ${!data.isPackage && data.social  ? field('Social Media Handles', data.social) : ''}
 
+    ${condRows ? `${sectionHeading('Conditional Questions')}${condRows}` : ''}
+
     ${data.message ? `
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:4px;margin-bottom:32px;border-radius:6px;overflow:hidden;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;margin-bottom:32px;border-radius:6px;overflow:hidden;">
       <tr>
         <td width="4" style="background:#FFC512;">&nbsp;</td>
         <td style="background:#f7f7f7;padding:14px 18px;">
@@ -258,7 +295,11 @@ export async function POST(req: NextRequest) {
 
     const {
       name, business, email, phone, service,
-      website, social, message, mode,
+      website, social, message, mode, serviceKey,
+      currentPlatforms, postingFrequency, socialGoal,
+      hasWebsite, googleBusiness, seoGoal, industry,
+      needsBooking, businessType, currentBooking,
+      bookingNeeds, needsSMS, interests, budget, discovery,
     } = body
 
     // ── Required field check ───────────────────────────────────────────────
@@ -303,15 +344,31 @@ export async function POST(req: NextRequest) {
     console.log('[audit] Resend initialised')
 
     const emailData = {
-      name:     String(name).trim(),
-      business: String(business).trim(),
-      email:    String(email).trim(),
-      phone:    String(phone || '').trim(),
-      service:  String(service || '').trim(),
-      website:  String(website || '').trim(),
-      social:   String(social || '').trim(),
-      message:  String(message || '').trim(),
+      name:             String(name).trim(),
+      business:         String(business).trim(),
+      email:            String(email).trim(),
+      phone:            String(phone || '').trim(),
+      service:          String(service || '').trim(),
+      website:          String(website || '').trim(),
+      social:           String(social || '').trim(),
+      message:          String(message || '').trim(),
       isPackage,
+      serviceKey:       String(serviceKey || '').trim(),
+      currentPlatforms: String(currentPlatforms || '').trim(),
+      postingFrequency: String(postingFrequency || '').trim(),
+      socialGoal:       String(socialGoal || '').trim(),
+      hasWebsite:       String(hasWebsite || '').trim(),
+      googleBusiness:   String(googleBusiness || '').trim(),
+      seoGoal:          String(seoGoal || '').trim(),
+      industry:         String(industry || '').trim(),
+      needsBooking:     String(needsBooking || '').trim(),
+      businessType:     String(businessType || '').trim(),
+      currentBooking:   String(currentBooking || '').trim(),
+      bookingNeeds:     String(bookingNeeds || '').trim(),
+      needsSMS:         String(needsSMS || '').trim(),
+      interests:        String(interests || '').trim(),
+      budget:           String(budget || '').trim(),
+      discovery:        String(discovery || '').trim(),
     }
 
     // ── Email 1: internal notification ────────────────────────────────────

@@ -67,7 +67,7 @@ export default function HeroSection() {
           {/* ── Badge ── */}
           <div className="hero-enter hero-enter-1 inline-flex items-center gap-2 bg-[#FFC512]/10 border border-[#FFC512]/30 text-[#FFC512] text-sm font-medium px-4 py-2 rounded-full mb-8">
             <MapPin size={14} />
-            <span>South Yorkshire's #1 Social Media Agency</span>
+            <span>South Yorkshire's #1 Local Business Growth Agency</span>
           </div>
 
           {/* ── Headline — each line cascades in independently ── */}

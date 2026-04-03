@@ -450,7 +450,7 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
                   </label>
                   <input
                     id="audit-website"
-                    type="url"
+                    type="text"
                     placeholder="https://yourbusiness.co.uk"
                     value={form.website}
                     onChange={(e) => set('website', e.target.value)}
