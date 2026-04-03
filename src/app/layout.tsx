@@ -24,11 +24,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.beeviral.co.uk
 // ─── Metadata ────────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
   title: {
-    default: 'Bee Viral | Social Media Marketing Agency in South Yorkshire',
+    default: 'Bee Viral | Local Business Growth Agency — South Yorkshire',
     template: '%s | Bee Viral',
   },
   description:
-    'We help local businesses in Wath, Rotherham and Barnsley grow through social media management, paid advertising and content creation.',
+    'Bee Viral helps local businesses in South Yorkshire grow online. We build websites, booking systems, manage social media, and deliver local SEO — all under one roof. Based in Wath, serving Rotherham, Barnsley, Sheffield and beyond.',
   keywords: [
     'social media marketing agency South Yorkshire',
     'social media management Rotherham',
@@ -72,8 +72,8 @@ export const metadata: Metadata = {
     locale:      'en_GB',
     url:         SITE_URL,
     siteName:    'Bee Viral',
-    title:       'Bee Viral | Social Media Marketing Agency in South Yorkshire',
-    description: 'We help local businesses in Wath, Rotherham and Barnsley grow through social media management, paid advertising and content creation.',
+    title:       'Bee Viral | Local Business Growth Agency — South Yorkshire',
+    description: 'Bee Viral helps local businesses in South Yorkshire grow online. We build websites, booking systems, manage social media, and deliver local SEO — all under one roof. Based in Wath, serving Rotherham, Barnsley, Sheffield and beyond.',
     images: [
       {
         url:    'https://www.beeviral.co.uk/og-image.png',
@@ -87,8 +87,8 @@ export const metadata: Metadata = {
   // ── Twitter / X ───────────────────────────────────────────────────────────
   twitter: {
     card:        'summary_large_image',
-    title:       'Bee Viral | Social Media Marketing Agency in South Yorkshire',
-    description: 'We help local businesses in Wath, Rotherham and Barnsley grow through social media management, paid advertising and content creation.',
+    title:       'Bee Viral | Local Business Growth Agency — South Yorkshire',
+    description: 'Bee Viral helps local businesses in South Yorkshire grow online. We build websites, booking systems, manage social media, and deliver local SEO — all under one roof. Based in Wath, serving Rotherham, Barnsley, Sheffield and beyond.',
     images:      ['https://www.beeviral.co.uk/og-image.png'],
   },
 
