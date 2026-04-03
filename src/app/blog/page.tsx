@@ -22,6 +22,9 @@ export default async function BlogPage() {
 
   return (
     <main className="bg-[#1a1a1a] min-h-screen">
+      {/* Navbar spacer */}
+      <div className="h-20 lg:h-24" aria-hidden="true" />
+
       {/* Hero */}
       <section className="bg-[#222222] py-20 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
