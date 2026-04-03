@@ -22,19 +22,23 @@ export default async function BlogPage() {
 
   return (
     <main className="bg-[#1a1a1a] min-h-screen">
-      {/* Navbar spacer */}
-      <div className="h-20 lg:h-24" aria-hidden="true" />
-
       {/* Hero */}
-      <section className="bg-[#222222] py-20 border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-[#FFC512] text-sm font-medium uppercase tracking-widest">
-            Insights & Tips
+      <section className="relative bg-[#222222] pt-40 pb-24 overflow-hidden border-b border-white/5">
+        <div aria-hidden="true" className="absolute inset-0 bg-honeycomb pointer-events-none" />
+        <div aria-hidden="true" className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-[#FFC512]/5 blur-3xl pointer-events-none" />
+        <div aria-hidden="true" className="absolute -bottom-20 -left-20 w-[350px] h-[350px] rounded-full bg-[#FFC512]/4 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <span className="inline-block text-[#FFC512] text-sm font-medium uppercase tracking-widest mb-4">
+            Insights &amp; Tips
           </span>
-          <h1 className="font-display font-bold text-4xl sm:text-5xl text-white mt-3 tracking-tight leading-tight">
+          <h1
+            className="font-display font-extrabold text-white mb-6"
+            style={{ fontSize: 'clamp(36px, 6vw, 72px)', lineHeight: 0.95, letterSpacing: '-0.02em' }}
+          >
             The Bee Viral Blog
           </h1>
-          <p className="text-white/55 text-lg mt-4 max-w-2xl font-normal leading-relaxed">
+          <p className="text-white/60 text-lg max-w-xl mx-auto font-normal leading-relaxed">
             Social media advice, platform updates, and real stories from South Yorkshire businesses.
           </p>
         </div>
