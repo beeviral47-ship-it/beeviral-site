@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import LocalSEOContent from './LocalSEOContent'
 
 export const metadata: Metadata = {
-  title: 'Local SEO Services in South Yorkshire | Bee Viral',
+  title: 'Local SEO & Content Marketing South Yorkshire | Bee Viral',
   description:
-    'Local SEO services for businesses in South Yorkshire, Rotherham, Barnsley & Wath. We optimise your Google Business Profile and website so local customers find you first.',
+    'Get found on Google by local customers. We optimise your website, Google Business profile, and publish monthly SEO blog content for businesses across South Yorkshire.',
 }
 
 export default function LocalSEOPage() {

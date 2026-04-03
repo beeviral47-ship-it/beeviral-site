@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import PaidAdvertisingContent from './PaidAdvertisingContent'
 
 export const metadata: Metadata = {
-  title: 'Facebook & Instagram Ads for Local Businesses in South Yorkshire | Bee Viral',
+  title: 'Paid Social Advertising South Yorkshire | Bee Viral',
   description:
-    'Targeted Facebook and Instagram ad campaigns for local businesses in South Yorkshire, Rotherham, Barnsley & Wath. We generate leads, drive footfall and deliver real ROI.',
+    'Targeted Facebook, Instagram and TikTok ad campaigns for local businesses in South Yorkshire. We put your brand in front of the right local audience at the right time.',
 }
 
 export default function PaidAdvertisingPage() {

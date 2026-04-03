@@ -4,7 +4,7 @@ import WebsiteDesignContent from './WebsiteDesignContent'
 export const metadata: Metadata = {
   title: 'Website Design & Build South Yorkshire | Bee Viral',
   description:
-    'Professional website design for local businesses in South Yorkshire. Custom Next.js builds, mobile-first, SEO-ready. From £800 one-time setup.',
+    'Custom mobile-first websites for local businesses in South Yorkshire. Built on Next.js, SEO-ready, with Sanity CMS included. From £800 one-time setup.',
 }
 
 export default function WebsiteDesignPage() {

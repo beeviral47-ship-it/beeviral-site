@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import SocialMediaManagementContent from './SocialMediaManagementContent'
 
 export const metadata: Metadata = {
-  title: 'Social Media Management in South Yorkshire | Bee Viral',
+  title: 'Social Media Management South Yorkshire | Bee Viral',
   description:
-    'Professional social media management for local businesses in South Yorkshire, Rotherham, Barnsley & Wath. Consistent posting, branded content & community engagement from £120/mo.',
+    'Professional social media management for local businesses in South Yorkshire. Monthly content, graphics, captions, and scheduling for Facebook, Instagram and TikTok. From £120/month.',
 }
 
 export default function SocialMediaManagementPage() {

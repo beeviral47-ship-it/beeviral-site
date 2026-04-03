@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import ContentCreationContent from './ContentCreationContent'
 
 export const metadata: Metadata = {
-  title: 'Social Media Content Creation for South Yorkshire Businesses | Bee Viral',
+  title: 'Social Media Content Creation South Yorkshire | Bee Viral',
   description:
-    'Professional social media content creation for local businesses in South Yorkshire. Branded graphics, Reels, captions and more — designed to stop the scroll and grow your audience.',
+    'Scroll-stopping photos, Reels, and graphics crafted for your brand and local South Yorkshire audience. In-house content creation by Bee Viral.',
 }
 
 export default function ContentCreationPage() {

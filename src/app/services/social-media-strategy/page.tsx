@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import SocialMediaStrategyContent from './SocialMediaStrategyContent'
 
 export const metadata: Metadata = {
-  title: 'Social Media Strategy for Local Businesses in South Yorkshire | Bee Viral',
+  title: 'Social Media Strategy South Yorkshire | Bee Viral',
   description:
-    'Bespoke social media strategy for local businesses in South Yorkshire, Rotherham, Barnsley & Wath. A clear plan aligned to your goals, audience and local market.',
+    'Data-driven social media strategy for local businesses in South Yorkshire. We build a clear plan aligned to your business goals — not random posting.',
 }
 
 export default function SocialMediaStrategyPage() {

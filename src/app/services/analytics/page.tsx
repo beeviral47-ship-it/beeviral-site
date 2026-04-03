@@ -4,7 +4,7 @@ import AnalyticsContent from './AnalyticsContent'
 export const metadata: Metadata = {
   title: 'Analytics & Reporting South Yorkshire | Bee Viral',
   description:
-    'Clear monthly reports showing exactly what\'s working for your business — reach, engagement, leads, and ROI. Bee Viral, South Yorkshire.',
+    'Clear monthly marketing reports for local businesses in South Yorkshire. Track reach, engagement, leads, and ROI — no jargon, just the numbers that matter.',
 }
 
 export default function AnalyticsPage() {

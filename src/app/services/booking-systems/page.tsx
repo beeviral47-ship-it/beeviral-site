@@ -4,7 +4,7 @@ import BookingSystemsContent from './BookingSystemsContent'
 export const metadata: Metadata = {
   title: 'Booking Systems & Automation South Yorkshire | Bee Viral',
   description:
-    'Custom online booking systems for salons, beauty studios, fitness businesses and local services in South Yorkshire. Automated reminders, confirmations and cancellations built in.',
+    'Custom online booking systems for salons, beauty studios, fitness businesses and local services in South Yorkshire. Automated reminders and cancellations built in.',
 }
 
 export default function BookingSystemsPage() {

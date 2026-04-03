@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import SocialMediaAuditContent from './SocialMediaAuditContent'
 
 export const metadata: Metadata = {
-  title: 'Social Media Audit for South Yorkshire Businesses | Bee Viral',
+  title: 'Social Media Audit South Yorkshire | Bee Viral',
   description:
-    'Free social media audit for local businesses in South Yorkshire, Rotherham, Barnsley & Wath. We review your accounts, identify gaps, and tell you exactly how to improve.',
+    'Full audit of your social media presence. We identify exactly what\'s holding your business back and give you a clear action plan. Free for South Yorkshire businesses.',
 }
 
 export default function SocialMediaAuditPage() {
