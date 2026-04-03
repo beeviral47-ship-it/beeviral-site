@@ -273,11 +273,15 @@ function PlanCard({
           {plan.name}
         </h3>
 
-        {/* Setup fee pill — Lane 3 only */}
+        {/* Setup fee banner — Lane 3 only */}
         {plan.setup !== undefined && (
-          <div className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 text-white/50 text-xs font-medium px-3 py-1.5 rounded-full mb-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FFC512]/60" />
-            £{plan.setup.toLocaleString()} one-time setup
+          <div className="w-full bg-[#FFC512] rounded-lg px-4 py-3 mb-5">
+            <p className="text-[#222222] font-bold text-sm tracking-wide">
+              One-time setup: £{plan.setup.toLocaleString()}
+            </p>
+            <p className="text-[#222222]/60 text-xs font-medium mt-0.5">
+              then £{plan.monthly}/month
+            </p>
           </div>
         )}
 
@@ -290,7 +294,7 @@ function PlanCard({
           >
             {plan.monthly}
           </span>
-          <span className="text-white/40 text-sm font-normal ml-1">/ month + VAT</span>
+          <span className="text-white/40 text-sm font-normal ml-1">/ month ongoing + VAT</span>
         </div>
       </div>
 
