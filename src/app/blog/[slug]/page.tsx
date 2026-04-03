@@ -38,7 +38,7 @@ export async function generateMetadata({
 const ptComponents: PortableTextComponents = {
   block: {
     normal:     ({ children }) => <p className="mb-5 leading-relaxed text-white/75">{children}</p>,
-    h2:         ({ children }) => <h2 className="font-display font-bold text-2xl sm:text-3xl text-white mt-12 mb-5 tracking-tight">{children}</h2>,
+    h2:         ({ children }) => <h2 className="font-display font-bold text-2xl sm:text-3xl text-[#FFC512] mt-12 mb-5 tracking-tight">{children}</h2>,
     h3:         ({ children }) => <h3 className="font-display font-semibold text-xl text-white mt-8 mb-4 tracking-tight">{children}</h3>,
     h4:         ({ children }) => <h4 className="font-display font-semibold text-lg text-white mt-6 mb-3 tracking-tight">{children}</h4>,
     blockquote: ({ children }) => (
@@ -120,9 +120,12 @@ export default async function BlogPostPage({
   return (
     <main className="bg-[#1a1a1a] min-h-screen">
 
-      {/* Cover image — progressive height across breakpoints */}
+      {/* Navbar spacer — pushes all content below the fixed header */}
+      <div className="h-20 lg:h-24" aria-hidden="true" />
+
+      {/* Cover image — full height visible below navbar */}
       {coverUrl && (
-        <div className="relative w-full h-[280px] sm:h-[380px] md:h-[460px] lg:h-[520px] overflow-hidden">
+        <div className="relative w-full h-[240px] sm:h-[340px] md:h-[420px] lg:h-[480px] overflow-hidden">
           <Image
             src={coverUrl}
             alt={post.featuredImage?.alt ?? post.title}
@@ -131,7 +134,7 @@ export default async function BlogPostPage({
             priority
             className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/30 via-transparent to-[#1a1a1a]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1a1a1a]" />
         </div>
       )}
 
@@ -139,7 +142,7 @@ export default async function BlogPostPage({
       <article className="max-w-3xl mx-auto px-4 sm:px-6 pb-16 sm:pb-24">
 
         {/* Back link */}
-        <div className={coverUrl ? 'pt-8 sm:pt-10' : 'pt-20 lg:pt-24'}>
+        <div className="pt-8 sm:pt-10">
           <Link
             href="/blog"
             className="inline-flex items-center gap-2 text-white/40 hover:text-[#FFC512] text-sm font-medium transition-colors duration-200 mb-8"
@@ -161,7 +164,7 @@ export default async function BlogPostPage({
         </div>
 
         {/* Title */}
-        <h1 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-tight mb-6 sm:mb-8">
+        <h1 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#FFC512] tracking-tight leading-tight mb-6 sm:mb-8">
           {post.title}
         </h1>
 
