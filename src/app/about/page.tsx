@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import AboutContent from './AboutContent'
 
 export const metadata: Metadata = {
-  title: 'About Us',
+  title: 'About Bee Viral | South Yorkshire\'s Local Business Growth Agency',
   description:
-    'Learn about Bee Viral — South Yorkshire\'s social media marketing agency founded in 2014. Over 200 local businesses helped across Wath, Rotherham and Barnsley.',
+    'Learn about Bee Viral — founded by Tahir Azam in South Yorkshire. We build websites, booking systems, manage social media and SEO for local businesses across Rotherham, Barnsley, Sheffield and Wath.',
 }
 
 export default function AboutPage() {

@@ -12,12 +12,12 @@ const reasons = [
     desc: 'We live and work in South Yorkshire. We know the landscape, the audience, and what actually resonates with local customers.',
   },
   {
-    title: 'Strategy First',
-    desc: 'Every campaign starts with a clear plan tied to your business goals — not random posting or vanity metrics.',
+    title: 'One Agency, Everything Handled',
+    desc: 'Website, booking system, social media, SEO, and reporting — you don\'t need four different suppliers. We do it all, joined up, under one roof.',
   },
   {
-    title: 'Real Results That Grow Your Business',
-    desc: 'We measure what matters: leads, bookings, and revenue — not likes or vanity metrics. Our campaigns are designed to generate real enquiries for your business.',
+    title: 'Real Results, Not Vanity Metrics',
+    desc: 'We measure what matters: leads, bookings, and revenue — not likes or follower counts. Every campaign is designed to generate real enquiries.',
   },
   {
     title: 'Transparent Communication',
@@ -28,7 +28,7 @@ const reasons = [
 const stats = [
   { value: '10+',  label: 'Years Experience' },
   { value: '200+', label: 'Local Businesses' },
-  { value: '5M+',  label: 'People Reached Through Campaigns' },
+  { value: '3',    label: 'Services: Web, Social & SEO' },
 ]
 
 export default function AboutPage() {
@@ -58,7 +58,7 @@ export default function AboutPage() {
             About Bee Viral
           </h1>
           <p className="text-white/60 text-lg max-w-xl mx-auto font-normal leading-relaxed">
-            Helping local businesses in South Yorkshire generate more leads through social media.
+            Helping local businesses across South Yorkshire build a complete, professional online presence — from websites and booking systems to social media and SEO.
           </p>
         </div>
       </section>
@@ -77,23 +77,25 @@ export default function AboutPage() {
             <div className="space-y-5 text-[#555] text-lg leading-relaxed font-normal" style={{ marginTop: '24px' }}>
               <p>
                 Bee Viral was founded in 2014 with a simple belief: local businesses deserve
-                the same quality of social media marketing as the big brands — without the
+                the same quality of digital marketing as the big brands — without the
                 agency price tag or the corporate disconnect.
               </p>
               <p>
-                Today, we work with businesses across Wath, Rotherham, Barnsley, and the
-                wider South Yorkshire region.
+                What started as a social media agency has grown into something bigger. Today
+                we build complete digital systems for local businesses — professional websites,
+                online booking platforms, automated email systems, social media management,
+                and local SEO — all under one roof, all handled by one team.
               </p>
               <p>
-                We're a local agency, rooted in South Yorkshire. Our team understands the
-                region, the communities, and the customers that make up your audience. That
-                local knowledge is something no out-of-town agency can replicate.
+                We work with businesses across Wath, Rotherham, Barnsley, Sheffield, and the
+                wider South Yorkshire region. We understand the local market, the local
+                audience, and what it actually takes to win customers in this area. That local
+                knowledge is something no out-of-town agency can replicate.
               </p>
               <p>
-                Over the past decade we've helped more than 200 businesses across Wath,
-                Rotherham, Barnsley, and beyond grow their online presence, attract real
-                customers, and build brands they're proud of. We focus on results that
-                matter — not likes, but leads. Not followers, but footfall.
+                Over the past decade we've helped more than 200 businesses grow their online
+                presence, attract real customers, and build brands they're proud of. We don't
+                focus on likes — we focus on leads. Not followers — footfall.
               </p>
             </div>
           </div>
@@ -154,12 +156,18 @@ export default function AboutPage() {
                 deliver.
               </p>
               <p>
-                After working closely with businesses across South Yorkshire, we saw the same
-                problem again and again: agencies focusing on vanity metrics instead of real
-                results. Bee Viral was built to change that.
+                After working closely with businesses across South Yorkshire, the same problem
+                kept appearing: agencies focusing on vanity metrics, generic templates, and
+                one-size-fits-all strategies that don't work for local businesses.
+              </p>
+              <p>
+                Bee Viral was built to change that. Whether you need a website built from
+                scratch, a booking system that runs on autopilot, or a social media presence
+                that actually generates enquiries — we'll tell you honestly what will work
+                for your business and deliver it properly.
               </p>
               <p className="text-[#333] font-medium">
-                If we don't believe we can help your business grow, we'll tell you upfront.
+                If we don't believe we can help you grow, we'll tell you upfront.
               </p>
             </div>
           </div>
@@ -206,14 +214,14 @@ export default function AboutPage() {
             Ready to grow your business?
           </h2>
           <p className="text-white/60 text-lg leading-relaxed font-normal mb-10">
-            Book your free social media audit — no commitment, no jargon, just
-            practical advice on how to generate more leads.
+            Book your free Digital Health Check — no commitment, no jargon, just
+            practical advice on how to generate more leads online.
           </p>
           <button
-            onClick={() => { trackButtonClick('Get Your Free Audit', 'about_cta'); openAuditModal('service') }}
+            onClick={() => { trackButtonClick('Get Your Free Health Check', 'about_cta'); openAuditModal('service', '', 'general') }}
             className="inline-flex items-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-base px-8 py-4 rounded-md transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-[#FFC512]/20"
           >
-            Get Your Free Audit
+            Get Your Free Health Check
             <ArrowRight size={18} />
           </button>
         </div>
