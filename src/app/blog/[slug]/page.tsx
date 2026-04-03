@@ -128,7 +128,7 @@ export default async function BlogPostPage({
 
       {/* Cover image — natural ratio, no browser-side zoom */}
       {coverUrl && (
-        <div className="relative w-full max-h-[560px] overflow-hidden">
+        <div className="relative w-full">
           <Image
             src={coverUrl}
             alt={post.featuredImage?.alt ?? post.title}
