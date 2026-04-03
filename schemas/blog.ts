@@ -95,6 +95,13 @@ export const blog = defineType({
 
     // ── SEO ─────────────────────────────────────────────────────────────────
     defineField({
+      name:        'focusKeyword',
+      title:       'Focus Keyword',
+      type:        'string',
+      group:       'seo',
+      description: 'Primary keyword or keyphrase this article is optimised for (e.g. "social media management Sheffield"). Used for on-page SEO analysis.',
+    }),
+    defineField({
       name:  'seo',
       title: 'SEO',
       type:  'seo',

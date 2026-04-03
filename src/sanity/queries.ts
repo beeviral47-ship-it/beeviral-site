@@ -34,43 +34,49 @@ const CATEGORY_FRAGMENT = `
 
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
   return client.fetch(
-    `*[_type == "blog" && status == "published"] | order(publishedAt desc) {
+    `*[_type == "blog"] | order(publishedAt desc) {
       _id, _type, status, title, slug, author, publishedAt, excerpt,
       ${IMAGE_FRAGMENT},
       ${CATEGORY_FRAGMENT}
-    }`
+    }`,
+    {},
+    { next: { revalidate: 3600 } }
   )
 }
 
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   return client.fetch(
-    `*[_type == "blog" && status == "published" && slug.current == $slug][0] {
+    `*[_type == "blog" && slug.current == $slug][0] {
       _id, _type, status, title, slug, author, publishedAt, excerpt,
       ${IMAGE_FRAGMENT},
       ${CATEGORY_FRAGMENT},
       body,
       ${SEO_FRAGMENT}
     }`,
-    { slug }
+    { slug },
+    { next: { revalidate: 3600 } }
   )
 }
 
 export async function getAllBlogSlugs(): Promise<string[]> {
   const results: { slug: { current: string } }[] = await client.fetch(
-    `*[_type == "blog" && status == "published"] { slug }`
+    `*[_type == "blog"] { slug }`,
+    {},
+    { next: { revalidate: 3600 } }
   )
   return results.map((r) => r.slug.current)
 }
 
 export async function getBlogPostsByCategory(categorySlug: string): Promise<BlogPost[]> {
   return client.fetch(
-    `*[_type == "blog" && status == "published" && $categorySlug in categories[]->slug.current]
+    `*[_type == "blog" && $categorySlug in categories[]->slug.current]
      | order(publishedAt desc) {
        _id, _type, status, title, slug, author, publishedAt, excerpt,
        ${IMAGE_FRAGMENT},
        ${CATEGORY_FRAGMENT}
      }`,
-    { categorySlug }
+    { categorySlug },
+    { next: { revalidate: 3600 } }
   )
 }
 
