@@ -5,9 +5,9 @@ import { MapPin, Mail, Phone, MessageCircle, Clock } from 'lucide-react'
 import { InstagramIcon, FacebookIcon } from '@/components/ui/SocialIcons'
 
 export const metadata: Metadata = {
-  title: 'Contact Us',
+  title: 'Contact Bee Viral | Free Digital Health Check — South Yorkshire',
   description:
-    'Get in touch with Bee Viral. Book a free social media audit for your business in Wath, Rotherham, Barnsley or South Yorkshire.',
+    'Get in touch with Bee Viral — South Yorkshire\'s local business growth agency. Book your free Digital Health Check today. No contracts, no jargon, just honest advice.',
 }
 
 const contactDetails = [
@@ -69,12 +69,10 @@ export default function ContactPage() {
             className="font-display font-extrabold text-white mb-6"
             style={{ fontSize: 'clamp(36px, 6vw, 72px)', lineHeight: 0.95, letterSpacing: '-0.02em' }}
           >
-            Let's Grow Your<br />
-            <span className="text-[#FFC512]">Business Together</span>
+            Let's Grow Your Business
           </h1>
           <p className="text-white/60 text-lg max-w-xl mx-auto font-normal leading-relaxed">
-            Book a free social media audit. No commitment, no jargon — just an
-            honest conversation about what we can do for your business.
+            Book your free Digital Health Check and we'll review your entire online presence — website, social media, SEO, and local search. Honest advice, no hard sell, no obligation.
           </p>
         </div>
       </section>
