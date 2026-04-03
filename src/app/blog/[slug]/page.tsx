@@ -10,6 +10,13 @@ import { Calendar, User, ArrowLeft } from 'lucide-react'
 import BlogCTA from '@/components/blog/BlogCTA'
 
 // ── Static params ─────────────────────────────────────────────────────────────
+// dynamicParams = true (default) — slugs not in generateStaticParams are
+// rendered on demand rather than returning 404. This means posts published
+// after the last build are immediately accessible without a redeploy.
+export const dynamicParams = true
+
+// Revalidate every 5 minutes so content edits appear quickly.
+export const revalidate = 300
 
 export async function generateStaticParams() {
   const slugs = await getAllBlogSlugs()
