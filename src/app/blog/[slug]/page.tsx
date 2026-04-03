@@ -114,35 +114,17 @@ export default async function BlogPostPage({
   const post = await getBlogPost(slug)
   if (!post) notFound()
 
-  // 1200×630 matches OG-image ratio (1.9:1). Sanity uses the hotspot data to crop
-  // intelligently server-side — one crop, no additional browser-side zoom.
   const coverUrl = post.featuredImage
-    ? urlFor(post.featuredImage).width(1200).height(630).url()
+    ? urlFor(post.featuredImage).width(896).height(504).url()
     : null
 
   return (
     <main className="bg-[#1a1a1a] min-h-screen">
 
-      {/* Navbar spacer — pushes all content below the fixed header */}
+      {/* Navbar spacer */}
       <div className="h-20 lg:h-24" aria-hidden="true" />
 
-      {/* Cover image — natural ratio, no browser-side zoom */}
-      {coverUrl && (
-        <div className="relative w-full">
-          <Image
-            src={coverUrl}
-            alt={post.featuredImage?.alt ?? post.title}
-            width={1200}
-            height={630}
-            sizes="100vw"
-            priority
-            className="w-full h-auto block"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1a1a1a]" />
-        </div>
-      )}
-
-      {/* Article */}
+      {/* Article — all content including the featured image lives inside this container */}
       <article className="max-w-3xl mx-auto px-4 sm:px-6 pb-16 sm:pb-24">
 
         {/* Back link */}
@@ -171,6 +153,20 @@ export default async function BlogPostPage({
         <h1 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#FFC512] tracking-tight leading-tight mb-6 sm:mb-8">
           {post.title}
         </h1>
+
+        {/* Featured image — contained, 16:9, within the article column */}
+        {coverUrl && (
+          <div className="relative w-full rounded-xl overflow-hidden mb-10" style={{ aspectRatio: '16/9' }}>
+            <Image
+              src={coverUrl}
+              alt={post.featuredImage?.alt ?? post.title}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 768px"
+              priority
+              className="object-cover"
+            />
+          </div>
+        )}
 
         {/* Divider */}
         <div className="h-px bg-white/8 mb-10" />
