@@ -114,32 +114,32 @@ export default async function BlogPostPage({
   if (!post) notFound()
 
   const coverUrl = post.featuredImage
-    ? urlFor(post.featuredImage).width(1600).height(700).url()
+    ? urlFor(post.featuredImage).width(1600).url()
     : null
 
   return (
     <main className="bg-[#1a1a1a] min-h-screen">
 
-      {/* Cover image */}
+      {/* Cover image — progressive height across breakpoints */}
       {coverUrl && (
-        <div className="relative w-full h-64 sm:h-96 overflow-hidden">
+        <div className="relative w-full h-[280px] sm:h-[380px] md:h-[460px] lg:h-[520px] overflow-hidden">
           <Image
             src={coverUrl}
             alt={post.featuredImage?.alt ?? post.title}
             fill
             sizes="100vw"
             priority
-            className="object-cover"
+            className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a1a1a]/20 to-[#1a1a1a]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/30 via-transparent to-[#1a1a1a]" />
         </div>
       )}
 
       {/* Article */}
-      <article className="max-w-3xl mx-auto px-4 sm:px-6 pb-24">
+      <article className="max-w-3xl mx-auto px-4 sm:px-6 pb-16 sm:pb-24">
 
         {/* Back link */}
-        <div className={coverUrl ? 'pt-6' : 'pt-20'}>
+        <div className={coverUrl ? 'pt-8 sm:pt-10' : 'pt-20 lg:pt-24'}>
           <Link
             href="/blog"
             className="inline-flex items-center gap-2 text-white/40 hover:text-[#FFC512] text-sm font-medium transition-colors duration-200 mb-8"
@@ -149,19 +149,19 @@ export default async function BlogPostPage({
         </div>
 
         {/* Meta */}
-        <div className="flex items-center gap-4 text-white/35 text-sm mb-5 font-normal">
+        <div className="flex items-center flex-wrap gap-3 sm:gap-4 text-white/35 text-xs sm:text-sm mb-5 font-normal">
           <span className="flex items-center gap-1.5">
-            <Calendar size={14} />
+            <Calendar size={13} />
             {post.publishedAt ? formatDate(post.publishedAt) : 'Draft'}
           </span>
           <span className="flex items-center gap-1.5">
-            <User size={14} />
+            <User size={13} />
             {post.author ?? 'Bee Viral'}
           </span>
         </div>
 
         {/* Title */}
-        <h1 className="font-display font-bold text-3xl sm:text-5xl text-white tracking-tight leading-tight mb-8">
+        <h1 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-tight mb-6 sm:mb-8">
           {post.title}
         </h1>
 
