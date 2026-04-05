@@ -1,3 +1,5 @@
+export const revalidate = 3600 // re-generate at most once per hour
+
 import dynamic from 'next/dynamic'
 import HeroSection from '@/components/home/HeroSection'
 import AreasWeServeSection from '@/components/home/AreasWeServeSection'
