@@ -1,5 +1,6 @@
 import { defineConfig, type DocumentActionProps } from 'sanity'
 import { structureTool } from 'sanity/structure'
+import { table } from '@sanity/table'
 import { schemaTypes } from './schemas'
 
 // ── Preview Action — opens the corresponding live page in a new tab ───────────
@@ -40,6 +41,7 @@ export default defineConfig({
   dataset:   process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
 
   plugins: [
+    table(),
     structureTool({
       structure: (S) =>
         S.list()

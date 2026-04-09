@@ -50,5 +50,8 @@ export const blockContent = defineType({
         { name: 'caption', type: 'string', title: 'Caption' },
       ],
     }),
+    defineArrayMember({
+      type: 'table',
+    }),
   ],
 })

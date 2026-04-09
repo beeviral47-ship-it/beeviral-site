@@ -81,6 +81,48 @@ const ptComponents: PortableTextComponents = {
     ),
   },
   types: {
+    table: ({ value }) => {
+      type TableRow = { _key?: string; cells?: string[] }
+      const rows: TableRow[] = value?.rows ?? []
+      if (!rows.length) return null
+
+      const [header, ...body] = rows
+
+      return (
+        <div className="my-8 overflow-x-auto rounded-xl border border-white/10">
+          <table className="w-full text-sm border-collapse min-w-[400px]">
+            {header?.cells?.length ? (
+              <thead>
+                <tr className="bg-[#FFC512]/10 border-b border-white/10">
+                  {header.cells.map((cell, j) => (
+                    <th
+                      key={j}
+                      className="px-4 py-3 text-left text-[#FFC512] font-semibold text-xs uppercase tracking-wider border-r border-white/8 last:border-r-0 whitespace-nowrap"
+                    >
+                      {cell}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+            ) : null}
+            <tbody>
+              {body.map((row, i) => (
+                <tr key={row._key ?? i} className={i % 2 === 0 ? 'bg-white/[0.02]' : ''}>
+                  {(row.cells ?? []).map((cell, j) => (
+                    <td
+                      key={j}
+                      className="px-4 py-3 text-white/70 border-t border-r border-white/8 last:border-r-0 leading-relaxed"
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    },
     image: ({ value }) => {
       if (!value?.asset) return null
       const src = urlFor(value).width(1200).url()

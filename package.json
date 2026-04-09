@@ -11,6 +11,7 @@
   "dependencies": {
     "@portabletext/react": "^6.0.3",
     "@sanity/image-url": "^2.1.1",
+    "@sanity/table": "^2.0.1",
     "lucide-react": "^1.7.0",
     "next": "16.2.1",
     "next-sanity": "^12.2.1",
