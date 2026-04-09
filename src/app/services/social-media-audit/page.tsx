@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import SocialMediaAuditContent from './SocialMediaAuditContent'
 
 export const metadata: Metadata = {
-  title: 'Social Media Audit South Yorkshire | Bee Viral',
+  title: 'Social Media Audit South Yorkshire',
   description:
     'Full audit of your social media presence. We identify exactly what\'s holding your business back and give you a clear action plan. Free for South Yorkshire businesses.',
 }

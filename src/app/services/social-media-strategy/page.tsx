@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import SocialMediaStrategyContent from './SocialMediaStrategyContent'
 
 export const metadata: Metadata = {
-  title: 'Social Media Strategy South Yorkshire | Bee Viral',
+  title: 'Social Media Strategy South Yorkshire',
   description:
     'Data-driven social media strategy for local businesses in South Yorkshire. We build a clear plan aligned to your business goals — not random posting.',
 }

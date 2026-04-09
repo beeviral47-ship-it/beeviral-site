@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import LocalSEOContent from './LocalSEOContent'
 
 export const metadata: Metadata = {
-  title: 'Local SEO & Content Marketing South Yorkshire | Bee Viral',
+  title: 'Local SEO & Content Marketing South Yorkshire',
   description:
     'Get found on Google by local customers. We optimise your website, Google Business profile, and publish monthly SEO blog content for businesses across South Yorkshire.',
 }

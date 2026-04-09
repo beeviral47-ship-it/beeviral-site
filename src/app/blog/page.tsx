@@ -6,7 +6,7 @@ import { urlFor } from '@/sanity/image'
 import { Calendar, User, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Blog | Bee Viral — Social Media Insights & Tips',
+  title: 'Blog — Social Media Insights & Tips',
   description: 'Social media tips, case studies, and marketing advice from the Bee Viral team in South Yorkshire.',
   alternates: { canonical: 'https://www.beeviral.co.uk/blog' },
 }

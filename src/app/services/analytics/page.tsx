@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import AnalyticsContent from './AnalyticsContent'
 
 export const metadata: Metadata = {
-  title: 'Analytics & Reporting South Yorkshire | Bee Viral',
+  title: 'Analytics & Reporting South Yorkshire',
   description:
     'Clear monthly marketing reports for local businesses in South Yorkshire. Track reach, engagement, leads, and ROI — no jargon, just the numbers that matter.',
 }

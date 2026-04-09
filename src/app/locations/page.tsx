@@ -4,7 +4,7 @@ import { MapPin, ArrowRight } from 'lucide-react'
 import { getAllLocationPages } from '@/sanity/queries'
 
 export const metadata: Metadata = {
-  title: 'Locations | Bee Viral — Social Media Agency in South Yorkshire',
+  title: 'Locations — Social Media Agency in South Yorkshire',
   description: 'Bee Viral provides social media marketing services across South Yorkshire including Wath, Rotherham, Barnsley and Sheffield.',
   alternates: { canonical: 'https://www.beeviral.co.uk/locations' },
 }

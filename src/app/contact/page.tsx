@@ -5,7 +5,7 @@ import { MapPin, Mail, Phone, MessageCircle, Clock } from 'lucide-react'
 import { InstagramIcon, FacebookIcon } from '@/components/ui/SocialIcons'
 
 export const metadata: Metadata = {
-  title: 'Contact Bee Viral | Free Digital Health Check — South Yorkshire',
+  title: 'Contact | Free Digital Health Check — South Yorkshire',
   description:
     'Get in touch with Bee Viral — South Yorkshire\'s local business growth agency. Book your free Digital Health Check today. No contracts, no jargon, just honest advice.',
 }
