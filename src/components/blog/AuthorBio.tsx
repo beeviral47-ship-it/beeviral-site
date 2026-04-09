@@ -16,13 +16,15 @@ export default function AuthorBio() {
 
         <div className="flex flex-col sm:flex-row gap-6 sm:gap-7 sm:items-start">
 
-          <Image
-            src="/images/tahir-azam.png"
-            alt="Tahir Azam — Founder, Bee Viral"
-            width={88}
-            height={88}
-            className="rounded-full object-cover shrink-0 w-[88px] h-[88px]"
-          />
+          <div className="shrink-0 w-[88px] h-[88px] rounded-full overflow-hidden">
+            <Image
+              src="/images/tahir-azam.png"
+              alt="Tahir Azam — Founder, Bee Viral"
+              width={88}
+              height={88}
+              className="object-cover w-full h-full"
+            />
+          </div>
 
           {/* ── Author details ──────────────────────────────────────────────── */}
           <div className="flex-1 min-w-0">
