@@ -8,7 +8,8 @@ import { getBlogPost, getAllBlogSlugs } from '@/sanity/queries'
 import { urlFor } from '@/sanity/image'
 import { buildMetadata } from '@/sanity/metadata'
 import { Calendar, User, ArrowLeft } from 'lucide-react'
-import BlogCTA from '@/components/blog/BlogCTA'
+import BlogCTA   from '@/components/blog/BlogCTA'
+import AuthorBio from '@/components/blog/AuthorBio'
 
 // ── Static params ─────────────────────────────────────────────────────────────
 // dynamicParams = true (default) — slugs not in generateStaticParams are
@@ -196,6 +197,9 @@ export default async function BlogPostPage({
             <PortableText value={post.body as Parameters<typeof PortableText>[0]['value']} components={ptComponents} />
           </div>
         )}
+
+        {/* Author bio — appears on every post automatically */}
+        <AuthorBio />
 
         {/* CTA — appears on every post automatically */}
         <BlogCTA />
