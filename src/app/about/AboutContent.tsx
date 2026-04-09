@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, ExternalLink } from 'lucide-react'
 import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
@@ -10,10 +11,10 @@ import { LinkedInIcon } from '@/components/ui/SocialIcons'
 // ── Data ────────────────────────────────────────────────────────────────────
 
 const stats = [
-  { value: '10+',  label: 'Years of Experience' },
-  { value: '200+', label: 'Local Businesses Served' },
-  { value: '5M+',  label: 'People Reached' },
-  { value: '776+', label: 'Client Projects Completed' },
+  { value: '10+',  label: 'Years of Experience',        target: 10,  suffix: '+' },
+  { value: '200+', label: 'Local Businesses Served',    target: 200, suffix: '+' },
+  { value: '5M+',  label: 'People Reached',             target: 5,   suffix: 'M+' },
+  { value: '776+', label: 'Client Projects Completed',  target: 776, suffix: '+' },
 ]
 
 const values = [
@@ -96,6 +97,158 @@ const trustBadges = [
     href: 'https://www.freelancer.com/u/Digitalexpertuae',
   },
 ]
+
+// ── Sub-components ───────────────────────────────────────────────────────────
+
+/** Animated counter that counts up from 0 when it enters the viewport */
+function StatItem({ target, suffix, label, delay }: {
+  target: number
+  suffix: string
+  label: string
+  delay: number
+}) {
+  const [count, setCount]     = useState(0)
+  const [started, setStarted] = useState(false)
+  const ref                   = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setStarted(true); observer.disconnect() } },
+      { threshold: 0.3 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!started) return
+    const duration = 1400 + delay * 120
+    const start    = Date.now()
+    const id       = setInterval(() => {
+      const t     = Math.min((Date.now() - start) / duration, 1)
+      const eased = 1 - Math.pow(1 - t, 3)
+      setCount(Math.floor(eased * target))
+      if (t >= 1) { setCount(target); clearInterval(id) }
+    }, 16)
+    return () => clearInterval(id)
+  }, [started, target, delay])
+
+  return (
+    <div
+      ref={ref}
+      className="reveal-scale flex flex-col items-start py-6 px-4 sm:px-6 lg:py-10 lg:px-10 lg:border-l lg:border-[#222222]/15 lg:first:border-l-0"
+      data-delay={delay}
+    >
+      <span
+        className="font-display font-extrabold text-[#222222] leading-none tracking-tight"
+        style={{ fontSize: 'clamp(36px, 5.5vw, 80px)' }}
+      >
+        {count}{suffix}
+      </span>
+      <span className="text-[#222222]/55 text-[10px] lg:text-[11px] font-semibold uppercase tracking-[0.15em] mt-3 leading-snug">
+        {label}
+      </span>
+    </div>
+  )
+}
+
+/** Sticky bottom bar on mobile — appears after scrolling, disappears near the bottom CTA */
+function StickyMobileCTA({ onOpen }: { onOpen: () => void }) {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollY = window.scrollY
+      const docH   = document.documentElement.scrollHeight
+      const winH   = window.innerHeight
+      setVisible(scrollY > 420 && scrollY < docH - winH - 300)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return (
+    <div className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 transition-transform duration-300 ${visible ? 'translate-y-0' : 'translate-y-full'}`}>
+      <div className="bg-[#FFC512] px-4 py-3 flex items-center justify-between shadow-[0_-4px_24px_rgba(0,0,0,0.3)]">
+        <p className="text-[#222222] font-semibold text-sm leading-tight">Free Digital Health Check</p>
+        <button
+          onClick={onOpen}
+          className="flex items-center gap-2 bg-[#222222] text-white text-xs font-semibold px-4 py-2.5 rounded transition-all duration-200 active:scale-95 shrink-0"
+        >
+          Book Now <ArrowRight size={12} />
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/** Shared card content for a client result — used in both desktop grid and mobile carousel */
+function ResultCard({ r }: { r: typeof clientResults[0] }) {
+  return (
+    <>
+      <span
+        className="font-display font-extrabold text-[#FFC512] leading-none tracking-tight"
+        style={{ fontSize: 'clamp(40px, 5vw, 68px)' }}
+      >
+        {r.stat}
+      </span>
+      <p className="text-white/35 text-[11px] font-semibold uppercase tracking-[0.15em] mt-2 mb-5 lg:mb-8">{r.statLabel}</p>
+      <p className="font-display font-bold text-white text-base leading-tight mb-1">{r.business}</p>
+      <p className="text-white/25 text-[11px] uppercase tracking-[0.15em] mb-4 lg:mb-6">{r.location}</p>
+      <blockquote className="text-white/45 text-sm leading-relaxed italic flex-1 mb-6 lg:mb-8">
+        "{r.quote}"
+      </blockquote>
+      <Link
+        href={`/case-studies/${r.slug}`}
+        className="inline-flex items-center gap-2 text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.15em] hover:gap-3 transition-all duration-200"
+      >
+        Full case study <ArrowRight size={11} />
+      </Link>
+    </>
+  )
+}
+
+/** Swipeable carousel used on mobile — replaces the 3-col grid */
+function MobileResultsCarousel() {
+  const [active, setActive] = useState(0)
+  const touchStartX         = useRef(0)
+
+  const next = () => setActive(a => a === clientResults.length - 1 ? 0 : a + 1)
+  const prev = () => setActive(a => a === 0 ? clientResults.length - 1 : a - 1)
+
+  const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX }
+  const handleTouchEnd   = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 40) diff > 0 ? next() : prev()
+  }
+
+  return (
+    <div className="lg:hidden mt-6" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div className="flex flex-col py-8 border-b border-white/8">
+        <ResultCard r={clientResults[active]} />
+      </div>
+      <div className="flex items-center justify-between mt-5">
+        <p className="text-white/25 text-[10px] font-semibold uppercase tracking-[0.15em]">
+          {active + 1} / {clientResults.length}
+        </p>
+        <div className="flex items-center gap-2">
+          {clientResults.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              className={`rounded-full transition-all duration-300 ${
+                i === active ? 'w-6 h-2 bg-[#FFC512]' : 'w-2 h-2 bg-white/20 hover:bg-white/40'
+              }`}
+              aria-label={`View result ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // ── Component ────────────────────────────────────────────────────────────────
 
@@ -185,21 +338,7 @@ export default function AboutContent() {
             className="grid grid-cols-2 lg:grid-cols-4"
           >
             {stats.map((s, i) => (
-              <div
-                key={s.label}
-                className="reveal-scale flex flex-col items-start py-6 px-4 sm:px-6 lg:py-10 lg:px-10 lg:border-l lg:border-[#222222]/15 lg:first:border-l-0"
-                data-delay={i}
-              >
-                <span
-                  className="font-display font-extrabold text-[#222222] leading-none tracking-tight"
-                  style={{ fontSize: 'clamp(36px, 5.5vw, 80px)' }}
-                >
-                  {s.value}
-                </span>
-                <span className="text-[#222222]/55 text-[10px] lg:text-[11px] font-semibold uppercase tracking-[0.15em] mt-3 leading-snug">
-                  {s.label}
-                </span>
-              </div>
+              <StatItem key={s.label} target={s.target} suffix={s.suffix} label={s.label} delay={i} />
             ))}
           </div>
         </div>
@@ -345,11 +484,14 @@ export default function AboutContent() {
             {values.map((v) => (
               <div
                 key={v.num}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-y-3 gap-x-10 py-8 lg:py-12"
+                className="group relative grid grid-cols-1 lg:grid-cols-12 gap-y-3 gap-x-10 py-8 lg:py-12"
               >
+                {/* Yellow left accent bar — slides in on hover (desktop only) */}
+                <div aria-hidden="true" className="hidden lg:block absolute left-0 inset-y-0 w-[3px] bg-[#FFC512] scale-y-0 group-hover:scale-y-100 origin-center transition-transform duration-300" />
+
                 {/* Number — hidden on mobile (shown inline with title below instead) */}
-                <div className="hidden lg:block lg:col-span-3">
-                  <span className="font-display font-bold text-[#FFC512] text-xs tracking-widest opacity-80">
+                <div className="hidden lg:block lg:col-span-3 pl-5">
+                  <span className="font-display font-bold text-[#FFC512] text-xs tracking-widest opacity-60 group-hover:opacity-100 transition-opacity duration-200">
                     {v.num}
                   </span>
                 </div>
@@ -359,13 +501,13 @@ export default function AboutContent() {
                     <span className="lg:hidden font-display font-bold text-[#FFC512] text-xs tracking-widest opacity-80 shrink-0">
                       {v.num}
                     </span>
-                    <h3 className="font-display font-bold text-[#222222] text-xl lg:text-2xl leading-tight tracking-tight">
+                    <h3 className="font-display font-bold text-[#222222] text-xl lg:text-2xl leading-tight tracking-tight group-hover:text-[#111] transition-colors duration-200">
                       {v.title}
                     </h3>
                   </div>
                 </div>
                 <div className="lg:col-span-5">
-                  <p className="text-[#666] text-sm lg:text-[16px] leading-relaxed font-normal mt-1 lg:mt-0">
+                  <p className="text-[#666] text-sm lg:text-[16px] leading-relaxed font-normal mt-1 lg:mt-0 group-hover:text-[#444] transition-colors duration-200">
                     {v.desc}
                   </p>
                 </div>
@@ -409,11 +551,14 @@ export default function AboutContent() {
             {whyReasons.map((r) => (
               <div
                 key={r.num}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-y-3 gap-x-10 py-8 lg:py-12"
+                className="group relative grid grid-cols-1 lg:grid-cols-12 gap-y-3 gap-x-10 py-8 lg:py-12"
               >
+                {/* Yellow left accent bar — slides in on hover (desktop only) */}
+                <div aria-hidden="true" className="hidden lg:block absolute left-0 inset-y-0 w-[3px] bg-[#FFC512] scale-y-0 group-hover:scale-y-100 origin-center transition-transform duration-300" />
+
                 {/* Number — hidden on mobile (shown inline with headline below instead) */}
-                <div className="hidden lg:block lg:col-span-3">
-                  <span className="font-display font-bold text-[#FFC512]/35 text-xs tracking-widest">
+                <div className="hidden lg:block lg:col-span-3 pl-5">
+                  <span className="font-display font-bold text-[#FFC512]/35 text-xs tracking-widest group-hover:text-[#FFC512]/70 transition-colors duration-200">
                     {r.num}
                   </span>
                 </div>
@@ -423,13 +568,13 @@ export default function AboutContent() {
                     <span className="lg:hidden font-display font-bold text-[#FFC512]/35 text-xs tracking-widest shrink-0">
                       {r.num}
                     </span>
-                    <h3 className="font-display font-bold text-white text-lg lg:text-2xl leading-tight tracking-tight">
+                    <h3 className="font-display font-bold text-white text-lg lg:text-2xl leading-tight tracking-tight group-hover:text-white transition-colors duration-200">
                       {r.headline}
                     </h3>
                   </div>
                 </div>
                 <div className="lg:col-span-5">
-                  <p className="text-white/45 text-sm lg:text-[16px] leading-relaxed font-normal mt-1 lg:mt-0">
+                  <p className="text-white/45 text-sm lg:text-[16px] leading-relaxed font-normal mt-1 lg:mt-0 group-hover:text-white/65 transition-colors duration-200">
                     {r.body}
                   </p>
                 </div>
@@ -622,46 +767,21 @@ export default function AboutContent() {
             </div>
           </div>
 
-          {/* Results — FIXED: py-14 → py-8 lg:py-12 per item */}
+          {/* Mobile: swipeable carousel */}
+          <MobileResultsCarousel />
+
+          {/* Desktop: 3-col grid */}
           <div
             ref={resultsRef}
-            className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-white/8 mt-6 lg:mt-2"
+            className="hidden lg:grid lg:grid-cols-3 divide-x divide-white/8 mt-2"
           >
             {clientResults.map((r, i) => (
               <div
                 key={r.slug}
-                className="reveal-scale flex flex-col py-8 lg:py-12 lg:px-12 first:lg:pl-0 last:lg:pr-0"
+                className="reveal-scale flex flex-col py-12 lg:px-12 first:pl-0 last:pr-0"
                 data-delay={i}
               >
-                <span
-                  className="font-display font-extrabold text-[#FFC512] leading-none tracking-tight"
-                  style={{ fontSize: 'clamp(40px, 5vw, 68px)' }}
-                >
-                  {r.stat}
-                </span>
-                {/* FIXED: mb-8 → mb-5 lg:mb-8 */}
-                <p className="text-white/35 text-[11px] font-semibold uppercase tracking-[0.15em] mt-2 mb-5 lg:mb-8">
-                  {r.statLabel}
-                </p>
-
-                <p className="font-display font-bold text-white text-base leading-tight mb-1">
-                  {r.business}
-                </p>
-                <p className="text-white/25 text-[11px] uppercase tracking-[0.15em] mb-4 lg:mb-6">
-                  {r.location}
-                </p>
-
-                <blockquote className="text-white/45 text-sm leading-relaxed italic flex-1 mb-6 lg:mb-8">
-                  "{r.quote}"
-                </blockquote>
-
-                <Link
-                  href={`/case-studies/${r.slug}`}
-                  className="inline-flex items-center gap-2 text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.15em] hover:gap-3 transition-all duration-200"
-                >
-                  Full case study
-                  <ArrowRight size={11} />
-                </Link>
+                <ResultCard r={r} />
               </div>
             ))}
           </div>
@@ -729,6 +849,9 @@ export default function AboutContent() {
           </div>
         </div>
       </section>
+
+      {/* Sticky mobile CTA — appears after scrolling, fixed to bottom on mobile only */}
+      <StickyMobileCTA onOpen={() => handleCTA('Book Your Free Digital Health Check', 'sticky_mobile_cta')} />
     </>
   )
 }
