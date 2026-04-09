@@ -497,7 +497,7 @@ export default function AboutContent() {
                   Tahir has been working in digital marketing since before "digital marketing" was the thing everyone called it.
                 </p>
                 <p>
-                  He started as a freelancer, working with businesses across the UK, the US, Canada, and Europe. He didn't learn in a classroom — he learned by taking on jobs, figuring out what worked, and delivering results for real clients with real money on the line.
+                  He holds an MSc in Digital Media Management from Sheffield Hallam University — so he understands the theory. But the education that really shaped how he works came from doing the actual work: building campaigns, fixing what wasn't working, and delivering results for real clients with real money on the line, across the UK, the US, Canada, and Europe.
                 </p>
                 <p>
                   Over 776 completed projects. Over 290 clients served. All before he ever put up an agency sign.
