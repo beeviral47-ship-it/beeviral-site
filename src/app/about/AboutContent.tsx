@@ -15,7 +15,7 @@ const stats = [
   { value: '5M+',    label: 'People Reached Through Campaigns' },
   { value: '776+',   label: 'Completed Client Projects' },
   { value: '290+',   label: 'Individual Clients Served Globally' },
-  { value: '$167K+', label: 'Verified Freelance Earnings' },
+  { value: '$167K+', label: 'Verified Earnings on Guru Alone' },
 ]
 
 const values = [
@@ -77,7 +77,7 @@ const clientResults = [
 const trustBadges = [
   {
     label: 'Verified on Guru',
-    sublabel: '776 jobs · $167K+ earned',
+    sublabel: '776 jobs · $167K+ earned on Guru alone',
     href: 'https://www.guru.com/freelancers/tahir-choudhry',
   },
   {
@@ -183,7 +183,7 @@ export default function AboutContent() {
                   Before Bee Viral, Tahir spent years in the trenches of freelance digital marketing — not in an agency boardroom, not studying theory, but actually doing the work. Client by client. Campaign by campaign.
                 </p>
                 <p>
-                  He completed over 776 client projects on platforms like Guru and Freelancer.com. He worked with more than 290 individual clients across the UK, the US, Canada, Europe, and beyond. He ran social media accounts, built ad campaigns, built websites, and generated real, measurable results — earning over $167,000 in verified freelance income.
+                  He completed over 776 client projects on platforms like Guru and Freelancer.com. He worked with more than 290 individual clients across the UK, the US, Canada, Europe, and beyond. He ran social media accounts, built ad campaigns, built websites, and generated real, measurable results for clients across the globe.
                 </p>
                 <p>
                   And while he was doing all of that, he kept noticing the same thing back home in South Yorkshire.
@@ -486,7 +486,7 @@ export default function AboutContent() {
                   He started as a freelancer, working with businesses across the UK, UAE, and wider world. He didn't learn in a classroom — he learned by taking on jobs, figuring out what worked, and delivering results for real clients with real money on the line.
                 </p>
                 <p>
-                  Over 776 completed projects. Over 290 clients served. More than $167,000 in verified earnings before he ever put up an agency sign.
+                  Over 776 completed projects. Over 290 clients served. All before he ever put up an agency sign.
                 </p>
                 <p>
                   In 2014, he came home to Wath upon Dearne and launched Bee Viral. The goal was never to build a big agency — it was to build the right one. An agency that treats every client like Tahir treated his freelance clients: seriously, honestly, and with a genuine stake in their success.
