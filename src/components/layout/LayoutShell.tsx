@@ -7,9 +7,10 @@ import { AuditModalProvider } from '@/components/providers/AuditModalProvider'
 
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isStudio = pathname?.startsWith('/studio')
+  const isStudio    = pathname?.startsWith('/studio')
+  const isDashboard = pathname?.startsWith('/dashboard')
 
-  if (isStudio) {
+  if (isStudio || isDashboard) {
     return <>{children}</>
   }
 

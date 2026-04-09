@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/studio', '/studio/'],
+        disallow: ['/studio', '/studio/', '/dashboard', '/dashboard/'],
       },
     ],
     sitemap: 'https://www.beeviral.co.uk/sitemap.xml',
