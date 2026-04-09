@@ -399,7 +399,7 @@ export default function AboutContent() {
             <div className="relative min-h-[520px] lg:min-h-0 order-2 lg:order-1 -mx-4 sm:-mx-6 lg:mx-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/images/tahir-azam.png"
+                src="/images/tahir-azam-pro.jpg"
                 alt="Tahir Azam — Founder, Bee Viral"
                 className="absolute inset-0 w-full h-full object-cover object-top"
               />
@@ -437,6 +437,22 @@ export default function AboutContent() {
                 <p className="text-[#222222] font-semibold">
                   Not a faceless team. A real person, with a real track record, who works in the same communities as the businesses he serves.
                 </p>
+              </div>
+
+              {/* Credentials */}
+              <div className="flex flex-wrap gap-2 mb-8">
+                {[
+                  'MSc Digital Media Management — Sheffield Hallam',
+                  'Infographics Specialist',
+                ].map((c) => (
+                  <span
+                    key={c}
+                    className="inline-flex items-center gap-1.5 bg-white border border-[#e0e0e0] text-[#444] text-[11px] font-semibold uppercase tracking-[0.12em] px-3 py-1.5 rounded"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-[#FFC512]" />
+                    {c}
+                  </span>
+                ))}
               </div>
 
               {/* Pull quote */}
