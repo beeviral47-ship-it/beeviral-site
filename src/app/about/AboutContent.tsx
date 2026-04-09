@@ -399,7 +399,7 @@ export default function AboutContent() {
             <div className="relative min-h-[520px] lg:min-h-0 order-2 lg:order-1 -mx-4 sm:-mx-6 lg:mx-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/images/tahir-azam-pro.jpg"
+                src="/images/tahir-azam-pro.png"
                 alt="Tahir Azam — Founder, Bee Viral"
                 className="absolute inset-0 w-full h-full object-cover object-top"
               />
