@@ -123,7 +123,7 @@ export default function AboutContent() {
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <span className="hero-enter hero-enter-1 inline-block text-[#FFC512] text-sm font-medium uppercase tracking-widest mb-5">
-            We've been doing this since 2014
+            10+ years of real-world digital marketing experience
           </span>
 
           <h1
@@ -195,10 +195,10 @@ export default function AboutContent() {
                   Not by obvious scammers — by professional-looking agencies charging professional-looking fees and delivering nothing worth paying for. Generic posts. Vanity metrics. Reports full of impressions and reach but no leads, no bookings, no actual business growth.
                 </p>
                 <p>
-                  In 2014, he came home and started Bee Viral with one simple idea: give South Yorkshire businesses the quality of digital marketing that was working globally — delivered locally, transparently, and without the bullshit.
+                  After years of delivering results for clients around the world, Tahir launched Bee Viral with one simple idea: give South Yorkshire businesses the same quality of digital marketing that was working globally — delivered locally, transparently, and without the bullshit.
                 </p>
                 <p>
-                  Ten years later, over 200 local businesses have grown with us. We're still here. And we're still doing the work ourselves.
+                  Since launching Bee Viral, over 200 local businesses have grown with us. And we're still doing the work ourselves — no middlemen, no outsourcing, no excuses.
                 </p>
               </div>
             </div>
@@ -261,7 +261,7 @@ export default function AboutContent() {
               This Isn't Theory.<br />This Is Track Record.
             </h2>
             <p className="text-[#222222]/65 text-lg max-w-xl mx-auto mt-4 font-normal leading-relaxed">
-              These aren't agency estimates. They're verified numbers from a decade of real client work — locally and globally. You can check every one of them.
+              These aren't agency estimates. They're verified numbers from years of real client work — locally and globally. You can check every one of them.
             </p>
           </div>
 
@@ -420,7 +420,7 @@ export default function AboutContent() {
                 {/* Yellow name badge overlaid at bottom of photo */}
                 <div className="absolute bottom-0 left-0 right-0 max-w-[320px] bg-[#FFC512] rounded-b-2xl px-6 py-4">
                   <p className="font-display font-bold text-[#222222] text-lg leading-tight">Tahir Azam</p>
-                  <p className="text-[#222222]/65 text-xs font-medium uppercase tracking-widest mt-0.5">Founder, Bee Viral · Est. 2014</p>
+                  <p className="text-[#222222]/65 text-xs font-medium uppercase tracking-widest mt-0.5">Founder, Bee Viral · South Yorkshire</p>
                 </div>
               </div>
 
@@ -483,13 +483,13 @@ export default function AboutContent() {
                   Tahir has been working in digital marketing since before "digital marketing" was the thing everyone called it.
                 </p>
                 <p>
-                  He started as a freelancer, working with businesses across the UK, UAE, and wider world. He didn't learn in a classroom — he learned by taking on jobs, figuring out what worked, and delivering results for real clients with real money on the line.
+                  He started as a freelancer, working with businesses across the UK, the US, Canada, and Europe. He didn't learn in a classroom — he learned by taking on jobs, figuring out what worked, and delivering results for real clients with real money on the line.
                 </p>
                 <p>
                   Over 776 completed projects. Over 290 clients served. All before he ever put up an agency sign.
                 </p>
                 <p>
-                  In 2014, he came home to Wath upon Dearne and launched Bee Viral. The goal was never to build a big agency — it was to build the right one. An agency that treats every client like Tahir treated his freelance clients: seriously, honestly, and with a genuine stake in their success.
+                  After years of delivering results for clients around the world, Tahir launched Bee Viral with a clear focus: South Yorkshire. The goal was never to build a big agency — it was to build the right one. An agency that treats every client like Tahir treated his freelance clients: seriously, honestly, and with a genuine stake in their success.
                 </p>
                 <p>
                   Today, he works with businesses across Rotherham, Barnsley, Sheffield, Doncaster, and wider South Yorkshire — handling everything from social media and SEO to website builds and paid ads.
