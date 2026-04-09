@@ -17,7 +17,7 @@ export default function AuthorBio() {
         <div className="flex flex-col sm:flex-row gap-6 sm:gap-7 sm:items-start">
 
           <Image
-            src="/images/tahir-azam.jpg.png"
+            src="/images/tahir-azam.png"
             alt="Tahir Azam — Founder, Bee Viral"
             width={88}
             height={88}
