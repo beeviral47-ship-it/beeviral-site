@@ -345,21 +345,27 @@ export default function AboutContent() {
             {values.map((v) => (
               <div
                 key={v.num}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-y-2 gap-x-10 py-8 lg:py-12"
+                className="grid grid-cols-1 lg:grid-cols-12 gap-y-3 gap-x-10 py-8 lg:py-12"
               >
-                {/* FIXED: number inline with title on mobile */}
-                <div className="lg:col-span-3">
+                {/* Number — hidden on mobile (shown inline with title below instead) */}
+                <div className="hidden lg:block lg:col-span-3">
                   <span className="font-display font-bold text-[#FFC512] text-xs tracking-widest opacity-80">
                     {v.num}
                   </span>
                 </div>
+                {/* Title — on mobile: number prefix shown inline */}
                 <div className="lg:col-span-4">
-                  <h3 className="font-display font-bold text-[#222222] text-xl lg:text-2xl leading-tight tracking-tight">
-                    {v.title}
-                  </h3>
+                  <div className="flex items-baseline gap-3 lg:block">
+                    <span className="lg:hidden font-display font-bold text-[#FFC512] text-xs tracking-widest opacity-80 shrink-0">
+                      {v.num}
+                    </span>
+                    <h3 className="font-display font-bold text-[#222222] text-xl lg:text-2xl leading-tight tracking-tight">
+                      {v.title}
+                    </h3>
+                  </div>
                 </div>
                 <div className="lg:col-span-5">
-                  <p className="text-[#666] text-sm lg:text-[16px] leading-relaxed font-normal mt-2 lg:mt-0">
+                  <p className="text-[#666] text-sm lg:text-[16px] leading-relaxed font-normal mt-1 lg:mt-0">
                     {v.desc}
                   </p>
                 </div>
@@ -403,20 +409,27 @@ export default function AboutContent() {
             {whyReasons.map((r) => (
               <div
                 key={r.num}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-y-2 gap-x-10 py-8 lg:py-12"
+                className="grid grid-cols-1 lg:grid-cols-12 gap-y-3 gap-x-10 py-8 lg:py-12"
               >
-                <div className="lg:col-span-3">
+                {/* Number — hidden on mobile (shown inline with headline below instead) */}
+                <div className="hidden lg:block lg:col-span-3">
                   <span className="font-display font-bold text-[#FFC512]/35 text-xs tracking-widest">
                     {r.num}
                   </span>
                 </div>
+                {/* Headline — on mobile: number prefix shown inline */}
                 <div className="lg:col-span-4">
-                  <h3 className="font-display font-bold text-white text-lg lg:text-2xl leading-tight tracking-tight">
-                    {r.headline}
-                  </h3>
+                  <div className="flex items-baseline gap-3 lg:block">
+                    <span className="lg:hidden font-display font-bold text-[#FFC512]/35 text-xs tracking-widest shrink-0">
+                      {r.num}
+                    </span>
+                    <h3 className="font-display font-bold text-white text-lg lg:text-2xl leading-tight tracking-tight">
+                      {r.headline}
+                    </h3>
+                  </div>
                 </div>
                 <div className="lg:col-span-5">
-                  <p className="text-white/45 text-sm lg:text-[16px] leading-relaxed font-normal mt-2 lg:mt-0">
+                  <p className="text-white/45 text-sm lg:text-[16px] leading-relaxed font-normal mt-1 lg:mt-0">
                     {r.body}
                   </p>
                 </div>
@@ -612,7 +625,7 @@ export default function AboutContent() {
           {/* Results — FIXED: py-14 → py-8 lg:py-12 per item */}
           <div
             ref={resultsRef}
-            className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-white/8 mt-2"
+            className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-white/8 mt-6 lg:mt-2"
           >
             {clientResults.map((r, i) => (
               <div
