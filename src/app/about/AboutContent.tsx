@@ -389,39 +389,70 @@ export default function AboutContent() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════
-          6. FOUNDER — magazine-style, full-height photo
+          6. FOUNDER — editorial grid, contained portrait
       ══════════════════════════════════════════════════════════════════════ */}
-      <section id="founder" className="bg-[#f5f5f5] overflow-hidden">
-        <div ref={founderRef} className="reveal max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[700px]">
+      <section id="founder" className="bg-[#f5f5f5] py-36">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            {/* Photo — full height, bleeds to top/bottom */}
-            <div className="relative min-h-[520px] lg:min-h-0 order-2 lg:order-1 -mx-4 sm:-mx-6 lg:mx-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/tahir-azam-pro.png"
-                alt="Tahir Azam — Founder, Bee Viral"
-                className="absolute inset-0 w-full h-full object-cover object-top"
-              />
-              {/* Subtle fade at bottom on desktop */}
-              <div className="hidden lg:block absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#f5f5f5] to-transparent" />
+          {/* Section header row */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pb-16 border-b border-[#e8e8e8] mb-20">
+            <div className="lg:col-span-3">
+              <span className="text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.2em]">
+                Meet the Founder
+              </span>
+            </div>
+            <div className="lg:col-span-9">
+              <h2
+                className="font-display font-extrabold text-[#222222] leading-tight tracking-tight"
+                style={{ fontSize: 'clamp(32px, 4vw, 60px)', lineHeight: 0.95 }}
+              >
+                Built by Someone Who's Done the Work.
+              </h2>
+            </div>
+          </div>
+
+          {/* Body row */}
+          <div ref={founderRef} className="reveal grid grid-cols-1 lg:grid-cols-12 gap-16">
+
+            {/* Photo — contained portrait, not full-bleed */}
+            <div className="lg:col-span-4 flex flex-col items-start">
+              <div className="w-full max-w-[300px]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/tahir-azam-pro.png"
+                  alt="Tahir Azam — Founder, Bee Viral"
+                  className="w-full rounded-2xl object-cover object-top shadow-xl shadow-black/10"
+                />
+                {/* Name plate beneath photo */}
+                <div className="mt-5 pb-5 border-b border-[#e0e0e0]">
+                  <p className="font-display font-bold text-[#222222] text-lg leading-tight">Tahir Azam</p>
+                  <p className="text-[#FFC512] text-[10px] font-semibold uppercase tracking-[0.18em] mt-1">
+                    Founder, Bee Viral · South Yorkshire
+                  </p>
+                </div>
+
+                {/* Credentials beneath name */}
+                <div className="mt-5 space-y-2">
+                  {[
+                    'MSc Digital Media Management',
+                    'Sheffield Hallam University',
+                    'Infographics Specialist',
+                  ].map((c, i) => (
+                    <div key={c} className="flex items-center gap-2">
+                      <span className={`w-1 h-1 rounded-full shrink-0 ${i === 1 ? 'bg-transparent' : 'bg-[#FFC512]'}`} />
+                      <span className={`text-[12px] font-normal leading-tight ${i === 1 ? 'text-[#aaa] pl-3' : 'text-[#555]'}`}>
+                        {c}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Content */}
-            <div className="order-1 lg:order-2 flex flex-col justify-center py-20 lg:pl-16 xl:pl-24">
+            <div className="lg:col-span-8 flex flex-col justify-start">
 
-              <span className="text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.2em] mb-8">
-                Meet the Founder
-              </span>
-
-              <h2
-                className="font-display font-extrabold text-[#222222] leading-tight tracking-tight mb-10"
-                style={{ fontSize: 'clamp(36px, 4vw, 58px)', lineHeight: 0.93 }}
-              >
-                Built by Someone<br />Who's Done<br />the Work.
-              </h2>
-
-              <div className="space-y-4 text-[#555] text-[16px] leading-relaxed max-w-md mb-10">
+              <div className="space-y-5 text-[#555] text-[17px] leading-relaxed mb-10">
                 <p>
                   Tahir has been working in digital marketing since before "digital marketing" was the thing everyone called it.
                 </p>
@@ -439,32 +470,16 @@ export default function AboutContent() {
                 </p>
               </div>
 
-              {/* Credentials */}
-              <div className="flex flex-wrap gap-2 mb-8">
-                {[
-                  'MSc Digital Media Management — Sheffield Hallam',
-                  'Infographics Specialist',
-                ].map((c) => (
-                  <span
-                    key={c}
-                    className="inline-flex items-center gap-1.5 bg-white border border-[#e0e0e0] text-[#444] text-[11px] font-semibold uppercase tracking-[0.12em] px-3 py-1.5 rounded"
-                  >
-                    <span className="w-1 h-1 rounded-full bg-[#FFC512]" />
-                    {c}
-                  </span>
-                ))}
-              </div>
-
               {/* Pull quote */}
-              <blockquote className="border-l-[3px] border-[#FFC512] pl-5 mb-10 max-w-sm">
-                <p className="text-[#333] text-[15px] italic leading-relaxed font-normal">
+              <blockquote className="border-l-[3px] border-[#FFC512] pl-6 mb-12">
+                <p className="font-display font-semibold text-[#222222] italic leading-snug" style={{ fontSize: 'clamp(18px, 2vw, 24px)' }}>
                   "If we take you on, I'm personally accountable for your growth."
                 </p>
               </blockquote>
 
               {/* Verified profiles */}
-              <div className="space-y-2 max-w-xs">
-                <p className="text-[#bbb] text-[10px] font-semibold uppercase tracking-[0.2em] mb-3">
+              <div className="space-y-2 max-w-sm">
+                <p className="text-[#bbb] text-[10px] font-semibold uppercase tracking-[0.2em] mb-4">
                   Verified Profiles
                 </p>
                 {trustBadges.map((b) => (
