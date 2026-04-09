@@ -177,7 +177,8 @@ export default function AboutContent() {
           FIXED: py-10 px-6 → py-6 px-4 lg:py-10 lg:px-10 per stat
           FIXED: stat number min size raised slightly for mobile readability
       ══════════════════════════════════════════════════════════════════════ */}
-      <section className="bg-[#1a1a1a] border-t border-white/5 py-10 lg:py-24">
+      {/* ── YELLOW STATS — brand moment, dark numbers on yellow ── */}
+      <section className="bg-[#FFC512] py-10 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             ref={statsRef}
@@ -186,18 +187,16 @@ export default function AboutContent() {
             {stats.map((s, i) => (
               <div
                 key={s.label}
-                /* FIXED: borders only on desktop — on 2-col mobile grid,
-                   odd children start a new row so border-l looks broken */
-                className="reveal-scale flex flex-col items-start py-6 px-4 sm:px-6 lg:py-10 lg:px-10 lg:border-l lg:border-white/8 lg:first:border-l-0"
+                className="reveal-scale flex flex-col items-start py-6 px-4 sm:px-6 lg:py-10 lg:px-10 lg:border-l lg:border-[#222222]/15 lg:first:border-l-0"
                 data-delay={i}
               >
                 <span
-                  className="font-display font-extrabold text-white leading-none tracking-tight"
+                  className="font-display font-extrabold text-[#222222] leading-none tracking-tight"
                   style={{ fontSize: 'clamp(36px, 5.5vw, 80px)' }}
                 >
                   {s.value}
                 </span>
-                <span className="text-white/30 text-[10px] lg:text-[11px] font-semibold uppercase tracking-[0.15em] mt-3 leading-snug">
+                <span className="text-[#222222]/55 text-[10px] lg:text-[11px] font-semibold uppercase tracking-[0.15em] mt-3 leading-snug">
                   {s.label}
                 </span>
               </div>
@@ -267,29 +266,48 @@ export default function AboutContent() {
               </div>
             </div>
 
-            {/* Pull quote row — FIXED: mt-20 pt-16 → mt-10 pt-10 lg:mt-20 lg:pt-16 */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 mt-10 pt-10 lg:mt-20 lg:pt-16 border-t border-[#f0f0f0]">
-              {/* FIXED: hidden on mobile */}
-              <div className="hidden lg:block lg:col-span-3" />
-              <div className="lg:col-span-9">
-                <blockquote className="border-l-[3px] border-[#FFC512] pl-6 lg:pl-8">
-                  <p
-                    className="font-display font-semibold text-[#222222] italic leading-snug"
-                    style={{ fontSize: 'clamp(18px, 2.5vw, 30px)' }}
-                  >
-                    "I'd speak to business owners in Rotherham or Barnsley who'd spent thousands
-                    with agencies and had nothing to show for it. No leads. No growth. Just a
-                    fancy PDF report and a lot of excuses. That's why I built Bee Viral."
-                  </p>
-                  <footer className="mt-4 lg:mt-5">
-                    <span className="text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.2em]">
-                      — Tahir Azam, Founder
-                    </span>
-                  </footer>
-                </blockquote>
-              </div>
-            </div>
 
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          WOW MOMENT — full-width oversized pull quote, stops the scroll
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section className="bg-[#1a1a1a] py-20 lg:py-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl">
+            {/* Giant decorative quote mark */}
+            <div
+              aria-hidden="true"
+              className="font-display font-extrabold text-[#FFC512]/12 leading-none select-none -mb-4 lg:-mb-8"
+              style={{ fontSize: 'clamp(80px, 15vw, 180px)' }}
+            >
+              "
+            </div>
+            <blockquote>
+              <p
+                className="font-display font-bold text-white leading-tight tracking-tight"
+                style={{ fontSize: 'clamp(22px, 3.5vw, 52px)', lineHeight: 1.1 }}
+              >
+                I'd speak to business owners in Rotherham or Barnsley who'd spent
+                thousands with agencies and had nothing to show for it. No leads.
+                No growth. Just a fancy PDF report and a lot of excuses.
+                <span className="text-[#FFC512]"> That's why I built Bee Viral.</span>
+              </p>
+              <footer className="mt-8 lg:mt-10 flex items-center gap-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/tahir-azam-pro.png"
+                  alt="Tahir Azam"
+                  className="w-12 h-12 rounded-full object-cover object-top shrink-0"
+                />
+                <div>
+                  <p className="text-white font-semibold text-sm leading-tight">Tahir Azam</p>
+                  <p className="text-[#FFC512] text-[10px] font-semibold uppercase tracking-[0.2em] mt-0.5">Founder, Bee Viral</p>
+                </div>
+              </footer>
+            </blockquote>
           </div>
         </div>
       </section>
@@ -301,11 +319,12 @@ export default function AboutContent() {
           FIXED: empty spacer div → hidden lg:block
           FIXED: row gap tightened on mobile
       ══════════════════════════════════════════════════════════════════════ */}
-      <section className="bg-white border-t border-[#ebebeb] pb-16 lg:pb-36">
+      {/* ── VALUES: #f5f5f5 breaks the white/white run from Story ── */}
+      <section className="bg-[#f5f5f5] border-t border-[#e8e8e8] pb-16 lg:pb-36">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Section header */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 pt-12 pb-8 lg:pt-20 lg:pb-16 border-b border-[#f0f0f0]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 pt-12 pb-8 lg:pt-20 lg:pb-16 border-b border-[#e8e8e8]">
             <div className="lg:col-span-3">
               <span className="text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.2em]">
                 How We Work
@@ -322,7 +341,7 @@ export default function AboutContent() {
           </div>
 
           {/* Numbered rows */}
-          <div ref={valuesRef} className="reveal divide-y divide-[#f0f0f0]">
+          <div ref={valuesRef} className="reveal divide-y divide-[#e8e8e8]">
             {values.map((v) => (
               <div
                 key={v.num}
@@ -431,11 +450,12 @@ export default function AboutContent() {
           FIXED: pull quote mb-12 → mb-8 lg:mb-12
           FIXED: trust badges max-w-sm → max-w-full sm:max-w-sm
       ══════════════════════════════════════════════════════════════════════ */}
-      <section id="founder" className="bg-[#f5f5f5] py-16 lg:py-36">
+      {/* ── FOUNDER: dark bg, larger photo, proper brand moment ── */}
+      <section id="founder" className="bg-[#1a1a1a] py-16 lg:py-36">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Section header row */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 pb-8 mb-10 lg:pb-16 lg:mb-20 border-b border-[#e8e8e8]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 pb-8 mb-10 lg:pb-16 lg:mb-20 border-b border-white/10">
             <div className="lg:col-span-3">
               <span className="text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.2em]">
                 Meet the Founder
@@ -443,7 +463,7 @@ export default function AboutContent() {
             </div>
             <div className="lg:col-span-9">
               <h2
-                className="font-display font-extrabold text-[#222222] leading-tight tracking-tight"
+                className="font-display font-extrabold text-white leading-tight tracking-tight"
                 style={{ fontSize: 'clamp(28px, 4vw, 60px)', lineHeight: 0.95 }}
               >
                 Built by Someone Who's Done the Work.
@@ -451,21 +471,21 @@ export default function AboutContent() {
             </div>
           </div>
 
-          {/* Body row */}
+          {/* Body row — photo span increased to 5 cols for more presence */}
           <div ref={founderRef} className="reveal grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
 
-            {/* Photo — FIXED: mx-auto on mobile so it centres in full-width col */}
-            <div className="lg:col-span-4 flex flex-col items-start">
-              <div className="w-full max-w-[280px] sm:max-w-[300px] mx-auto lg:mx-0">
+            {/* Photo — larger, centred on mobile */}
+            <div className="lg:col-span-5 flex flex-col items-start">
+              <div className="w-full max-w-[320px] sm:max-w-[360px] mx-auto lg:mx-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/tahir-azam-pro.png"
                   alt="Tahir Azam — Founder, Bee Viral"
-                  className="w-full rounded-2xl object-cover object-top shadow-xl shadow-black/10"
+                  className="w-full rounded-2xl object-cover object-top shadow-2xl shadow-black/40"
                 />
                 {/* Name plate beneath photo */}
-                <div className="mt-4 pb-4 border-b border-[#e0e0e0]">
-                  <p className="font-display font-bold text-[#222222] text-base lg:text-lg leading-tight">Tahir Azam</p>
+                <div className="mt-5 pb-5 border-b border-white/10">
+                  <p className="font-display font-bold text-white text-base lg:text-lg leading-tight">Tahir Azam</p>
                   <p className="text-[#FFC512] text-[10px] font-semibold uppercase tracking-[0.18em] mt-1">
                     Founder, Bee Viral · South Yorkshire
                   </p>
@@ -480,7 +500,7 @@ export default function AboutContent() {
                   ].map((c, i) => (
                     <div key={c} className="flex items-center gap-2">
                       <span className={`w-1 h-1 rounded-full shrink-0 ${i === 1 ? 'bg-transparent' : 'bg-[#FFC512]'}`} />
-                      <span className={`text-[12px] font-normal leading-tight ${i === 1 ? 'text-[#aaa] pl-3' : 'text-[#555]'}`}>
+                      <span className={`text-[12px] font-normal leading-tight ${i === 1 ? 'text-white/25 pl-3' : 'text-white/55'}`}>
                         {c}
                       </span>
                     </div>
@@ -490,9 +510,9 @@ export default function AboutContent() {
             </div>
 
             {/* Content */}
-            <div className="lg:col-span-8 flex flex-col justify-start">
+            <div className="lg:col-span-7 flex flex-col justify-start">
 
-              <div className="space-y-4 text-[#555] text-base lg:text-[17px] leading-relaxed mb-8 lg:mb-10">
+              <div className="space-y-4 text-white/55 text-base lg:text-[17px] leading-relaxed mb-8 lg:mb-10">
                 <p>
                   Tahir has been working in digital marketing since before "digital marketing" was the thing everyone called it.
                 </p>
@@ -505,21 +525,21 @@ export default function AboutContent() {
                 <p>
                   After years of delivering results around the world, Tahir launched Bee Viral with a clear focus: South Yorkshire. The goal was never to build a big agency — it was to build the right one.
                 </p>
-                <p className="text-[#222222] font-semibold">
+                <p className="text-white font-semibold">
                   Not a faceless team. A real person, with a real track record, who works in the same communities as the businesses he serves.
                 </p>
               </div>
 
-              {/* Pull quote — FIXED: mb-12 → mb-8 lg:mb-12 */}
+              {/* Pull quote */}
               <blockquote className="border-l-[3px] border-[#FFC512] pl-5 lg:pl-6 mb-8 lg:mb-12">
-                <p className="font-display font-semibold text-[#222222] italic leading-snug" style={{ fontSize: 'clamp(16px, 2vw, 24px)' }}>
+                <p className="font-display font-semibold text-white italic leading-snug" style={{ fontSize: 'clamp(16px, 2vw, 24px)' }}>
                   "If we take you on, I'm personally accountable for your growth."
                 </p>
               </blockquote>
 
-              {/* Verified profiles — FIXED: max-w-sm → max-w-full sm:max-w-sm */}
+              {/* Verified profiles */}
               <div className="space-y-2 max-w-full sm:max-w-sm">
-                <p className="text-[#bbb] text-[10px] font-semibold uppercase tracking-[0.2em] mb-3">
+                <p className="text-white/25 text-[10px] font-semibold uppercase tracking-[0.2em] mb-3">
                   Verified Profiles
                 </p>
                 {trustBadges.map((b) => (
@@ -528,7 +548,7 @@ export default function AboutContent() {
                     href={b.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-3 bg-[#222222] hover:bg-[#2d2d2d] rounded-lg px-4 py-3.5 transition-colors duration-200"
+                    className="group flex items-center gap-3 bg-white/6 hover:bg-white/10 border border-white/8 rounded-lg px-4 py-3.5 transition-colors duration-200"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-[#FFC512] shrink-0" />
                     <div className="flex-1 min-w-0">
@@ -544,13 +564,13 @@ export default function AboutContent() {
                   href="https://www.linkedin.com/in/tahir-azam-7675b393/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-3 border border-[#ddd] hover:border-[#FFC512]/60 rounded-lg px-4 py-3.5 transition-colors duration-200"
+                  className="group flex items-center gap-3 border border-white/15 hover:border-[#FFC512]/50 rounded-lg px-4 py-3.5 transition-colors duration-200"
                 >
                   <LinkedInIcon size={14} />
-                  <span className="text-[#555] text-sm font-medium group-hover:text-[#222222] transition-colors duration-200 flex-1">
+                  <span className="text-white/55 text-sm font-medium group-hover:text-white transition-colors duration-200 flex-1">
                     Connect on LinkedIn
                   </span>
-                  <ExternalLink size={12} className="text-[#ccc] group-hover:text-[#999] transition-colors duration-200 shrink-0" />
+                  <ExternalLink size={12} className="text-white/20 group-hover:text-white/50 transition-colors duration-200 shrink-0" />
                 </a>
               </div>
 
