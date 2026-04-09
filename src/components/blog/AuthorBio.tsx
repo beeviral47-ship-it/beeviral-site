@@ -19,9 +19,9 @@ export default function AuthorBio() {
           <img
             src="/images/tahir-azam.png"
             alt="Tahir Azam — Founder, Bee Viral"
-            width={88}
-            height={88}
-            className="shrink-0 w-[88px] h-[88px] rounded-full object-cover object-top"
+            width={112}
+            height={112}
+            className="shrink-0 w-[112px] h-[112px] rounded-full object-cover object-center"
           />
 
           {/* ── Author details ──────────────────────────────────────────────── */}
