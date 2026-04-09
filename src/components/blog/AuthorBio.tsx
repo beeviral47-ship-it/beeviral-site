@@ -16,27 +16,13 @@ export default function AuthorBio() {
 
         <div className="flex flex-col sm:flex-row gap-6 sm:gap-7 sm:items-start">
 
-          {/* ── Author photo ─────────────────────────────────────────────────────
-              TO ADD REAL PHOTO: delete the placeholder <div> below and replace
-              it with the <Image> block shown in the comment, then remove this
-              comment block.
-
-              <Image
-                src="/images/tahir-azam.jpg"   ← drop the file into public/images/
-                alt="Tahir Azam — Founder, Bee Viral"
-                width={88}
-                height={88}
-                className="rounded-full object-cover shrink-0 w-[88px] h-[88px]"
-              />
-          ───────────────────────────────────────────────────────────────────── */}
-          <div
-            className="shrink-0 w-[88px] h-[88px] rounded-full bg-[#FFC512]/10 border border-[#FFC512]/20 flex items-center justify-center"
-            aria-label="Tahir Azam"
-          >
-            <span className="font-display font-bold text-xl text-[#FFC512] leading-none select-none">
-              TA
-            </span>
-          </div>
+          <Image
+            src="/images/tahir-azam.jpg.png"
+            alt="Tahir Azam — Founder, Bee Viral"
+            width={88}
+            height={88}
+            className="rounded-full object-cover shrink-0 w-[88px] h-[88px]"
+          />
 
           {/* ── Author details ──────────────────────────────────────────────── */}
           <div className="flex-1 min-w-0">
@@ -58,9 +44,9 @@ export default function AuthorBio() {
             {/* Links */}
             <div className="flex items-center gap-4 mt-5">
 
-              {/* LinkedIn — TO UPDATE: replace the href value with the Bee Viral LinkedIn company page URL */}
+              {/* LinkedIn */}
               <a
-                href="https://www.linkedin.com/company/bee-viral"
+                href="https://www.linkedin.com/in/tahir-azam-7675b393/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-white/40 hover:text-[#FFC512] text-sm font-medium transition-colors duration-200"
