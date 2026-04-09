@@ -183,7 +183,7 @@ export default function AboutContent() {
                   Before Bee Viral, Tahir spent years in the trenches of freelance digital marketing — not in an agency boardroom, not studying theory, but actually doing the work. Client by client. Campaign by campaign.
                 </p>
                 <p>
-                  He completed over 776 client projects on platforms like Guru and Freelancer.com. He worked with more than 290 individual clients across the UK, the Middle East, and beyond. He ran social media accounts, built ad campaigns, built websites, and generated real, measurable results — earning over $167,000 in verified freelance income.
+                  He completed over 776 client projects on platforms like Guru and Freelancer.com. He worked with more than 290 individual clients across the UK, the US, Canada, Europe, and beyond. He ran social media accounts, built ad campaigns, built websites, and generated real, measurable results — earning over $167,000 in verified freelance income.
                 </p>
                 <p>
                   And while he was doing all of that, he kept noticing the same thing back home in South Yorkshire.
