@@ -21,7 +21,7 @@ export default function AuthorBio() {
             alt="Tahir Azam — Founder, Bee Viral"
             width={112}
             height={112}
-            className="shrink-0 w-[112px] h-[112px] rounded-full object-cover object-center"
+            className="shrink-0 w-[112px] h-[112px] rounded-full object-cover object-top"
           />
 
           {/* ── Author details ──────────────────────────────────────────────── */}
