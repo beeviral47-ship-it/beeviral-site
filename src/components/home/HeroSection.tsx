@@ -73,14 +73,14 @@ export default function HeroSection() {
           {/* ── Headline — each line cascades in independently ── */}
           <h1 className="hero-headline text-white mb-8">
             <span className="block hero-enter hero-enter-2">
-              We Build, Market
+              South Yorkshire&apos;s
             </span>
             <span className="block hero-enter hero-enter-3">
-              & Grow Local
+              Full-Service Digital
             </span>
-            {/* "Businesses Online." is larger + enters last */}
+            {/* "Marketing Agency" is larger + enters last */}
             <span className="hero-headline-accent hero-enter hero-enter-4 text-[#FFC512] relative mt-1">
-              Businesses Online.
+              Marketing Agency.
               {/* Wavy underline — decorative, hidden from screen readers */}
               <svg
                 aria-hidden="true"
@@ -103,8 +103,8 @@ export default function HeroSection() {
 
           {/* ── Subheadline ── */}
           <p className="hero-enter hero-enter-5 text-white/70 text-lg sm:text-xl leading-relaxed max-w-2xl mb-10 font-normal">
-            From your website to your social media — we handle your entire digital
-            presence so you can focus on running your business.{' '}
+            We build, market &amp; grow local businesses online — from your website
+            to your social media.{' '}
             <span className="text-white font-medium">Based in South Yorkshire</span>,
             trusted by 200+ local businesses.
           </p>
