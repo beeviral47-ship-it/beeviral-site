@@ -34,6 +34,28 @@ const studioCspHeader = [
 ].join('; ')
 
 const nextConfig: NextConfig = {
+  // ── 301 Redirects — legacy URL preservation ────────────────────────────────
+  async redirects() {
+    return [
+      // Old site page slugs → new equivalents
+      { source: '/about-us/',               destination: '/about',                              permanent: true },
+      { source: '/social-media-marketing/', destination: '/services/social-media-management',  permanent: true },
+      { source: '/marketing-solutions/',    destination: '/services',                           permanent: true },
+      { source: '/social-media-strategy/',  destination: '/services/social-media-strategy',    permanent: true },
+
+      // Trailing-slash cleanup
+      { source: '/contact/',                destination: '/contact',                            permanent: true },
+      { source: '/portfolio/',              destination: '/portfolio',                          permanent: true },
+
+      // Old portfolio case study pages
+      { source: '/blueberry-lane/',         destination: '/portfolio',                          permanent: true },
+      { source: '/urban-thread/',           destination: '/portfolio',                          permanent: true },
+
+      // Old blog post — redirect to blog index (no matching post found on new site)
+      { source: '/why-local-businesses-need-a-real-strategy-in-2025/', destination: '/blog',   permanent: true },
+    ]
+  },
+
   // ── Images ─────────────────────────────────────────────────────────────────
   images: {
     formats: ['image/avif', 'image/webp'],
