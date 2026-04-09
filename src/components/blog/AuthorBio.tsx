@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { LinkedInIcon } from '@/components/ui/SocialIcons'
 
@@ -16,15 +15,14 @@ export default function AuthorBio() {
 
         <div className="flex flex-col sm:flex-row gap-6 sm:gap-7 sm:items-start">
 
-          <div className="relative shrink-0 w-[88px] h-[88px] rounded-full overflow-hidden">
-            <Image
-              src="/images/tahir-azam.png"
-              alt="Tahir Azam — Founder, Bee Viral"
-              fill
-              sizes="88px"
-              className="object-cover object-top"
-            />
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/tahir-azam.png"
+            alt="Tahir Azam — Founder, Bee Viral"
+            width={88}
+            height={88}
+            className="shrink-0 w-[88px] h-[88px] rounded-full object-cover object-top"
+          />
 
           {/* ── Author details ──────────────────────────────────────────────── */}
           <div className="flex-1 min-w-0">
