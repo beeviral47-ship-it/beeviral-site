@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import PackagesContent from './PackagesContent'
 
 export const metadata: Metadata = {
-  title: 'Pricing & Packages — South Yorkshire',
+  title: 'Social Media & SEO Packages From £120/mo',
   description:
     'Simple, transparent pricing for local businesses in South Yorkshire. Social media management from £120/month. Full website and booking systems from £800. No contracts, cancel anytime.',
 }

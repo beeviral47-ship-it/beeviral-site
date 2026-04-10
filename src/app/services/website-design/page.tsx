@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import WebsiteDesignContent from './WebsiteDesignContent'
 
 export const metadata: Metadata = {
-  title: 'Website Design & Build South Yorkshire',
+  title: 'Website Design South Yorkshire | From £800',
   description:
     'Custom mobile-first websites for local businesses in South Yorkshire. Built on Next.js, SEO-ready, with Sanity CMS included. From £800 one-time setup.',
 }

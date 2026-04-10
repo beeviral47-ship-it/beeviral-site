@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import SocialMediaManagementContent from './SocialMediaManagementContent'
 
 export const metadata: Metadata = {
-  title: 'Social Media Management South Yorkshire',
+  title: { absolute: 'Social Media Management South Yorkshire | From £120/mo' },
   description:
     'Professional social media management for local businesses in South Yorkshire. Monthly content, graphics, captions, and scheduling for Facebook, Instagram and TikTok. From £120/month.',
 }

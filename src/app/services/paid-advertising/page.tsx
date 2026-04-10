@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import PaidAdvertisingContent from './PaidAdvertisingContent'
 
 export const metadata: Metadata = {
-  title: 'Paid Social Advertising South Yorkshire',
+  title: 'Facebook & Instagram Ads South Yorkshire',
   description:
     'Targeted Facebook, Instagram and TikTok ad campaigns for local businesses in South Yorkshire. We put your brand in front of the right local audience at the right time.',
 }

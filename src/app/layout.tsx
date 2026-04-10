@@ -24,7 +24,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.beeviral.co.uk
 // ─── Metadata ────────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
   title: {
-    default: 'Bee Viral | Local Business Growth Agency — South Yorkshire',
+    default: 'Social Media & SEO Agency South Yorkshire | Bee Viral',
     template: '%s | Bee Viral',
   },
   description:

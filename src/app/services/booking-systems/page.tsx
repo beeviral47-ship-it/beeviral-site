@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import BookingSystemsContent from './BookingSystemsContent'
 
 export const metadata: Metadata = {
-  title: 'Booking Systems & Automation South Yorkshire',
+  title: 'Online Booking Systems for Local Businesses',
   description:
     'Custom online booking systems for salons, beauty studios, fitness businesses and local services in South Yorkshire. Automated reminders and cancellations built in.',
 }

@@ -52,7 +52,7 @@ export function buildMetadata({
   }
 
   return {
-    title: metaTitle,
+    title: { absolute: metaTitle },
     description: metaDescription,
     alternates: { canonical },
     robots: noindex
