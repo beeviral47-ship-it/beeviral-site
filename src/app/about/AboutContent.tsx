@@ -100,14 +100,15 @@ const trustBadges = [
 
 // ── Sub-components ───────────────────────────────────────────────────────────
 
-/** Animated counter that counts up from 0 when it enters the viewport */
+/** Animated counter that counts up from the target value when it enters the viewport.
+ *  SEO note: initial state = target so Googlebot sees real numbers in static HTML. */
 function StatItem({ target, suffix, label, delay }: {
   target: number
   suffix: string
   label: string
   delay: number
 }) {
-  const [count, setCount]     = useState(0)
+  const [count, setCount]     = useState(target)
   const [started, setStarted] = useState(false)
   const ref                   = useRef<HTMLDivElement>(null)
 
