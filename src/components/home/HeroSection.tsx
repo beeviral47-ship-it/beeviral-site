@@ -52,13 +52,11 @@ export default function HeroSection() {
         ref={blur1Ref}
         aria-hidden="true"
         className="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-[#FFC512]/6 blur-3xl pointer-events-none"
-        style={{ willChange: 'transform' }}
       />
       <div
         ref={blur2Ref}
         aria-hidden="true"
         className="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full bg-[#FFC512]/5 blur-3xl pointer-events-none"
-        style={{ willChange: 'transform' }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
@@ -71,15 +69,18 @@ export default function HeroSection() {
           </div>
 
           {/* ── Headline — each line cascades in independently ── */}
+          {/* hero-enter-text uses transform-only animation so text stays   */}
+          {/* visible from first paint — LCP fires immediately, not after   */}
+          {/* the opacity delay that hero-enter would impose.               */}
           <h1 className="hero-headline text-white mb-8">
-            <span className="block hero-enter hero-enter-2">
+            <span className="block hero-enter-text hero-enter-2">
               South Yorkshire&apos;s
             </span>
-            <span className="block hero-enter hero-enter-3">
+            <span className="block hero-enter-text hero-enter-3">
               Full-Service Digital
             </span>
             {/* "Marketing Agency" is larger + enters last */}
-            <span className="hero-headline-accent hero-enter hero-enter-4 text-[#FFC512] relative mt-1">
+            <span className="hero-headline-accent hero-enter-text hero-enter-4 text-[#FFC512] relative mt-1">
               Marketing Agency.
               {/* Wavy underline — decorative, hidden from screen readers */}
               <svg

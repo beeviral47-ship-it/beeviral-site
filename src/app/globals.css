@@ -74,6 +74,13 @@ body {
   to   { opacity: 1; transform: translateY(0);    }
 }
 
+/* Headline-only entrance — transform only, NO opacity change.
+   Keeps text visible from first paint so it counts for LCP immediately. */
+@keyframes heroSlideUp {
+  from { transform: translateY(22px); }
+  to   { transform: translateY(0);    }
+}
+
 /* Scroll-reveal keyframes (triggered by .visible class) */
 @keyframes revealUp {
   from { opacity: 0; transform: translateY(36px); }
@@ -105,10 +112,21 @@ body {
 /* ══════════════════════════════════════════════════
    HERO ENTRANCE  (CSS-only, fires immediately)
 ══════════════════════════════════════════════════ */
+
+/* Used on badge, subheadline, CTAs, trust indicators —
+   elements that can safely start invisible. */
 .hero-enter {
   opacity: 0;
   animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Used on H1 headline spans — opacity stays 1 so the text
+   is visible from first paint (LCP fires immediately).
+   animation-fill-mode: both holds translateY(22px) during the delay. */
+.hero-enter-text {
+  animation: heroSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 .hero-enter-1  { animation-delay: 80ms;  }
 .hero-enter-2  { animation-delay: 220ms; }
 .hero-enter-3  { animation-delay: 380ms; }
@@ -218,6 +236,7 @@ body {
   }
 
   .hero-enter,
+  .hero-enter-text,
   .reveal,
   .reveal-left,
   .reveal-right,
