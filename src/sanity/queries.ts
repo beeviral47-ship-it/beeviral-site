@@ -61,7 +61,7 @@ export async function getBlogPost(slug: string, preview = false): Promise<BlogPo
 
 export async function getAllBlogSlugs(): Promise<string[]> {
   const results: { slug: { current: string } }[] = await client.fetch(
-    `*[_type == "blog"] { slug }`,
+    `*[_type == "blog" && status == "published"] { slug }`,
     {},
     { next: { revalidate: 3600 } }
   )

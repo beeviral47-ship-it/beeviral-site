@@ -15,7 +15,11 @@ const staticPages: MetadataRoute.Sitemap = [
   { url: `${SITE_URL}/services/local-seo`,               priority: 0.8, changeFrequency: 'monthly' },
   { url: `${SITE_URL}/services/social-media-strategy`,   priority: 0.8, changeFrequency: 'monthly' },
   { url: `${SITE_URL}/services/social-media-audit`,      priority: 0.8, changeFrequency: 'monthly' },
+  { url: `${SITE_URL}/services/website-design`,          priority: 0.8, changeFrequency: 'monthly' },
+  { url: `${SITE_URL}/services/booking-systems`,         priority: 0.8, changeFrequency: 'monthly' },
+  { url: `${SITE_URL}/services/analytics`,               priority: 0.8, changeFrequency: 'monthly' },
   { url: `${SITE_URL}/packages`,            priority: 0.9, changeFrequency: 'monthly' },
+  { url: `${SITE_URL}/locations`,           priority: 0.8, changeFrequency: 'monthly' },
   { url: `${SITE_URL}/case-studies`,        priority: 0.8, changeFrequency: 'weekly'  },
   { url: `${SITE_URL}/portfolio`,           priority: 0.7, changeFrequency: 'monthly' },
   { url: `${SITE_URL}/blog`,                priority: 0.8, changeFrequency: 'daily'   },
@@ -26,7 +30,7 @@ const staticPages: MetadataRoute.Sitemap = [
 
 async function fetchDynamicEntries(): Promise<MetadataRoute.Sitemap> {
   try {
-    const [blogPosts, caseStudies, services, pages] = await Promise.all([
+    const [blogPosts, caseStudies, services, pages, locationPages] = await Promise.all([
       client.fetch<{ slug: string; updatedAt: string }[]>(
         `*[_type == "blog" && status == "published"] {
           "slug": slug.current,
@@ -47,6 +51,12 @@ async function fetchDynamicEntries(): Promise<MetadataRoute.Sitemap> {
       ),
       client.fetch<{ slug: string; updatedAt: string }[]>(
         `*[_type == "page" && status == "published"] {
+          "slug": slug.current,
+          "updatedAt": _updatedAt
+        }`
+      ),
+      client.fetch<{ slug: string; updatedAt: string }[]>(
+        `*[_type == "locationPage"] {
           "slug": slug.current,
           "updatedAt": _updatedAt
         }`
@@ -81,7 +91,14 @@ async function fetchDynamicEntries(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
     }))
 
-    return [...blogEntries, ...caseStudyEntries, ...serviceEntries, ...pageEntries]
+    const locationEntries: MetadataRoute.Sitemap = locationPages.map((p) => ({
+      url:             `${SITE_URL}/locations/${p.slug}`,
+      lastModified:    p.updatedAt ? new Date(p.updatedAt) : new Date(),
+      priority:        0.8,
+      changeFrequency: 'monthly',
+    }))
+
+    return [...blogEntries, ...caseStudyEntries, ...serviceEntries, ...pageEntries, ...locationEntries]
   } catch {
     // If Sanity is unavailable (e.g. env vars not yet set), return empty —
     // the static pages are still included
