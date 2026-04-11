@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { motion } from 'motion/react'
+import { scaleUp, fadeUp, staggerContainer } from '@/lib/motion-variants'
+import MagneticButton from '@/components/ui/MagneticButton'
 import { trackButtonClick } from '@/lib/analytics'
 import { useAuditModal } from '@/components/providers/AuditModalProvider'
 
 export default function CTASection() {
-  const ref = useScrollReveal<HTMLDivElement>(0.2)
   const { openAuditModal } = useAuditModal()
 
   return (
@@ -21,41 +22,58 @@ export default function CTASection() {
         }}
       />
 
-      {/* Content — scale-up entrance */}
-      <div ref={ref} className="reveal-scale relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2
+      {/* Content */}
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-40px' }}
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+      >
+        <motion.h2
+          variants={scaleUp}
           className="font-display font-extrabold text-[#222222] mb-6"
           style={{ fontSize: 'clamp(36px, 6vw, 72px)', lineHeight: 0.95, letterSpacing: '-0.02em' }}
         >
           Ready to Go Viral?
-        </h2>
+        </motion.h2>
 
-        <p className="text-[#222222]/70 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+        <motion.p
+          variants={fadeUp}
+          className="text-[#222222]/70 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-normal"
+        >
           Let's talk about your business. Get a free social media audit and a
           tailored strategy — no obligation, no jargon, just results.
-        </p>
+        </motion.p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => { trackButtonClick('Book Your Free Audit', 'cta_banner'); openAuditModal('service') }}
-            className="inline-flex items-center justify-center gap-2 bg-[#222222] hover:bg-[#333] text-white font-semibold text-base px-8 py-4 rounded-md transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg tracking-wide"
-          >
-            Book Your Free Audit
-            <ArrowRight size={18} />
-          </button>
-          <Link
-            href="/packages"
-            onClick={() => trackButtonClick('View Our Packages', 'cta_banner')}
-            className="inline-flex items-center justify-center gap-2 bg-transparent hover:bg-[#222222]/10 border-2 border-[#222222] text-[#222222] font-semibold text-base px-8 py-4 rounded-md transition-all duration-200 tracking-wide"
-          >
-            View Our Packages
-          </Link>
-        </div>
+        <motion.div
+          variants={fadeUp}
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+        >
+          <MagneticButton>
+            <button
+              onClick={() => { trackButtonClick('Book Your Free Audit', 'cta_banner'); openAuditModal('service') }}
+              className="inline-flex items-center justify-center gap-2 bg-[#222222] hover:bg-[#333] text-white font-semibold text-base px-8 py-4 rounded-md transition-colors duration-200 active:scale-95 shadow-lg tracking-wide"
+            >
+              Book Your Free Audit
+              <ArrowRight size={18} />
+            </button>
+          </MagneticButton>
+          <MagneticButton strength={5}>
+            <Link
+              href="/packages"
+              onClick={() => trackButtonClick('View Our Packages', 'cta_banner')}
+              className="inline-flex items-center justify-center gap-2 bg-transparent hover:bg-[#222222]/10 border-2 border-[#222222] text-[#222222] font-semibold text-base px-8 py-4 rounded-md transition-colors duration-200 tracking-wide"
+            >
+              View Our Packages
+            </Link>
+          </MagneticButton>
+        </motion.div>
 
-        <p className="mt-10 text-[#222222]/50 text-sm font-normal">
+        <motion.p variants={fadeUp} className="mt-10 text-[#222222]/50 text-sm font-normal">
           No contracts. No setup fees. Cancel anytime. — Trusted by 200+ South Yorkshire businesses.
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
     </section>
   )
 }

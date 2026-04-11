@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { TrendingUp, Search, BarChart2, MessageCircle, Monitor, Calendar } from 'lucide-react'
-import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
+import { motion } from 'motion/react'
+import { fadeUp, scaleUp, staggerContainer } from '@/lib/motion-variants'
 
 // ── Service data ──────────────────────────────────────────────────────────────
 
@@ -57,16 +58,18 @@ const group2 = [
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function ServicesSection() {
-  const headingRef = useScrollReveal<HTMLDivElement>(0.2)
-  const group1Ref  = useStaggerReveal<HTMLDivElement>(0.05)
-  const group2Ref  = useStaggerReveal<HTMLDivElement>(0.05)
-
   return (
     <section className="bg-[#222222] py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Heading */}
-        <div ref={headingRef} className="reveal text-center mb-16">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+          className="text-center mb-16"
+        >
           <span className="text-[#FFC512] text-sm font-medium uppercase tracking-widest">
             What We Do
           </span>
@@ -78,7 +81,7 @@ export default function ServicesSection() {
             From daily social posts to full websites with booking systems — we handle
             your entire digital presence so you can focus on running your business.
           </p>
-        </div>
+        </motion.div>
 
         {/* Group 1 */}
         <div className="mb-12">
@@ -89,30 +92,32 @@ export default function ServicesSection() {
             <div className="flex-1 h-px bg-white/8" />
           </div>
 
-          <div
-            ref={group1Ref}
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {group1.map((service, i) => (
-              <Link
-                key={service.title}
-                href={service.href}
-                className="reveal-scale group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#FFC512]/5 block"
-                data-delay={i}
-                style={{ transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease' }}
-              >
-                <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
-                  {service.icon}
-                </div>
-                <h3 className="font-display font-semibold text-white text-lg mb-3 group-hover:text-[#FFC512] transition-colors tracking-tight">
-                  {service.title}
-                </h3>
-                <p className="text-white/55 text-sm leading-relaxed font-normal">
-                  {service.description}
-                </p>
-              </Link>
+            {group1.map((service) => (
+              <motion.div key={service.title} variants={scaleUp}>
+                <Link
+                  href={service.href}
+                  className="group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 block h-full"
+                >
+                  <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
+                    {service.icon}
+                  </div>
+                  <h3 className="font-display font-semibold text-white text-lg mb-3 group-hover:text-[#FFC512] transition-colors tracking-tight">
+                    {service.title}
+                  </h3>
+                  <p className="text-white/55 text-sm leading-relaxed font-normal">
+                    {service.description}
+                  </p>
+                </Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         {/* Group 2 */}
@@ -124,30 +129,32 @@ export default function ServicesSection() {
             <div className="flex-1 h-px bg-white/8" />
           </div>
 
-          <div
-            ref={group2Ref}
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {group2.map((service, i) => (
-              <Link
-                key={service.title}
-                href={service.href}
-                className="reveal-scale group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#FFC512]/5 block"
-                data-delay={i}
-                style={{ transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease' }}
-              >
-                <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
-                  {service.icon}
-                </div>
-                <h3 className="font-display font-semibold text-white text-lg mb-3 group-hover:text-[#FFC512] transition-colors tracking-tight">
-                  {service.title}
-                </h3>
-                <p className="text-white/55 text-sm leading-relaxed font-normal">
-                  {service.description}
-                </p>
-              </Link>
+            {group2.map((service) => (
+              <motion.div key={service.title} variants={scaleUp}>
+                <Link
+                  href={service.href}
+                  className="group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 block h-full"
+                >
+                  <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
+                    {service.icon}
+                  </div>
+                  <h3 className="font-display font-semibold text-white text-lg mb-3 group-hover:text-[#FFC512] transition-colors tracking-tight">
+                    {service.title}
+                  </h3>
+                  <p className="text-white/55 text-sm leading-relaxed font-normal">
+                    {service.description}
+                  </p>
+                </Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
       </div>

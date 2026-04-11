@@ -2,9 +2,10 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { motion } from 'motion/react'
 import { navLinks, serviceLinks, locations, socials } from '@/lib/data'
 import { InstagramIcon, FacebookIcon } from '@/components/ui/SocialIcons'
-import { useStaggerReveal } from '@/hooks/useScrollReveal'
+import { fadeUp, staggerContainer } from '@/lib/motion-variants'
 import { trackLinkClick } from '@/lib/analytics'
 
 const socialIcons: Record<string, React.ReactNode> = {
@@ -13,17 +14,21 @@ const socialIcons: Record<string, React.ReactNode> = {
 }
 
 export default function Footer() {
-  const gridRef = useStaggerReveal<HTMLDivElement>(0.05)
-
   return (
     <footer className="bg-[#1a1a1a] text-white overflow-hidden">
 
       {/* Main footer content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-20px' }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8"
+        >
 
           {/* Brand column */}
-          <div className="reveal" data-delay="0">
+          <motion.div variants={fadeUp}>
             <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <Image
                 src="/images/logo-transparent.png"
@@ -54,10 +59,10 @@ export default function Footer() {
                 </a>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Navigation */}
-          <div className="reveal" data-delay="1">
+          <motion.div variants={fadeUp}>
             <h3 className="font-display font-semibold text-[#FFC512] text-xs uppercase tracking-widest mb-5">
               Navigation
             </h3>
@@ -73,10 +78,10 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Services */}
-          <div className="reveal hidden md:block" data-delay="2">
+          <motion.div variants={fadeUp} className="hidden md:block">
             <h3 className="font-display font-semibold text-[#FFC512] text-xs uppercase tracking-widest mb-5">
               Services
             </h3>
@@ -92,10 +97,10 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Locations + Contact */}
-          <div className="reveal" data-delay="3">
+          <motion.div variants={fadeUp}>
             <div className="hidden md:block mb-8">
               <h3 className="font-display font-semibold text-[#FFC512] text-xs uppercase tracking-widest mb-5">
                 We Serve
@@ -145,8 +150,9 @@ export default function Footer() {
               <li className="text-white/60 text-sm font-normal">South Yorkshire, UK</li>
               <li className="text-white/60 text-sm font-normal">Mon–Fri: 9:00am – 5:30pm</li>
             </ul>
-          </div>
-        </div>
+          </motion.div>
+
+        </motion.div>
       </div>
 
       {/* Bottom bar */}

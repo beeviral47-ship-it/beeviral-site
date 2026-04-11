@@ -2,7 +2,8 @@
 
 import { CheckCircle2 } from 'lucide-react'
 import Image from 'next/image'
-import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { motion } from 'motion/react'
+import { slideLeft, slideRight, fadeUp, staggerContainer } from '@/lib/motion-variants'
 
 const reasons = [
   {
@@ -24,16 +25,19 @@ const reasons = [
 ]
 
 export default function WhySection() {
-  const leftRef  = useScrollReveal<HTMLDivElement>(0.15)
-  const rightRef = useScrollReveal<HTMLDivElement>(0.15)
-
   return (
     <section className="bg-white py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
           {/* Left — visual, slides in from left */}
-          <div ref={leftRef} className="reveal-left relative">
+          <motion.div
+            variants={slideLeft}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            className="relative"
+          >
             <div className="relative rounded-2xl overflow-hidden bg-[#222222] aspect-square max-w-lg mx-auto lg:mx-0">
               <div className="absolute inset-0 bg-honeycomb opacity-30" />
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 p-10">
@@ -75,10 +79,15 @@ export default function WhySection() {
               <div className="font-display text-3xl font-extrabold tracking-tight">10+</div>
               <div className="text-xs font-medium uppercase tracking-widest opacity-70">Years in Business</div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Right — text content, slides in from right */}
-          <div ref={rightRef} className="reveal-right">
+          {/* Right — text + reasons list, slides in from right */}
+          <motion.div
+            variants={slideRight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+          >
             <span className="text-[#FFC512] text-sm font-medium uppercase tracking-widest">
               Why Choose Us
             </span>
@@ -91,9 +100,15 @@ export default function WhySection() {
               presence since 2014. Here's why over 200 local businesses trust us.
             </p>
 
-            <ul className="space-y-6">
+            <motion.ul
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-40px' }}
+              className="space-y-6"
+            >
               {reasons.map((r) => (
-                <li key={r.title} className="flex gap-4">
+                <motion.li key={r.title} variants={fadeUp} className="flex gap-4">
                   <CheckCircle2 size={22} className="text-[#FFC512] flex-shrink-0 mt-0.5" />
                   <div>
                     <h3 className="font-display font-semibold text-[#222222] mb-1 tracking-tight">
@@ -101,10 +116,10 @@ export default function WhySection() {
                     </h3>
                     <p className="text-[#555] text-sm leading-relaxed font-normal">{r.desc}</p>
                   </div>
-                </li>
+                </motion.li>
               ))}
-            </ul>
-          </div>
+            </motion.ul>
+          </motion.div>
         </div>
       </div>
     </section>

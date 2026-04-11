@@ -2,8 +2,9 @@
 
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import { motion } from 'motion/react'
 import { InstagramIcon, FacebookIcon } from '@/components/ui/SocialIcons'
-import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
+import { fadeUp, scaleUp, staggerContainer } from '@/lib/motion-variants'
 
 const projects = [
   {
@@ -39,15 +40,18 @@ const projects = [
 ]
 
 export default function PortfolioPreview() {
-  const headingRef = useScrollReveal<HTMLDivElement>(0.2)
-  const gridRef    = useStaggerReveal<HTMLDivElement>(0.05)
-
   return (
     <section className="bg-[#1a1a1a] py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Heading */}
-        <div ref={headingRef} className="reveal flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14"
+        >
           <div>
             <span className="text-[#FFC512] text-sm font-medium uppercase tracking-widest">
               Our Work
@@ -63,55 +67,50 @@ export default function PortfolioPreview() {
           >
             View Full Portfolio <ArrowRight size={18} />
           </Link>
-        </div>
+        </motion.div>
 
-        {/* Cards — stagger via data-delay */}
-        <div
-          ref={gridRef}
+        {/* Cards */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
         >
-          {projects.map((p, i) => (
-            <Link
-              key={p.client}
-              href={`/case-studies/${p.slug}`}
-              className="reveal-scale group relative rounded-xl overflow-hidden bg-[#2d2d2d] border border-white/5 hover:border-[#FFC512]/40 block"
-              data-delay={i}
-              style={{ transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease' }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 20px 40px rgba(255,197,18,0.1)'
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = '';
-                (e.currentTarget as HTMLElement).style.boxShadow = ''
-              }}
-            >
-              {/* Gradient tile */}
-              <div className={`h-48 bg-gradient-to-b ${p.color} flex items-center justify-center`}>
-                <div className="text-white/10 font-display text-6xl font-extrabold select-none tracking-tight">
-                  {p.client.charAt(0)}
+          {projects.map((p) => (
+            <motion.div key={p.client} variants={scaleUp}>
+              <Link
+                href={`/case-studies/${p.slug}`}
+                className="group relative rounded-xl overflow-hidden bg-[#2d2d2d] border border-white/5 hover:border-[#FFC512]/40 block transition-colors duration-300"
+              >
+                {/* Gradient tile */}
+                <div className={`h-48 bg-gradient-to-b ${p.color} flex items-center justify-center`}>
+                  <div className="text-white/10 font-display text-6xl font-extrabold select-none tracking-tight">
+                    {p.client.charAt(0)}
+                  </div>
+                  <div className="absolute top-4 left-4 bg-[#FFC512] text-[#222222] text-xs font-semibold px-3 py-1 rounded-full tracking-wide">
+                    {p.tag}
+                  </div>
                 </div>
-                <div className="absolute top-4 left-4 bg-[#FFC512] text-[#222222] text-xs font-semibold px-3 py-1 rounded-full tracking-wide">
-                  {p.tag}
-                </div>
-              </div>
 
-              {/* Content */}
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-white/40 text-xs mb-3 font-normal">
-                  {p.icon}
-                  <span>{p.platform}</span>
-                  <span>·</span>
-                  <span>{p.location}</span>
+                {/* Content */}
+                <div className="p-6">
+                  <div className="flex items-center gap-2 text-white/40 text-xs mb-3 font-normal">
+                    {p.icon}
+                    <span>{p.platform}</span>
+                    <span>·</span>
+                    <span>{p.location}</span>
+                  </div>
+                  <h3 className="font-display font-semibold text-white text-xl mb-2 group-hover:text-[#FFC512] transition-colors tracking-tight">
+                    {p.client}
+                  </h3>
+                  <p className="text-[#FFC512] font-semibold text-sm tracking-wide">{p.result}</p>
                 </div>
-                <h3 className="font-display font-semibold text-white text-xl mb-2 group-hover:text-[#FFC512] transition-colors tracking-tight">
-                  {p.client}
-                </h3>
-                <p className="text-[#FFC512] font-semibold text-sm tracking-wide">{p.result}</p>
-              </div>
-            </Link>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
+
       </div>
     </section>
   )

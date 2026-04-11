@@ -19,6 +19,22 @@
   /* ─── Background / foreground ───────────────── */
   --color-background: #222222;
   --color-foreground: #FFFFFF;
+
+  /* ─── Motion tokens ─────────────────────────── */
+  --ease-out-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-expo:    cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out:     cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast:   150ms;
+  --duration-base:   300ms;
+  --duration-slow:   600ms;
+  --duration-cinema: 900ms;
+
+  /* ─── Z-index scale ──────────────────────────── */
+  --z-base:    0;
+  --z-raised:  10;
+  --z-overlay: 100;
+  --z-modal:   200;
+  --z-cursor:  9999;
 }
 
 /* ══════════════════════════════════════════════════
@@ -213,6 +229,15 @@ body {
   height: 4px;
   background: #FFC512;
   border-radius: 2px;
+}
+
+/* ══════════════════════════════════════════════════
+   CUSTOM CURSOR  — hides OS cursor on fine-pointer
+   devices so our canvas cursor takes over.
+   Touch/pen devices are unaffected.
+══════════════════════════════════════════════════ */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
 }
 
 /* ══════════════════════════════════════════════════
