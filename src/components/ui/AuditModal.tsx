@@ -7,7 +7,35 @@ import { trackFormSubmit } from '@/lib/analytics'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const packageOptions = [
+// Packages grouped by lane — shown based on which lane the user came from
+const packagesByLane: Record<string, string[]> = {
+  'social-only': [
+    'Starter — £120/mo',
+    'Growth — £150/mo',
+    'Hive — £200/mo',
+  ],
+  'social-seo': [
+    'Buzz — £250/mo',
+    'Swarm — £350/mo',
+  ],
+  'brochure': [
+    'Brochure — £800 setup + £200/mo',
+    'Booking Pro — £1,500 setup + £250/mo',
+    'Booking Elite — £2,500 setup + £300/mo',
+  ],
+  'booking-pro': [
+    'Brochure — £800 setup + £200/mo',
+    'Booking Pro — £1,500 setup + £250/mo',
+    'Booking Elite — £2,500 setup + £300/mo',
+  ],
+  'booking-elite': [
+    'Brochure — £800 setup + £200/mo',
+    'Booking Pro — £1,500 setup + £250/mo',
+    'Booking Elite — £2,500 setup + £300/mo',
+  ],
+}
+
+const allPackageOptions = [
   'Starter — £120/mo',
   'Growth — £150/mo',
   'Hive — £200/mo',
@@ -90,13 +118,14 @@ function buildSteps(serviceKey: string | undefined, isPackageMode: boolean): Wiz
   }
 
   if (isPackageMode) {
+    const options = (serviceKey && packagesByLane[serviceKey]) ?? allPackageOptions
     return [
       {
         id: 'package',
-        question: 'Which package are you interested in?',
-        subtext: "Not sure? Pick 'Help me choose' and we'll advise.",
+        question: 'Which package would you like?',
+        subtext: 'Select one to continue.',
         type: 'package',
-        options: packageOptions,
+        options,
       },
       { ...contact, question: 'Last step — your details', subtext: "We'll get you set up within 5–7 working days." },
     ]
@@ -187,8 +216,9 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
   const progress   = totalSteps > 1 ? (stepIndex / (totalSteps - 1)) * 100 : 100
 
   useEffect(() => {
-    setFormState(prev => ({ ...prev, service: defaultService }))
-  }, [defaultService])
+    // In package mode, start with no pre-selection — user must choose deliberately
+    setFormState(prev => ({ ...prev, service: isPackageMode ? '' : defaultService }))
+  }, [defaultService, isPackageMode])
 
   // Auto-focus name field when contact step appears
   useEffect(() => {
@@ -248,7 +278,7 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
 
   function pickPackage(value: string) {
     setFormState(prev => ({ ...prev, service: value }))
-    setTimeout(goNext, 320)
+    // No auto-advance — package is a purchase decision, user confirms with Continue
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -460,6 +490,13 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
                         </button>
                       )
                     })}
+                    <button
+                      onClick={goNext}
+                      disabled={!form.service}
+                      className="w-full mt-1 inline-flex items-center justify-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] disabled:opacity-30 disabled:cursor-not-allowed text-[#222222] font-semibold text-sm px-6 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95"
+                    >
+                      Continue <ArrowRight size={16} />
+                    </button>
                   </div>
                 )}
 
