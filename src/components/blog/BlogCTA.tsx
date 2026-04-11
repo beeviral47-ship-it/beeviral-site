@@ -13,19 +13,19 @@ export default function BlogCTA() {
         Free — No obligation
       </span>
       <h2 className="font-display font-bold text-2xl sm:text-3xl text-white tracking-tight mt-3 mb-3">
-        Ready to grow on social media?
+        Get your free Digital Health Check
       </h2>
       <p className="text-white/55 text-sm sm:text-base leading-relaxed max-w-md mx-auto mb-8">
-        Get a free audit of your social media presence from the Bee Viral team. We&apos;ll review your accounts and tell you exactly what&apos;s working and what isn&apos;t.
+        We&apos;ll review your entire online presence — website, social media, SEO, and local search — and give you honest advice on exactly what we&apos;d do differently. No hard sell, no jargon.
       </p>
       <button
         onClick={() => {
-          trackButtonClick('Get a Free Audit', 'blog_cta')
+          trackButtonClick('Get Your Free Health Check', 'blog_cta')
           openAuditModal('service')
         }}
         className="inline-flex items-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-sm px-6 py-3 rounded-md transition-all duration-200 hover:scale-105 active:scale-95"
       >
-        Get a Free Audit <ArrowRight size={16} />
+        Get Your Free Health Check <ArrowRight size={16} />
       </button>
       <p className="text-white/25 text-xs mt-4 font-normal">
         No commitment. We&apos;ll never share your details.

@@ -238,14 +238,14 @@ export default function ServicesContent() {
             Ready to grow your business?
           </h2>
           <p className="text-[#222222]/70 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-            Book your free social media audit — no commitment, no jargon, just
+            Book your free Digital Health Check — no commitment, no jargon, just
             practical advice on how to generate more leads.
           </p>
           <button
-            onClick={() => { trackButtonClick('Get Your Free Audit', 'services_cta'); openAuditModal('service') }}
+            onClick={() => { trackButtonClick('Get Your Free Health Check', 'services_cta'); openAuditModal('service') }}
             className="inline-flex items-center gap-2 bg-[#222222] hover:bg-[#333] text-white font-semibold text-base px-8 py-4 rounded-md transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg tracking-wide"
           >
-            Get Your Free Audit
+            Get Your Free Health Check
             <ArrowRight size={18} />
           </button>
         </div>

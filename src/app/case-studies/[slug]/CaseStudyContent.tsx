@@ -506,19 +506,19 @@ export default function CaseStudyContent({ caseStudy: cs }: Props) {
             Ready to grow your business?
           </h2>
           <p className="text-[#222222]/70 text-lg max-w-xl mx-auto mb-10 leading-relaxed font-normal">
-            Book your free social media audit and find out exactly what we&apos;d do for your
+            Book your free Digital Health Check and find out exactly what we&apos;d do for your
             business in the first 90 days.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => {
-                trackButtonClick('Book Your Free Audit', 'case_study_cta')
+                trackButtonClick('Book Your Free Health Check', 'case_study_cta')
                 openAuditModal('service')
               }}
               className="inline-flex items-center gap-2 bg-[#222222] hover:bg-[#333] text-white font-semibold text-base px-8 py-4 rounded-md transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg tracking-wide"
             >
-              Book Your Free Audit
+              Book Your Free Health Check
               <ArrowRight size={18} />
             </button>
 

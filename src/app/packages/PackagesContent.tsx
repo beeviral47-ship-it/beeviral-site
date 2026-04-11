@@ -583,7 +583,7 @@ export default function PackagesContent() {
             className="font-display font-extrabold text-white mt-4 mb-6"
             style={{ fontSize: 'clamp(32px, 5vw, 60px)', lineHeight: 1, letterSpacing: '-0.02em' }}
           >
-            Get a free audit first.
+            Start with a free Digital Health Check.
           </h2>
           <p className="text-white/60 text-lg leading-relaxed font-normal mb-10">
             We'll review your current online presence, tell you exactly what's holding
@@ -591,12 +591,12 @@ export default function PackagesContent() {
           </p>
           <button
             onClick={() => {
-              trackButtonClick('Book Your Free Audit', 'packages_cta')
+              trackButtonClick('Book Your Free Health Check', 'packages_cta')
               openAuditModal('service')
             }}
             className="inline-flex items-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-base px-8 py-4 rounded-md transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-[#FFC512]/20"
           >
-            Book Your Free Audit
+            Book Your Free Health Check
             <ArrowRight size={18} />
           </button>
           <p className="text-white/25 text-sm mt-5 font-normal">

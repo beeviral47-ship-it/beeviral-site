@@ -42,8 +42,8 @@ export default function CTASection() {
           variants={fadeUp}
           className="text-[#222222]/70 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-normal"
         >
-          Let's talk about your business. Get a free social media audit and a
-          tailored strategy — no obligation, no jargon, just results.
+          Let's talk about your business. Get a free Digital Health Check and a
+          tailored growth strategy — no obligation, no jargon, just results.
         </motion.p>
 
         <motion.div
@@ -52,10 +52,10 @@ export default function CTASection() {
         >
           <MagneticButton>
             <button
-              onClick={() => { trackButtonClick('Book Your Free Audit', 'cta_banner'); openAuditModal('service') }}
+              onClick={() => { trackButtonClick('Book Your Free Health Check', 'cta_banner'); openAuditModal('service') }}
               className="inline-flex items-center justify-center gap-2 bg-[#222222] hover:bg-[#333] text-white font-semibold text-base px-8 py-4 rounded-md transition-colors duration-200 active:scale-95 shadow-lg tracking-wide"
             >
-              Book Your Free Audit
+              Book Your Free Health Check
               <ArrowRight size={18} />
             </button>
           </MagneticButton>
