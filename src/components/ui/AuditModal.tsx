@@ -1,8 +1,11 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { X, ArrowRight, CheckCircle2, Loader2, Check } from 'lucide-react'
+import { useState, useEffect, useRef, useMemo } from 'react'
+import { X, ArrowRight, ArrowLeft, CheckCircle2, Loader2, Check } from 'lucide-react'
+import { motion, AnimatePresence } from 'motion/react'
 import { trackFormSubmit } from '@/lib/analytics'
+
+// ── Constants ─────────────────────────────────────────────────────────────────
 
 const packageOptions = [
   'Starter — £120/mo',
@@ -16,6 +19,8 @@ const packageOptions = [
   'Not sure — help me choose',
 ]
 
+// ── Types ─────────────────────────────────────────────────────────────────────
+
 interface Props {
   open: boolean
   onClose: () => void
@@ -24,11 +29,10 @@ interface Props {
   serviceKey?: string
 }
 
-// ── Base form (unchanged fields) ──────────────────────────────────────────────
-
-const empty = { name: '', business: '', email: '', phone: '', service: '', website: '', social: '', message: '', hp: '' }
-
-// ── Conditional form fields ───────────────────────────────────────────────────
+const empty = {
+  name: '', business: '', email: '', phone: '',
+  service: '', website: '', social: '', message: '', hp: '',
+}
 
 interface CondForm {
   currentPlatforms: string[]
@@ -66,145 +70,141 @@ const emptyCond: CondForm = {
   discovery: '',
 }
 
-// ── Helper UI components ──────────────────────────────────────────────────────
+type MultiField = 'currentPlatforms' | 'bookingNeeds' | 'interests'
 
-function CondSection({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-lg border border-white/8 bg-[#1a1a1a] p-5 space-y-5">
-      <p className="text-[#FFC512] text-xs font-semibold uppercase tracking-widest border-b border-white/8 pb-2.5">
-        {title}
-      </p>
-      {children}
-    </div>
-  )
+interface WizardStep {
+  id: string
+  question: string
+  subtext?: string
+  type: 'single' | 'multi' | 'contact' | 'package'
+  condField?: keyof CondForm
+  options?: string[]
 }
 
-function RadioGroup({
-  label,
-  name,
-  options,
-  value,
-  onChange,
-}: {
-  label: string
-  name: string
-  options: string[]
-  value: string
-  onChange: (v: string) => void
-}) {
-  return (
-    <div>
-      <p className="text-white/50 text-xs font-medium uppercase tracking-wider mb-2.5">{label}</p>
-      <div className="space-y-2">
-        {options.map((opt) => (
-          <label key={opt} className="flex items-center gap-3 cursor-pointer group">
-            <input
-              type="radio"
-              name={name}
-              value={opt}
-              checked={value === opt}
-              onChange={() => onChange(opt)}
-              className="sr-only"
-            />
-            <span
-              className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors duration-150 ${
-                value === opt ? 'border-[#FFC512]' : 'border-white/25 group-hover:border-white/50'
-              }`}
-            >
-              {value === opt && <span className="w-2 h-2 rounded-full bg-[#FFC512]" />}
-            </span>
-            <span
-              className={`text-sm leading-snug transition-colors duration-150 ${
-                value === opt ? 'text-white' : 'text-white/60 group-hover:text-white/80'
-              }`}
-            >
-              {opt}
-            </span>
-          </label>
-        ))}
-      </div>
-    </div>
-  )
+// ── Step factory ──────────────────────────────────────────────────────────────
+
+function buildSteps(serviceKey: string | undefined, isPackageMode: boolean): WizardStep[] {
+  const contact: WizardStep = {
+    id: 'contact',
+    question: 'Almost done — just your details',
+    subtext: "We'll get back to you within 1 business day. No hard sell, no commitment.",
+    type: 'contact',
+  }
+
+  if (isPackageMode) {
+    return [
+      {
+        id: 'package',
+        question: 'Which package are you interested in?',
+        subtext: "Not sure? Pick 'Help me choose' and we'll advise.",
+        type: 'package',
+        options: packageOptions,
+      },
+      { ...contact, question: 'Last step — your details', subtext: "We'll get you set up within 5–7 working days." },
+    ]
+  }
+
+  const isSocial  = serviceKey === 'social-only'  || serviceKey === 'service-social'
+  const isSEO     = serviceKey === 'social-seo'   || serviceKey === 'service-seo'
+  const isWebsite = serviceKey === 'brochure'     || serviceKey === 'service-website'
+  const isBooking = serviceKey === 'booking-pro'  || serviceKey === 'booking-elite' || serviceKey === 'service-booking'
+
+  if (isSocial) {
+    return [
+      { id: 'currentPlatforms', question: 'Which platforms are you currently on?', subtext: 'Select all that apply.', type: 'multi', condField: 'currentPlatforms', options: ['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'None yet'] },
+      { id: 'postingFrequency', question: 'How often are you currently posting?', type: 'single', condField: 'postingFrequency', options: ['Daily', 'A few times a week', 'Once a week or less', "I'm not posting at all"] },
+      { id: 'socialGoal', question: "What's your main goal?", type: 'single', condField: 'socialGoal', options: ['Get more followers', 'Generate leads and enquiries', 'Increase footfall to my business', 'Build brand awareness', 'All of the above'] },
+      contact,
+    ]
+  }
+
+  if (isSEO) {
+    return [
+      { id: 'currentPlatforms', question: 'Which platforms are you currently on?', subtext: 'Select all that apply.', type: 'multi', condField: 'currentPlatforms', options: ['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'None yet'] },
+      { id: 'hasWebsite', question: 'Do you currently have a website?', type: 'single', condField: 'hasWebsite', options: ["Yes, and it's working well", 'Yes, but it needs improvement', "No, I don't have one"] },
+      { id: 'googleBusiness', question: 'Are you on Google Business Profile?', type: 'single', condField: 'googleBusiness', options: ["Yes, it's set up and active", "Yes, but it's incomplete", "No, I'm not listed"] },
+      { id: 'seoGoal', question: "What's your main goal?", type: 'single', condField: 'seoGoal', options: ['Rank higher on Google', 'Get more social media followers', 'Both equally', 'Not sure yet'] },
+      contact,
+    ]
+  }
+
+  if (isWebsite) {
+    return [
+      { id: 'hasWebsite', question: 'Do you currently have a website?', type: 'single', condField: 'hasWebsite', options: ['Yes, but it needs a full redesign', "Yes, but it's not generating enquiries", 'No, I need one built from scratch'] },
+      { id: 'industry', question: 'What industry are you in?', type: 'single', condField: 'industry', options: ['Hospitality & Food', 'Trades & Construction', 'Beauty & Hair', 'Fitness & Wellness', 'Retail', 'Professional Services', 'Healthcare', 'Other'] },
+      { id: 'needsBooking', question: 'Do you need a booking or appointment system?', type: 'single', condField: 'needsBooking', options: ['Yes, definitely', 'Maybe in future', 'No, just a brochure site'] },
+      contact,
+    ]
+  }
+
+  if (isBooking) {
+    const steps: WizardStep[] = [
+      { id: 'businessType', question: 'What type of business are you?', type: 'single', condField: 'businessType', options: ['Hair or beauty salon', 'Nail studio', 'Fitness or personal training', 'Clinic or healthcare', 'Restaurant or hospitality', 'Other appointment-based business'] },
+      { id: 'currentBooking', question: 'How do you currently take bookings?', type: 'single', condField: 'currentBooking', options: ['Phone calls only', 'WhatsApp or DM', 'Third party app (Fresha, Treatwell etc.)', 'No formal system yet'] },
+      { id: 'bookingNeeds', question: 'What do you need it to handle?', subtext: 'Select all that apply.', type: 'multi', condField: 'bookingNeeds', options: ['Online booking 24/7', 'Automated confirmation emails', 'Reminder messages before appointments', 'Cancellation management', 'Multiple services in one booking', 'Staff or multi-therapist scheduling'] },
+    ]
+    if (serviceKey === 'booking-elite') {
+      steps.push({ id: 'needsSMS', question: 'Do you need SMS reminders as well as email?', type: 'single', condField: 'needsSMS', options: ['Yes, SMS and email both', 'Email only is fine', 'Not sure yet'] })
+    }
+    steps.push(contact)
+    return steps
+  }
+
+  // General — no serviceKey
+  return [
+    { id: 'interests', question: 'What do you need most help with?', subtext: 'Select all that apply.', type: 'multi', condField: 'interests', options: ['Social media management', 'SEO and blogging', 'Website design or rebuild', 'Booking & automation system', 'Not sure — just want advice'] },
+    { id: 'hasWebsite', question: 'Do you currently have a website?', type: 'single', condField: 'hasWebsite', options: ["Yes, and I'm happy with it", 'Yes, but it needs work', 'No, I need one built'] },
+    { id: 'budget', question: "What's your monthly marketing budget?", type: 'single', condField: 'budget', options: ['Under £150/month', '£150–£300/month', '£300–£500/month', '£500+/month', 'Not sure yet'] },
+    { id: 'discovery', question: 'How are customers finding you right now?', type: 'single', condField: 'discovery', options: ['Word of mouth / referrals', 'Google search', 'Social media', "I'm not getting enough customers yet", 'Mix of everything'] },
+    contact,
+  ]
 }
 
-function CheckGroup({
-  label,
-  name,
-  options,
-  values,
-  onChange,
-}: {
-  label: string
-  name: string
-  options: string[]
-  values: string[]
-  onChange: (v: string) => void
-}) {
-  return (
-    <div>
-      <p className="text-white/50 text-xs font-medium uppercase tracking-wider mb-2.5">{label}</p>
-      <div className="space-y-2">
-        {options.map((opt) => {
-          const checked = values.includes(opt)
-          return (
-            <label key={opt} className="flex items-center gap-3 cursor-pointer group">
-              <input
-                type="checkbox"
-                name={name}
-                value={opt}
-                checked={checked}
-                onChange={() => onChange(opt)}
-                className="sr-only"
-              />
-              <span
-                className={`w-4 h-4 rounded border-2 flex-shrink-0 flex items-center justify-center transition-colors duration-150 ${
-                  checked ? 'border-[#FFC512] bg-[#FFC512]' : 'border-white/25 group-hover:border-white/50'
-                }`}
-              >
-                {checked && <Check size={10} className="text-[#222222]" />}
-              </span>
-              <span
-                className={`text-sm leading-snug transition-colors duration-150 ${
-                  checked ? 'text-white' : 'text-white/60 group-hover:text-white/80'
-                }`}
-              >
-                {opt}
-              </span>
-            </label>
-          )
-        })}
-      </div>
-    </div>
-  )
+// ── Slide animation ───────────────────────────────────────────────────────────
+
+const slideVariants = {
+  enter: (dir: number) => ({ x: dir > 0 ? 52 : -52, opacity: 0 }),
+  center: { x: 0, opacity: 1, transition: { duration: 0.28, ease: [0.25, 0.1, 0.25, 1] as const } },
+  exit:  (dir: number) => ({ x: dir > 0 ? -52 : 52, opacity: 0, transition: { duration: 0.18 } }),
 }
 
-// ── Main modal ────────────────────────────────────────────────────────────────
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function AuditModal({ open, onClose, defaultService = '', mode = 'service', serviceKey }: Props) {
-  const isPackageMode             = mode === 'book-package'
-  const [form, setForm]           = useState({ ...empty, service: defaultService })
-  const [cond, setCond]           = useState<CondForm>({ ...emptyCond })
-  const [loading, setLoading]     = useState(false)
-  const [success, setSuccess]     = useState(false)
-  const [error, setError]         = useState('')
-  const firstFieldRef             = useRef<HTMLInputElement>(null)
+  const isPackageMode = mode === 'book-package'
 
-  // Sync defaultService when it changes (e.g. different plan clicked)
+  const [form,      setFormState] = useState({ ...empty, service: defaultService })
+  const [cond,      setCond]      = useState<CondForm>({ ...emptyCond })
+  const [stepIndex, setStepIndex] = useState(0)
+  const [dir,       setDir]       = useState(1)
+  const [loading,   setLoading]   = useState(false)
+  const [success,   setSuccess]   = useState(false)
+  const [error,     setError]     = useState('')
+  const nameRef = useRef<HTMLInputElement>(null)
+
+  const steps      = useMemo(() => buildSteps(serviceKey, isPackageMode), [serviceKey, isPackageMode])
+  const step       = steps[stepIndex]
+  const totalSteps = steps.length
+  // Progress goes from 0% at step 0 to 100% at last step
+  const progress   = totalSteps > 1 ? (stepIndex / (totalSteps - 1)) * 100 : 100
+
   useEffect(() => {
-    setForm((prev) => ({ ...prev, service: defaultService }))
+    setFormState(prev => ({ ...prev, service: defaultService }))
   }, [defaultService])
 
-  // Focus first field when modal opens
+  // Auto-focus name field when contact step appears
   useEffect(() => {
-    if (open) setTimeout(() => firstFieldRef.current?.focus(), 50)
-  }, [open])
+    if (step?.type === 'contact') setTimeout(() => nameRef.current?.focus(), 120)
+  }, [stepIndex, step?.type])
 
   // Reset on close
   useEffect(() => {
     if (!open) {
       setTimeout(() => {
-        setForm({ ...empty, service: defaultService })
+        setFormState({ ...empty, service: defaultService })
         setCond({ ...emptyCond })
+        setStepIndex(0)
+        setDir(1)
         setSuccess(false)
         setError('')
         setLoading(false)
@@ -227,26 +227,35 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
   }, [open])
 
   function set(field: string, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }))
+    setFormState(prev => ({ ...prev, [field]: value }))
   }
 
-  function setRadio(field: keyof CondForm, value: string) {
-    setCond((prev) => ({ ...prev, [field]: value }))
+  function goNext() {
+    setDir(1)
+    setStepIndex(i => Math.min(i + 1, totalSteps - 1))
   }
 
-  function toggleCheck(field: 'currentPlatforms' | 'bookingNeeds' | 'interests', value: string) {
-    setCond((prev) => {
-      const arr = prev[field]
-      return { ...prev, [field]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value] }
+  function goBack() {
+    setDir(-1)
+    setStepIndex(i => Math.max(i - 1, 0))
+  }
+
+  function pickSingle(field: keyof CondForm, value: string) {
+    setCond(prev => ({ ...prev, [field]: value }))
+    setTimeout(goNext, 320)
+  }
+
+  function pickPackage(value: string) {
+    setFormState(prev => ({ ...prev, service: value }))
+    setTimeout(goNext, 320)
+  }
+
+  function toggleMulti(field: MultiField, value: string) {
+    setCond(prev => {
+      const arr = prev[field] as string[]
+      return { ...prev, [field]: arr.includes(value) ? arr.filter(v => v !== value) : [...arr, value] }
     })
   }
-
-  // Which conditional block to show
-  const showSocial   = serviceKey === 'social-only'  || serviceKey === 'service-social'
-  const showSEO      = serviceKey === 'social-seo'   || serviceKey === 'service-seo'
-  const showWebsite  = serviceKey === 'brochure'     || serviceKey === 'service-website'
-  const showBooking  = serviceKey === 'booking-pro'  || serviceKey === 'booking-elite' || serviceKey === 'service-booking'
-  const showGeneral  = !serviceKey || serviceKey === 'general'
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -260,7 +269,6 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
           ...form,
           mode,
           serviceKey: serviceKey ?? '',
-          // Conditional fields — always sent, empty string if block was not shown
           currentPlatforms: cond.currentPlatforms.join(', '),
           postingFrequency: cond.postingFrequency,
           socialGoal:       cond.socialGoal,
@@ -294,8 +302,7 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
 
   if (!open) return null
 
-  const inputCls =
-    'w-full bg-[#1a1a1a] border border-white/10 focus:border-[#FFC512]/60 focus:outline-none rounded-lg px-4 py-3 text-white text-sm placeholder:text-white/30 transition-colors duration-200'
+  const inputCls = 'w-full bg-[#1a1a1a] border border-white/10 focus:border-[#FFC512]/60 focus:outline-none rounded-lg px-4 py-3 text-white text-sm placeholder:text-white/30 transition-colors duration-200'
   const labelCls = 'block text-white/60 text-xs font-medium uppercase tracking-wider mb-1.5'
 
   return (
@@ -309,381 +316,342 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
 
       {/* Panel */}
-      <div className="relative z-10 w-full max-w-md bg-[#222222] border border-white/10 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden max-h-[92vh] overflow-y-auto">
+      <div className="relative z-10 w-full max-w-md bg-[#222222] border border-white/10 rounded-2xl shadow-2xl shadow-black/60 flex flex-col max-h-[92vh]">
 
-        {/* Close */}
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 text-white/50 hover:text-white flex items-center justify-center transition-all duration-200 z-10"
-        >
-          <X size={16} />
-        </button>
+        {/* Progress bar */}
+        <div className="h-1 bg-white/5 rounded-t-2xl overflow-hidden flex-shrink-0">
+          <motion.div
+            className="h-full bg-[#FFC512] rounded-full"
+            animate={{ width: `${success ? 100 : progress}%` }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+          />
+        </div>
 
-        {success ? (
-          /* ── Success ── */
-          <div className="px-8 py-12 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#FFC512]/10 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle2 size={32} className="text-[#FFC512]" />
-            </div>
-            <h2 className="font-display font-extrabold text-white text-2xl tracking-tight mb-3">
-              {isPackageMode ? "You're all booked in!" : "Thanks! Your Digital Health Check is booked."}
-            </h2>
-            <p className="text-white/60 text-sm leading-relaxed mb-8">
-              {isPackageMode
-                ? <>Thanks, <strong className="text-white">{form.name}</strong>. We'll be in touch within one business day to get your package set up.</>
-                : <>Thanks, <strong className="text-white">{form.name}</strong>. We'll review your online presence and get back to you within 1 business day with practical, honest advice — no jargon, no hard sell.</>
-              }
-            </p>
-            <button
-              onClick={onClose}
-              className="inline-flex items-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-sm px-6 py-3 rounded-md transition-all duration-200 hover:scale-105"
+        {/* Top bar — back | counter | close */}
+        <div className="flex items-center justify-between px-5 py-4 flex-shrink-0">
+          <button
+            onClick={stepIndex > 0 && !success ? goBack : onClose}
+            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white flex items-center justify-center transition-all duration-200"
+            aria-label={stepIndex > 0 && !success ? 'Go back' : 'Close'}
+          >
+            {stepIndex > 0 && !success ? <ArrowLeft size={15} /> : <X size={15} />}
+          </button>
+
+          {!success && (
+            <span className="text-white/30 text-xs font-medium tabular-nums">
+              {stepIndex + 1} / {totalSteps}
+            </span>
+          )}
+
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white flex items-center justify-center transition-all duration-200"
+            aria-label="Close"
+          >
+            <X size={15} />
+          </button>
+        </div>
+
+        {/* Scrollable body */}
+        <div className="overflow-y-auto flex-1 overscroll-contain">
+          {success ? (
+
+            /* ── Success ─────────────────────────────────────────────── */
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="px-8 py-10 text-center"
             >
-              Close
-            </button>
-          </div>
-        ) : (
-          <>
-            {/* Header */}
-            <div className="bg-[#FFC512]/5 border-b border-white/8 px-8 py-6">
-              <span className="text-[#FFC512] text-xs font-semibold uppercase tracking-widest">
-                {isPackageMode ? 'No contracts — Cancel anytime' : 'Free — No obligation'}
-              </span>
-              <h2 className="font-display font-extrabold text-white text-2xl tracking-tight mt-1">
-                {isPackageMode ? 'Book Your Package' : 'Book Your Free Digital Health Check'}
+              <div className="w-16 h-16 rounded-full bg-[#FFC512]/10 flex items-center justify-center mx-auto mb-6">
+                <CheckCircle2 size={32} className="text-[#FFC512]" />
+              </div>
+              <h2 className="font-display font-extrabold text-white text-2xl tracking-tight mb-3">
+                {isPackageMode ? "You're all booked in!" : "Thanks! Your Digital Health Check is booked."}
               </h2>
-              <p className="text-white/50 text-sm font-normal mt-1">
+              <p className="text-white/60 text-sm leading-relaxed mb-8">
                 {isPackageMode
-                  ? "Fill in your details and we'll get you set up within 5–7 working days."
-                  : "We'll review your online presence and get back to you within 1 business day."}
+                  ? <>Thanks, <strong className="text-white">{form.name}</strong>. We'll be in touch within one business day to get your package set up.</>
+                  : <>Thanks, <strong className="text-white">{form.name}</strong>. We'll review your online presence and get back to you within 1 business day with practical, honest advice — no jargon, no hard sell.</>
+                }
               </p>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="px-8 py-6 space-y-4">
-
-              {/* Name + Business */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="audit-name" className={labelCls}>Your Name *</label>
-                  <input
-                    ref={firstFieldRef}
-                    id="audit-name"
-                    type="text"
-                    required
-                    autoComplete="name"
-                    placeholder="Jane Smith"
-                    value={form.name}
-                    onChange={(e) => set('name', e.target.value)}
-                    className={inputCls}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="audit-business" className={labelCls}>Business Name *</label>
-                  <input
-                    id="audit-business"
-                    type="text"
-                    required
-                    autoComplete="organization"
-                    placeholder="Your Business"
-                    value={form.business}
-                    onChange={(e) => set('business', e.target.value)}
-                    className={inputCls}
-                  />
-                </div>
-              </div>
-
-              {/* Email */}
-              <div>
-                <label htmlFor="audit-email" className={labelCls}>Email Address *</label>
-                <input
-                  id="audit-email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  placeholder="jane@yourbusiness.co.uk"
-                  value={form.email}
-                  onChange={(e) => set('email', e.target.value)}
-                  className={inputCls}
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label htmlFor="audit-phone" className={labelCls}>
-                  Phone Number <span className="normal-case text-white/30 font-normal">(optional)</span>
-                </label>
-                <input
-                  id="audit-phone"
-                  type="tel"
-                  autoComplete="tel"
-                  placeholder="07700 000 000"
-                  value={form.phone}
-                  onChange={(e) => set('phone', e.target.value)}
-                  className={inputCls}
-                />
-              </div>
-
-              {/* Package select — book-package mode only */}
-              {isPackageMode && (
-                <div>
-                  <label htmlFor="audit-service" className={labelCls}>Package</label>
-                  <select
-                    id="audit-service"
-                    value={form.service}
-                    onChange={(e) => set('service', e.target.value)}
-                    className={`${inputCls} appearance-none cursor-pointer`}
-                  >
-                    <option value="">Select a package…</option>
-                    {packageOptions.map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {/* Website URL — audit mode */}
-              {!isPackageMode && (
-                <div>
-                  <label htmlFor="audit-website" className={labelCls}>
-                    Website URL <span className="normal-case text-white/30 font-normal">(optional)</span>
-                  </label>
-                  <input
-                    id="audit-website"
-                    type="text"
-                    placeholder="https://yourbusiness.co.uk"
-                    value={form.website}
-                    onChange={(e) => set('website', e.target.value)}
-                    className={inputCls}
-                  />
-                </div>
-              )}
-
-              {/* Social handles — audit mode */}
-              {!isPackageMode && (
-                <div>
-                  <label htmlFor="audit-social" className={labelCls}>
-                    Social Media Handles <span className="normal-case text-white/30 font-normal">(optional)</span>
-                  </label>
-                  <input
-                    id="audit-social"
-                    type="text"
-                    placeholder="e.g. @yourbusiness on Instagram & Facebook"
-                    value={form.social}
-                    onChange={(e) => set('social', e.target.value)}
-                    className={inputCls}
-                  />
-                </div>
-              )}
-
-              {/* ── Conditional blocks ──────────────────────────────────────────── */}
-
-              {/* Block A / G — social-only, service-social */}
-              {showSocial && (
-                <CondSection title="Tell us about your social media">
-                  <CheckGroup
-                    label="Which platforms are you currently on?"
-                    name="currentPlatforms"
-                    options={['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'None yet']}
-                    values={cond.currentPlatforms}
-                    onChange={(v) => toggleCheck('currentPlatforms', v)}
-                  />
-                  <RadioGroup
-                    label="How often are you currently posting?"
-                    name="postingFrequency"
-                    options={['Daily', 'A few times a week', 'Once a week or less', "I'm not posting at all"]}
-                    value={cond.postingFrequency}
-                    onChange={(v) => setRadio('postingFrequency', v)}
-                  />
-                  <RadioGroup
-                    label="What's your main goal?"
-                    name="socialGoal"
-                    options={['Get more followers', 'Generate leads and enquiries', 'Increase footfall to my business', 'Build brand awareness', 'All of the above']}
-                    value={cond.socialGoal}
-                    onChange={(v) => setRadio('socialGoal', v)}
-                  />
-                </CondSection>
-              )}
-
-              {/* Block B / H — social-seo, service-seo */}
-              {showSEO && (
-                <CondSection title="Tell us about your online presence">
-                  <CheckGroup
-                    label="Which platforms are you currently on?"
-                    name="currentPlatforms"
-                    options={['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'None yet']}
-                    values={cond.currentPlatforms}
-                    onChange={(v) => toggleCheck('currentPlatforms', v)}
-                  />
-                  <RadioGroup
-                    label="Do you currently have a website?"
-                    name="hasWebsite"
-                    options={["Yes, and it's working well", 'Yes, but it needs improvement', "No, I don't have one"]}
-                    value={cond.hasWebsite}
-                    onChange={(v) => setRadio('hasWebsite', v)}
-                  />
-                  <RadioGroup
-                    label="Are you listed on Google Business Profile?"
-                    name="googleBusiness"
-                    options={["Yes, it's set up and active", "Yes, but it's incomplete", "No, I'm not listed"]}
-                    value={cond.googleBusiness}
-                    onChange={(v) => setRadio('googleBusiness', v)}
-                  />
-                  <RadioGroup
-                    label="What's your main goal?"
-                    name="seoGoal"
-                    options={['Rank higher on Google', 'Get more social media followers', 'Both equally', 'Not sure yet']}
-                    value={cond.seoGoal}
-                    onChange={(v) => setRadio('seoGoal', v)}
-                  />
-                </CondSection>
-              )}
-
-              {/* Block C / E — brochure, service-website */}
-              {showWebsite && (
-                <CondSection title="Tell us about your website needs">
-                  <RadioGroup
-                    label="Do you currently have a website?"
-                    name="hasWebsite"
-                    options={['Yes, but it needs a full redesign', "Yes, but it's not generating enquiries", 'No, I need one built from scratch']}
-                    value={cond.hasWebsite}
-                    onChange={(v) => setRadio('hasWebsite', v)}
-                  />
-                  <RadioGroup
-                    label="What industry are you in?"
-                    name="industry"
-                    options={['Hospitality & Food', 'Trades & Construction', 'Beauty & Hair', 'Fitness & Wellness', 'Retail', 'Professional Services', 'Healthcare', 'Other']}
-                    value={cond.industry}
-                    onChange={(v) => setRadio('industry', v)}
-                  />
-                  <RadioGroup
-                    label="Do you need a booking or appointment system?"
-                    name="needsBooking"
-                    options={['Yes, definitely', 'Maybe in future', 'No, just a brochure site']}
-                    value={cond.needsBooking}
-                    onChange={(v) => setRadio('needsBooking', v)}
-                  />
-                </CondSection>
-              )}
-
-              {/* Block D / F — booking-pro, booking-elite, service-booking */}
-              {showBooking && (
-                <CondSection title="Tell us about your booking needs">
-                  <RadioGroup
-                    label="What type of business are you?"
-                    name="businessType"
-                    options={['Hair or beauty salon', 'Nail studio', 'Fitness or personal training', 'Clinic or healthcare', 'Restaurant or hospitality', 'Other appointment-based business']}
-                    value={cond.businessType}
-                    onChange={(v) => setRadio('businessType', v)}
-                  />
-                  <RadioGroup
-                    label="How do you currently take bookings?"
-                    name="currentBooking"
-                    options={['Phone calls only', 'WhatsApp or DM', 'Third party app (Fresha, Treatwell etc.)', 'No formal system yet']}
-                    value={cond.currentBooking}
-                    onChange={(v) => setRadio('currentBooking', v)}
-                  />
-                  <CheckGroup
-                    label="What do you need the system to handle?"
-                    name="bookingNeeds"
-                    options={['Online booking 24/7', 'Automated confirmation emails', 'Reminder messages before appointments', 'Cancellation management', 'Multiple services in one booking', 'Staff or multi-therapist scheduling']}
-                    values={cond.bookingNeeds}
-                    onChange={(v) => toggleCheck('bookingNeeds', v)}
-                  />
-                  {serviceKey === 'booking-elite' && (
-                    <RadioGroup
-                      label="Do you need SMS reminders as well as email?"
-                      name="needsSMS"
-                      options={['Yes, SMS and email both', 'Email only is fine', 'Not sure yet']}
-                      value={cond.needsSMS}
-                      onChange={(v) => setRadio('needsSMS', v)}
-                    />
-                  )}
-                </CondSection>
-              )}
-
-              {/* Block I — general or no serviceKey */}
-              {showGeneral && (
-                <CondSection title="A few quick questions">
-                  <RadioGroup
-                    label="Do you currently have a website?"
-                    name="hasWebsite"
-                    options={["Yes, and I'm happy with it", 'Yes, but it needs work', 'No, I need one built']}
-                    value={cond.hasWebsite}
-                    onChange={(v) => setRadio('hasWebsite', v)}
-                  />
-                  <CheckGroup
-                    label="What are you most interested in?"
-                    name="interests"
-                    options={['Social media management', 'SEO and blogging', 'Website design or rebuild', 'Booking & automation system', 'Not sure — just want advice']}
-                    values={cond.interests}
-                    onChange={(v) => toggleCheck('interests', v)}
-                  />
-                  <RadioGroup
-                    label="What's your monthly marketing budget?"
-                    name="budget"
-                    options={['Under £150/month', '£150–£300/month', '£300–£500/month', '£500+/month', 'Not sure yet']}
-                    value={cond.budget}
-                    onChange={(v) => setRadio('budget', v)}
-                  />
-                  <RadioGroup
-                    label="How are customers currently finding you?"
-                    name="discovery"
-                    options={['Word of mouth / referrals', 'Google search', 'Social media', "I'm not getting enough customers yet", 'Mix of everything']}
-                    value={cond.discovery}
-                    onChange={(v) => setRadio('discovery', v)}
-                  />
-                </CondSection>
-              )}
-
-              {/* Message */}
-              <div>
-                <label htmlFor="audit-message" className={labelCls}>
-                  {isPackageMode ? 'Anything else?' : "Anything you'd like us to focus on?"}
-                  {' '}<span className="normal-case text-white/30 font-normal">(optional)</span>
-                </label>
-                <textarea
-                  id="audit-message"
-                  rows={3}
-                  placeholder={
-                    isPackageMode
-                      ? 'Any questions about the package or your requirements…'
-                      : 'E.g. we post regularly but get very little engagement…'
-                  }
-                  value={form.message}
-                  onChange={(e) => set('message', e.target.value)}
-                  className={`${inputCls} resize-none`}
-                />
-              </div>
-
-              {/* Honeypot — hidden from real users, catches bots that fill all fields */}
-              <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', top: '-9999px', opacity: 0, width: 0, height: 0, overflow: 'hidden' }}>
-                <label htmlFor="hp-audit">Leave this empty</label>
-                <input id="hp-audit" type="text" name="hp" tabIndex={-1} autoComplete="off" value={form.hp ?? ''} onChange={(e) => set('hp', e.target.value)} />
-              </div>
-
-              {error && <p className="text-red-400 text-xs font-medium">{error}</p>}
-
               <button
-                type="submit"
-                disabled={loading}
-                className="w-full inline-flex items-center justify-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] disabled:opacity-60 disabled:cursor-not-allowed text-[#222222] font-semibold text-sm px-6 py-3.5 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-95"
+                onClick={onClose}
+                className="inline-flex items-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-sm px-6 py-3 rounded-md transition-all duration-200 hover:scale-105"
               >
-                {loading ? (
-                  <><Loader2 size={16} className="animate-spin" /> Sending…</>
-                ) : isPackageMode ? (
-                  <>Book My Package <ArrowRight size={16} /></>
-                ) : (
-                  <>Book My Free Digital Health Check <ArrowRight size={16} /></>
-                )}
+                Close
               </button>
+            </motion.div>
 
-              <p className="text-white/25 text-xs text-center font-normal">
-                No commitment. We'll never share your details.
-              </p>
-            </form>
-          </>
-        )}
+          ) : (
+
+            /* ── Wizard steps ─────────────────────────────────────────── */
+            <AnimatePresence mode="wait" custom={dir}>
+              <motion.div
+                key={stepIndex}
+                custom={dir}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="px-6 pb-8"
+              >
+
+                {/* Question heading */}
+                <div className="mb-6">
+                  {stepIndex === 0 && (
+                    <span className="inline-block text-[#FFC512] text-xs font-semibold uppercase tracking-widest mb-3">
+                      {isPackageMode ? 'No contracts — cancel anytime' : 'Free — No obligation'}
+                    </span>
+                  )}
+                  <h2 className="font-display font-bold text-white text-xl sm:text-2xl tracking-tight leading-snug">
+                    {step.question}
+                  </h2>
+                  {step.subtext && (
+                    <p className="text-white/45 text-sm mt-2 leading-relaxed font-normal">{step.subtext}</p>
+                  )}
+                </div>
+
+                {/* ── Single-select cards ───────────────────────────── */}
+                {(step.type === 'single') && step.condField && (
+                  <div className="space-y-2.5">
+                    {step.options!.map(opt => {
+                      const selected = cond[step.condField!] === opt
+                      return (
+                        <button
+                          key={opt}
+                          onClick={() => pickSingle(step.condField!, opt)}
+                          className={`w-full text-left px-4 py-3.5 rounded-xl border-2 transition-all duration-150 group ${
+                            selected
+                              ? 'border-[#FFC512] bg-[#FFC512]/10 text-white'
+                              : 'border-white/10 bg-[#1a1a1a] text-white/65 hover:border-white/25 hover:text-white hover:bg-[#1d1d1d]'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-3">
+                            <span className="text-sm font-medium leading-snug">{opt}</span>
+                            <span className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors duration-150 ${
+                              selected ? 'border-[#FFC512] bg-[#FFC512]' : 'border-white/20 group-hover:border-white/40'
+                            }`}>
+                              {selected && <Check size={11} className="text-[#222222]" strokeWidth={3} />}
+                            </span>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+
+                {/* ── Package select cards ──────────────────────────── */}
+                {step.type === 'package' && (
+                  <div className="space-y-2.5">
+                    {step.options!.map(opt => {
+                      const selected = form.service === opt
+                      return (
+                        <button
+                          key={opt}
+                          onClick={() => pickPackage(opt)}
+                          className={`w-full text-left px-4 py-3.5 rounded-xl border-2 transition-all duration-150 group ${
+                            selected
+                              ? 'border-[#FFC512] bg-[#FFC512]/10 text-white'
+                              : 'border-white/10 bg-[#1a1a1a] text-white/65 hover:border-white/25 hover:text-white hover:bg-[#1d1d1d]'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-3">
+                            <span className="text-sm font-medium leading-snug">{opt}</span>
+                            <span className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors duration-150 ${
+                              selected ? 'border-[#FFC512] bg-[#FFC512]' : 'border-white/20 group-hover:border-white/40'
+                            }`}>
+                              {selected && <Check size={11} className="text-[#222222]" strokeWidth={3} />}
+                            </span>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+
+                {/* ── Multi-select cards ────────────────────────────── */}
+                {step.type === 'multi' && step.condField && (
+                  <div className="space-y-2.5">
+                    {step.options!.map(opt => {
+                      const field    = step.condField as MultiField
+                      const vals     = cond[field] as string[]
+                      const selected = vals.includes(opt)
+                      return (
+                        <button
+                          key={opt}
+                          onClick={() => toggleMulti(field, opt)}
+                          className={`w-full text-left px-4 py-3.5 rounded-xl border-2 transition-all duration-150 group ${
+                            selected
+                              ? 'border-[#FFC512] bg-[#FFC512]/10 text-white'
+                              : 'border-white/10 bg-[#1a1a1a] text-white/65 hover:border-white/25 hover:text-white hover:bg-[#1d1d1d]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className={`w-5 h-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-colors duration-150 ${
+                              selected ? 'border-[#FFC512] bg-[#FFC512]' : 'border-white/20 group-hover:border-white/40'
+                            }`}>
+                              {selected && <Check size={11} className="text-[#222222]" strokeWidth={3} />}
+                            </span>
+                            <span className="text-sm font-medium leading-snug">{opt}</span>
+                          </div>
+                        </button>
+                      )
+                    })}
+                    <button
+                      onClick={goNext}
+                      className="w-full mt-1 inline-flex items-center justify-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-sm px-6 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95"
+                    >
+                      Continue <ArrowRight size={16} />
+                    </button>
+                  </div>
+                )}
+
+                {/* ── Contact step ──────────────────────────────────── */}
+                {step.type === 'contact' && (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label htmlFor="wiz-name" className={labelCls}>Your Name *</label>
+                        <input
+                          ref={nameRef}
+                          id="wiz-name"
+                          type="text"
+                          required
+                          autoComplete="name"
+                          placeholder="Jane Smith"
+                          value={form.name}
+                          onChange={e => set('name', e.target.value)}
+                          className={inputCls}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="wiz-business" className={labelCls}>Business *</label>
+                        <input
+                          id="wiz-business"
+                          type="text"
+                          required
+                          autoComplete="organization"
+                          placeholder="Your Business"
+                          value={form.business}
+                          onChange={e => set('business', e.target.value)}
+                          className={inputCls}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="wiz-email" className={labelCls}>Email *</label>
+                      <input
+                        id="wiz-email"
+                        type="email"
+                        required
+                        autoComplete="email"
+                        placeholder="jane@yourbusiness.co.uk"
+                        value={form.email}
+                        onChange={e => set('email', e.target.value)}
+                        className={inputCls}
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="wiz-phone" className={labelCls}>
+                        Phone <span className="normal-case text-white/30 font-normal">(optional)</span>
+                      </label>
+                      <input
+                        id="wiz-phone"
+                        type="tel"
+                        autoComplete="tel"
+                        placeholder="07700 000 000"
+                        value={form.phone}
+                        onChange={e => set('phone', e.target.value)}
+                        className={inputCls}
+                      />
+                    </div>
+
+                    {!isPackageMode && (
+                      <>
+                        <div>
+                          <label htmlFor="wiz-website" className={labelCls}>
+                            Website <span className="normal-case text-white/30 font-normal">(optional)</span>
+                          </label>
+                          <input
+                            id="wiz-website"
+                            type="text"
+                            placeholder="https://yourbusiness.co.uk"
+                            value={form.website}
+                            onChange={e => set('website', e.target.value)}
+                            className={inputCls}
+                          />
+                        </div>
+
+                        <div>
+                          <label htmlFor="wiz-social" className={labelCls}>
+                            Social Handles <span className="normal-case text-white/30 font-normal">(optional)</span>
+                          </label>
+                          <input
+                            id="wiz-social"
+                            type="text"
+                            placeholder="@yourbusiness on Instagram & Facebook"
+                            value={form.social}
+                            onChange={e => set('social', e.target.value)}
+                            className={inputCls}
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    <div>
+                      <label htmlFor="wiz-message" className={labelCls}>
+                        {isPackageMode ? 'Anything else?' : 'Anything to focus on?'}
+                        {' '}<span className="normal-case text-white/30 font-normal">(optional)</span>
+                      </label>
+                      <textarea
+                        id="wiz-message"
+                        rows={3}
+                        placeholder={
+                          isPackageMode
+                            ? 'Any questions about the package…'
+                            : 'E.g. we post regularly but get very little engagement…'
+                        }
+                        value={form.message}
+                        onChange={e => set('message', e.target.value)}
+                        className={`${inputCls} resize-none`}
+                      />
+                    </div>
+
+                    {/* Honeypot — hidden from real users */}
+                    <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', top: '-9999px', opacity: 0, width: 0, height: 0, overflow: 'hidden' }}>
+                      <label htmlFor="hp-wiz">Leave this empty</label>
+                      <input id="hp-wiz" type="text" name="hp" tabIndex={-1} autoComplete="off" value={form.hp ?? ''} onChange={e => set('hp', e.target.value)} />
+                    </div>
+
+                    {error && <p className="text-red-400 text-xs font-medium">{error}</p>}
+
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full inline-flex items-center justify-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] disabled:opacity-60 disabled:cursor-not-allowed text-[#222222] font-semibold text-sm px-6 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95"
+                    >
+                      {loading ? (
+                        <><Loader2 size={16} className="animate-spin" /> Sending…</>
+                      ) : isPackageMode ? (
+                        <>Book My Package <ArrowRight size={16} /></>
+                      ) : (
+                        <>Book My Free Digital Health Check <ArrowRight size={16} /></>
+                      )}
+                    </button>
+
+                    <p className="text-white/30 text-xs text-center font-normal">
+                      No commitment. We'll never share your details.
+                    </p>
+                  </form>
+                )}
+
+              </motion.div>
+            </AnimatePresence>
+          )}
+        </div>
       </div>
     </div>
   )
