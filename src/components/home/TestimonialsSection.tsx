@@ -113,7 +113,7 @@ export default function TestimonialsSection() {
                     {t.name.charAt(0)}
                   </div>
                   <p className="text-white font-semibold tracking-wide">{t.name}</p>
-                  <p className="text-white/40 text-sm font-normal">{t.role}</p>
+                  <p className="text-white/55 text-sm font-normal">{t.role}</p>
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -123,7 +123,7 @@ export default function TestimonialsSection() {
           <div className="flex items-center justify-center gap-6 mt-8">
             <button
               onClick={prev}
-              className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#FFC512] hover:text-[#222222] text-white/60 flex items-center justify-center transition-colors duration-200 hover:scale-110"
+              className="w-11 h-11 rounded-full bg-white/5 hover:bg-[#FFC512] hover:text-[#222222] text-white/60 flex items-center justify-center transition-colors duration-200 hover:scale-110"
               aria-label="Previous testimonial"
             >
               <ChevronLeft size={18} />
@@ -136,6 +136,7 @@ export default function TestimonialsSection() {
                   key={i}
                   onClick={() => go(i, i > active ? 'right' : 'left')}
                   aria-label={`Go to testimonial ${i + 1}`}
+                  className="inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
                 >
                   <motion.span
                     animate={{
@@ -151,7 +152,7 @@ export default function TestimonialsSection() {
 
             <button
               onClick={next}
-              className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#FFC512] hover:text-[#222222] text-white/60 flex items-center justify-center transition-colors duration-200 hover:scale-110"
+              className="w-11 h-11 rounded-full bg-white/5 hover:bg-[#FFC512] hover:text-[#222222] text-white/60 flex items-center justify-center transition-colors duration-200 hover:scale-110"
               aria-label="Next testimonial"
             >
               <ChevronRight size={18} />

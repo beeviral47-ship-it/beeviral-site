@@ -102,12 +102,12 @@ export default function WhySection() {
             whileInView="visible"
             viewport={{ once: true, margin: '-40px' }}
           >
-            <span className="text-[#FFC512] text-sm font-medium uppercase tracking-widest">
+            <span className="inline-block bg-[#FFC512] text-[#222222] text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full">
               Why Choose Us
             </span>
             <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-[#222222] mt-3 mb-4 leading-tight tracking-tight">
               The Agency That<br />
-              <span className="text-[#FFC512]">Actually Delivers</span>
+              <span className="text-[#222222] underline decoration-[#FFC512] decoration-4 underline-offset-4">Actually Delivers</span>
             </h2>
             <p className="text-[#555] text-base sm:text-lg mb-8 sm:mb-10 leading-relaxed font-normal">
               We've been helping South Yorkshire businesses grow their social media
