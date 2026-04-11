@@ -278,7 +278,7 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
 
   function pickPackage(value: string) {
     setFormState(prev => ({ ...prev, service: value }))
-    // No auto-advance — package is a purchase decision, user confirms with Continue
+    setTimeout(goNext, 320)
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -490,13 +490,6 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
                         </button>
                       )
                     })}
-                    <button
-                      onClick={goNext}
-                      disabled={!form.service}
-                      className="w-full mt-1 inline-flex items-center justify-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] disabled:opacity-30 disabled:cursor-not-allowed text-[#222222] font-semibold text-sm px-6 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95"
-                    >
-                      Continue <ArrowRight size={16} />
-                    </button>
                   </div>
                 )}
 
