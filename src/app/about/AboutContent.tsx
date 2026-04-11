@@ -280,7 +280,7 @@ export default function AboutContent() {
           FIXED: CTA button full-width on mobile with justify-center
           FIXED: bottom row gap-6 → gap-3 sm:gap-6, mt-8 → mt-5 lg:mt-8
       ══════════════════════════════════════════════════════════════════════ */}
-      <section className="relative bg-[#222222] pt-28 pb-14 lg:pt-40 lg:pb-32 overflow-hidden">
+      <section className="relative bg-[#222222] pt-28 pb-16 sm:pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
         <div aria-hidden="true" className="absolute inset-0 bg-honeycomb pointer-events-none" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -359,7 +359,7 @@ export default function AboutContent() {
           <div ref={storyRef} className="reveal-left">
 
             {/* Header row */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 mb-8 pb-8 lg:mb-16 lg:pb-16 border-b border-[#f0f0f0]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-6 mb-8 pb-8 lg:mb-16 lg:pb-16 border-b border-[#f0f0f0]">
               <div className="lg:col-span-3">
                 <span className="text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.2em]">
                   The Real Story
@@ -414,7 +414,7 @@ export default function AboutContent() {
       {/* ══════════════════════════════════════════════════════════════════════
           WOW MOMENT — full-width oversized pull quote, stops the scroll
       ══════════════════════════════════════════════════════════════════════ */}
-      <section className="bg-[#1a1a1a] py-20 lg:py-32 overflow-hidden">
+      <section className="bg-[#1a1a1a] py-16 sm:py-20 lg:py-32 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl">
             {/* Giant decorative quote mark */}
@@ -460,11 +460,11 @@ export default function AboutContent() {
           FIXED: row gap tightened on mobile
       ══════════════════════════════════════════════════════════════════════ */}
       {/* ── VALUES: #f5f5f5 breaks the white/white run from Story ── */}
-      <section className="bg-[#f5f5f5] border-t border-[#e8e8e8] pb-16 lg:pb-36">
+      <section className="bg-[#f5f5f5] border-t border-[#e8e8e8] py-16 lg:py-36">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Section header */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 pt-12 pb-8 lg:pt-20 lg:pb-16 border-b border-[#e8e8e8]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-6 pb-8 lg:pb-16 border-b border-[#e8e8e8]">
             <div className="lg:col-span-3">
               <span className="text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.2em]">
                 How We Work
@@ -530,7 +530,7 @@ export default function AboutContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Section header */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 pb-10 lg:pb-16 border-b border-white/8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-6 pb-10 lg:pb-16 border-b border-white/8">
             <div className="lg:col-span-3">
               <span className="text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.2em]">
                 The Honest Case
@@ -614,7 +614,7 @@ export default function AboutContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Section header row */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 pb-8 mb-10 lg:pb-16 lg:mb-20 border-b border-white/10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-6 pb-8 mb-10 lg:pb-16 lg:mb-20 border-b border-white/10">
             <div className="lg:col-span-3">
               <span className="text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.2em]">
                 Meet the Founder
@@ -751,7 +751,7 @@ export default function AboutContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Header */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 pb-10 lg:pb-16 border-b border-white/8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-6 pb-10 lg:pb-16 border-b border-white/8">
             <div className="lg:col-span-3">
               <span className="text-[#FFC512] text-[11px] font-semibold uppercase tracking-[0.2em]">
                 Client Results
