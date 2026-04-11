@@ -1,33 +1,51 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion } from 'motion/react'
-import { useInView } from 'motion/react'
+import { motion, useInView } from 'motion/react'
 import { stats } from '@/lib/data'
 import { scaleUp, staggerContainer } from '@/lib/motion-variants'
 
+// ── Easing ───────────────────────────────────────────────────────────────────
+// Expo curve: jumps to ~50% of value in the first 10% of duration,
+// then slowly creeps to the final number — reads as spring-like without
+// an actual numeric overshoot (which would look wrong for stats).
+function easeOutExpo(t: number): number {
+  return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t)
+}
+
+// ── Counter ───────────────────────────────────────────────────────────────────
 function Counter({ target, suffix }: { target: number; suffix: string }) {
-  const [count, setCount] = useState(0)
-  const ref               = useRef<HTMLSpanElement>(null)
-  const isInView          = useInView(ref, { once: true, amount: 0.5 })
+  const [count, setCount]    = useState(0)
+  const ref                  = useRef<HTMLSpanElement>(null)
+  const isInView             = useInView(ref, { once: true, amount: 0.5 })
+  const startTimeRef         = useRef<number | null>(null)
+  const rafRef               = useRef<number>(0)
+  const DURATION             = 1800 // ms
 
   useEffect(() => {
     if (!isInView) return
-    const duration  = 1800
-    const steps     = 60
-    const increment = target / steps
-    let current     = 0
-    const timer     = setInterval(() => {
-      current += increment
-      if (current >= target) { setCount(target); clearInterval(timer) }
-      else                   { setCount(Math.floor(current)) }
-    }, duration / steps)
-    return () => clearInterval(timer)
+
+    startTimeRef.current = null
+
+    const tick = (timestamp: number) => {
+      if (!startTimeRef.current) startTimeRef.current = timestamp
+      const elapsed = timestamp - startTimeRef.current
+      const t       = Math.min(elapsed / DURATION, 1)
+      const eased   = easeOutExpo(t)
+
+      setCount(Math.round(eased * target))
+
+      if (t < 1) rafRef.current = requestAnimationFrame(tick)
+    }
+
+    rafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafRef.current)
   }, [isInView, target])
 
   return <span ref={ref}>{count}{suffix}</span>
 }
 
+// ── Section ───────────────────────────────────────────────────────────────────
 export default function StatsSection() {
   return (
     <section className="bg-[#FFC512] py-14 overflow-hidden">
