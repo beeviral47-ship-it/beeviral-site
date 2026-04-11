@@ -12,7 +12,7 @@ export default function CTASection() {
   const { openAuditModal } = useAuditModal()
 
   return (
-    <section className="bg-[#FFC512] relative overflow-hidden py-24">
+    <section className="bg-[#FFC512] relative overflow-hidden py-16 sm:py-24">
 
       {/* Honeycomb texture */}
       <div
@@ -33,7 +33,7 @@ export default function CTASection() {
         <motion.h2
           variants={scaleUp}
           className="font-display font-extrabold text-[#222222] mb-6"
-          style={{ fontSize: 'clamp(36px, 6vw, 72px)', lineHeight: 0.95, letterSpacing: '-0.02em' }}
+          style={{ fontSize: 'clamp(32px, 8vw, 72px)', lineHeight: 0.95, letterSpacing: '-0.02em' }}
         >
           Ready to Go Viral?
         </motion.h2>

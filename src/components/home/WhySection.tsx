@@ -5,6 +5,7 @@ import { CheckCircle2 } from 'lucide-react'
 import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'motion/react'
 import { slideLeft, slideRight, fadeUp, staggerContainer } from '@/lib/motion-variants'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 const reasons = [
   {
@@ -27,22 +28,22 @@ const reasons = [
 
 export default function WhySection() {
   const sectionRef = useRef<HTMLElement>(null)
+  const isMobile   = useIsMobile()
 
-  // Scroll progress while the section is in view — 0 when top hits viewport bottom, 1 when bottom leaves viewport top
+  // Hooks must be called unconditionally — only applied on desktop
   const { scrollYProgress } = useScroll({
     target:  sectionRef,
     offset: ['start end', 'end start'],
   })
-
-  // Image panel drifts up 24px over the section's scroll range — subtle foreground/background separation
   const imageY = useTransform(scrollYProgress, [0, 1], [20, -20])
 
   return (
-    <section ref={sectionRef} className="bg-white py-24 overflow-hidden">
+    <section ref={sectionRef} className="bg-white py-16 sm:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        {/* gap reduced on mobile — gap-16 was 64px which is too much at 375px */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-14 lg:gap-16 items-center">
 
-          {/* Left — image panel with scroll parallax */}
+          {/* Left — image panel with scroll parallax (desktop only) */}
           <motion.div
             variants={slideLeft}
             initial="hidden"
@@ -50,34 +51,32 @@ export default function WhySection() {
             viewport={{ once: true, margin: '-40px' }}
             className="relative"
           >
-            {/* Parallax wrapper — moves slightly slower than scroll */}
-            <motion.div style={{ y: imageY }}>
-              <div className="relative rounded-2xl overflow-hidden bg-[#222222] aspect-square max-w-lg mx-auto lg:mx-0">
+            <motion.div style={isMobile ? undefined : { y: imageY }}>
+              <div className="relative rounded-2xl overflow-hidden bg-[#222222] aspect-square max-w-sm sm:max-w-lg mx-auto lg:mx-0">
                 <div className="absolute inset-0 bg-honeycomb opacity-30" />
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 p-10">
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 p-8 sm:p-10">
                   <Image
                     src="/images/logo-transparent.png"
                     alt="Bee Viral"
                     width={280}
                     height={140}
-                    sizes="(max-width: 1024px) 256px, 280px"
-                    className="w-64 object-contain drop-shadow-2xl"
+                    sizes="(max-width: 640px) 200px, (max-width: 1024px) 256px, 280px"
+                    className="w-48 sm:w-64 object-contain drop-shadow-2xl"
                   />
-                  <p className="text-white/40 text-sm text-center font-normal tracking-widest uppercase">
+                  <p className="text-white/40 text-xs sm:text-sm text-center font-normal tracking-widest uppercase">
                     South Yorkshire's Social Media Agency
                   </p>
                 </div>
                 <div
-                  className="absolute top-0 right-0 w-24 h-24 bg-[#FFC512]"
+                  className="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 bg-[#FFC512]"
                   style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
                 />
-                {/* Since 2014 badge — desktop only */}
                 <div className="hidden lg:block absolute bottom-6 left-6 bg-[#FFC512] text-[#222222] font-semibold text-sm px-4 py-2 rounded-md tracking-wide">
                   Since 2014
                 </div>
               </div>
 
-              {/* Mobile-only badges */}
+              {/* Mobile badges */}
               <div className="flex items-stretch justify-center gap-3 mt-4 lg:hidden">
                 <div className="flex items-center bg-[#FFC512] text-[#222222] font-semibold text-sm px-4 py-2.5 rounded-md tracking-wide shadow-lg">
                   Since 2014
@@ -89,14 +88,14 @@ export default function WhySection() {
               </div>
             </motion.div>
 
-            {/* Desktop 10+ badge — outside the parallax wrapper so it stays anchored */}
+            {/* Desktop 10+ badge — outside parallax wrapper so it stays anchored */}
             <div className="hidden lg:block absolute -bottom-4 right-0 bg-[#FFC512] text-[#222222] rounded-xl px-6 py-4 shadow-xl">
               <div className="font-display text-3xl font-extrabold tracking-tight">10+</div>
               <div className="text-xs font-medium uppercase tracking-widest opacity-70">Years in Business</div>
             </div>
           </motion.div>
 
-          {/* Right — text + reasons list */}
+          {/* Right — text */}
           <motion.div
             variants={slideRight}
             initial="hidden"
@@ -106,11 +105,11 @@ export default function WhySection() {
             <span className="text-[#FFC512] text-sm font-medium uppercase tracking-widest">
               Why Choose Us
             </span>
-            <h2 className="font-display font-bold text-4xl sm:text-5xl text-[#222222] mt-3 mb-4 leading-tight tracking-tight">
+            <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-[#222222] mt-3 mb-4 leading-tight tracking-tight">
               The Agency That<br />
               <span className="text-[#FFC512]">Actually Delivers</span>
             </h2>
-            <p className="text-[#555] text-lg mb-10 leading-relaxed font-normal">
+            <p className="text-[#555] text-base sm:text-lg mb-8 sm:mb-10 leading-relaxed font-normal">
               We've been helping South Yorkshire businesses grow their social media
               presence since 2014. Here's why over 200 local businesses trust us.
             </p>
@@ -120,13 +119,13 @@ export default function WhySection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: '-40px' }}
-              className="space-y-6"
+              className="space-y-5 sm:space-y-6"
             >
               {reasons.map((r) => (
-                <motion.li key={r.title} variants={fadeUp} className="flex gap-4">
-                  <CheckCircle2 size={22} className="text-[#FFC512] flex-shrink-0 mt-0.5" />
+                <motion.li key={r.title} variants={fadeUp} className="flex gap-3 sm:gap-4">
+                  <CheckCircle2 size={20} className="text-[#FFC512] flex-shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-display font-semibold text-[#222222] mb-1 tracking-tight">
+                    <h3 className="font-display font-semibold text-[#222222] mb-1 tracking-tight text-sm sm:text-base">
                       {r.title}
                     </h3>
                     <p className="text-[#555] text-sm leading-relaxed font-normal">{r.desc}</p>

@@ -88,22 +88,13 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ── Header ── */}
-      <motion.header
-        animate={{
-          backgroundColor: isSolid ? 'rgba(34,34,34,0.92)' : 'rgba(34,34,34,0)',
-          backdropFilter:  isSolid ? 'blur(14px)'           : 'blur(0px)',
-          borderBottomColor: isSolid
-            ? 'rgba(255,255,255,0.07)'
-            : 'rgba(255,255,255,0)',
-        }}
-        transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-        style={{
-          borderBottom: '1px solid transparent',
-          boxShadow: isSolid ? '0 4px 24px rgba(0,0,0,0.3)' : 'none',
-          WebkitBackdropFilter: isSolid ? 'blur(14px)' : 'blur(0px)',
-        }}
-        className="fixed top-0 left-0 right-0 z-50"
+      {/* ── Header — CSS transition is cheaper than JS-driven Motion animate on scroll ── */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 border-b ${
+          isSolid
+            ? 'bg-[rgba(34,34,34,0.92)] backdrop-blur-md border-white/[0.07] shadow-[0_4px_24px_rgba(0,0,0,0.3)]'
+            : 'bg-transparent border-transparent'
+        }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 lg:h-24">
@@ -279,7 +270,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-      </motion.header>
+      </header>
 
       {/* ── Mobile menu — spring slide from right ── */}
       <AnimatePresence>

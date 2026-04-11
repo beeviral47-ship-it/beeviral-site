@@ -51,9 +51,11 @@ export default function TestimonialsSection() {
 
   return (
     <section
-      className="bg-[#222222] py-24"
+      className="bg-[#222222] py-16 sm:py-24"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={() => setIsPaused(true)}
+      onTouchEnd={() => setIsPaused(false)}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -86,7 +88,7 @@ export default function TestimonialsSection() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="relative bg-[#2d2d2d] border border-white/5 rounded-2xl p-8 sm:p-12 text-center overflow-hidden"
+                className="relative bg-[#2d2d2d] border border-white/5 rounded-2xl p-5 sm:p-8 lg:p-12 text-center overflow-hidden"
               >
                 {/* Decorative quote mark */}
                 <div className="absolute top-6 left-8 text-[#FFC512]/15 font-display text-9xl font-extrabold leading-none select-none pointer-events-none">

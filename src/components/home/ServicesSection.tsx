@@ -66,7 +66,7 @@ function ServiceCard({ service }: { service: typeof group1[number] }) {
     >
       <Link
         href={service.href}
-        className="group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 block h-full"
+        className="group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-5 sm:p-7 transition-colors duration-300 block h-full"
       >
         <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
           {service.icon}
@@ -86,7 +86,7 @@ function ServiceCard({ service }: { service: typeof group1[number] }) {
 
 export default function ServicesSection() {
   return (
-    <section className="bg-[#222222] py-24 overflow-hidden">
+    <section className="bg-[#222222] py-16 sm:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Heading */}
