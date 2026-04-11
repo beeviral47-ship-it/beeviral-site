@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { TrendingUp, Search, BarChart2, MessageCircle, Monitor, Calendar } from 'lucide-react'
 import { motion } from 'motion/react'
-import { fadeUp, scaleUp, staggerContainer } from '@/lib/motion-variants'
+import { fadeUp, scaleUp, staggerContainer, cardHover } from '@/lib/motion-variants'
 
 // ── Service data ──────────────────────────────────────────────────────────────
 
@@ -55,6 +55,33 @@ const group2 = [
   },
 ]
 
+// ── Shared card ───────────────────────────────────────────────────────────────
+
+function ServiceCard({ service }: { service: typeof group1[number] }) {
+  return (
+    <motion.div
+      variants={scaleUp}
+      whileHover={cardHover}
+      style={{ willChange: 'transform' }}
+    >
+      <Link
+        href={service.href}
+        className="group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 block h-full"
+      >
+        <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
+          {service.icon}
+        </div>
+        <h3 className="font-display font-semibold text-white text-lg mb-3 group-hover:text-[#FFC512] transition-colors tracking-tight">
+          {service.title}
+        </h3>
+        <p className="text-white/55 text-sm leading-relaxed font-normal">
+          {service.description}
+        </p>
+      </Link>
+    </motion.div>
+  )
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function ServicesSection() {
@@ -91,7 +118,6 @@ export default function ServicesSection() {
             </span>
             <div className="flex-1 h-px bg-white/8" />
           </div>
-
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -100,22 +126,7 @@ export default function ServicesSection() {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {group1.map((service) => (
-              <motion.div key={service.title} variants={scaleUp}>
-                <Link
-                  href={service.href}
-                  className="group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 block h-full"
-                >
-                  <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
-                    {service.icon}
-                  </div>
-                  <h3 className="font-display font-semibold text-white text-lg mb-3 group-hover:text-[#FFC512] transition-colors tracking-tight">
-                    {service.title}
-                  </h3>
-                  <p className="text-white/55 text-sm leading-relaxed font-normal">
-                    {service.description}
-                  </p>
-                </Link>
-              </motion.div>
+              <ServiceCard key={service.title} service={service} />
             ))}
           </motion.div>
         </div>
@@ -128,7 +139,6 @@ export default function ServicesSection() {
             </span>
             <div className="flex-1 h-px bg-white/8" />
           </div>
-
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -137,22 +147,7 @@ export default function ServicesSection() {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {group2.map((service) => (
-              <motion.div key={service.title} variants={scaleUp}>
-                <Link
-                  href={service.href}
-                  className="group bg-[#2d2d2d] hover:bg-[#333] border border-white/5 hover:border-[#FFC512]/30 rounded-xl p-7 transition-colors duration-300 block h-full"
-                >
-                  <div className="w-14 h-14 rounded-lg bg-[#FFC512]/10 group-hover:bg-[#FFC512] text-[#FFC512] group-hover:text-[#222222] flex items-center justify-center mb-5 transition-all duration-300">
-                    {service.icon}
-                  </div>
-                  <h3 className="font-display font-semibold text-white text-lg mb-3 group-hover:text-[#FFC512] transition-colors tracking-tight">
-                    {service.title}
-                  </h3>
-                  <p className="text-white/55 text-sm leading-relaxed font-normal">
-                    {service.description}
-                  </p>
-                </Link>
-              </motion.div>
+              <ServiceCard key={service.title} service={service} />
             ))}
           </motion.div>
         </div>

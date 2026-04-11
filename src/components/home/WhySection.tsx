@@ -1,8 +1,9 @@
 'use client'
 
+import { useRef } from 'react'
 import { CheckCircle2 } from 'lucide-react'
 import Image from 'next/image'
-import { motion } from 'motion/react'
+import { motion, useScroll, useTransform } from 'motion/react'
 import { slideLeft, slideRight, fadeUp, staggerContainer } from '@/lib/motion-variants'
 
 const reasons = [
@@ -25,12 +26,23 @@ const reasons = [
 ]
 
 export default function WhySection() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  // Scroll progress while the section is in view — 0 when top hits viewport bottom, 1 when bottom leaves viewport top
+  const { scrollYProgress } = useScroll({
+    target:  sectionRef,
+    offset: ['start end', 'end start'],
+  })
+
+  // Image panel drifts up 24px over the section's scroll range — subtle foreground/background separation
+  const imageY = useTransform(scrollYProgress, [0, 1], [20, -20])
+
   return (
-    <section className="bg-white py-24 overflow-hidden">
+    <section ref={sectionRef} className="bg-white py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-          {/* Left — visual, slides in from left */}
+          {/* Left — image panel with scroll parallax */}
           <motion.div
             variants={slideLeft}
             initial="hidden"
@@ -38,50 +50,53 @@ export default function WhySection() {
             viewport={{ once: true, margin: '-40px' }}
             className="relative"
           >
-            <div className="relative rounded-2xl overflow-hidden bg-[#222222] aspect-square max-w-lg mx-auto lg:mx-0">
-              <div className="absolute inset-0 bg-honeycomb opacity-30" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 p-10">
-                <Image
-                  src="/images/logo-transparent.png"
-                  alt="Bee Viral"
-                  width={280}
-                  height={140}
-                  sizes="(max-width: 1024px) 256px, 280px"
-                  className="w-64 object-contain drop-shadow-2xl"
+            {/* Parallax wrapper — moves slightly slower than scroll */}
+            <motion.div style={{ y: imageY }}>
+              <div className="relative rounded-2xl overflow-hidden bg-[#222222] aspect-square max-w-lg mx-auto lg:mx-0">
+                <div className="absolute inset-0 bg-honeycomb opacity-30" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 p-10">
+                  <Image
+                    src="/images/logo-transparent.png"
+                    alt="Bee Viral"
+                    width={280}
+                    height={140}
+                    sizes="(max-width: 1024px) 256px, 280px"
+                    className="w-64 object-contain drop-shadow-2xl"
+                  />
+                  <p className="text-white/40 text-sm text-center font-normal tracking-widest uppercase">
+                    South Yorkshire's Social Media Agency
+                  </p>
+                </div>
+                <div
+                  className="absolute top-0 right-0 w-24 h-24 bg-[#FFC512]"
+                  style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
                 />
-                <p className="text-white/40 text-sm text-center font-normal tracking-widest uppercase">
-                  South Yorkshire's Social Media Agency
-                </p>
+                {/* Since 2014 badge — desktop only */}
+                <div className="hidden lg:block absolute bottom-6 left-6 bg-[#FFC512] text-[#222222] font-semibold text-sm px-4 py-2 rounded-md tracking-wide">
+                  Since 2014
+                </div>
               </div>
-              <div
-                className="absolute top-0 right-0 w-24 h-24 bg-[#FFC512]"
-                style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
-              />
-              {/* Since 2014 badge — desktop only (inside the card) */}
-              <div className="hidden lg:block absolute bottom-6 left-6 bg-[#FFC512] text-[#222222] font-semibold text-sm px-4 py-2 rounded-md tracking-wide">
-                Since 2014
-              </div>
-            </div>
 
-            {/* Mobile-only: both badges side by side, visually anchored below the card */}
-            <div className="flex items-stretch justify-center gap-3 mt-4 lg:hidden">
-              <div className="flex items-center bg-[#FFC512] text-[#222222] font-semibold text-sm px-4 py-2.5 rounded-md tracking-wide shadow-lg">
-                Since 2014
+              {/* Mobile-only badges */}
+              <div className="flex items-stretch justify-center gap-3 mt-4 lg:hidden">
+                <div className="flex items-center bg-[#FFC512] text-[#222222] font-semibold text-sm px-4 py-2.5 rounded-md tracking-wide shadow-lg">
+                  Since 2014
+                </div>
+                <div className="bg-[#FFC512] text-[#222222] rounded-xl px-5 py-3 shadow-lg">
+                  <div className="font-display text-2xl font-extrabold tracking-tight leading-none mb-0.5">10+</div>
+                  <div className="text-[10px] font-medium uppercase tracking-widest opacity-70">Years in Business</div>
+                </div>
               </div>
-              <div className="bg-[#FFC512] text-[#222222] rounded-xl px-5 py-3 shadow-lg">
-                <div className="font-display text-2xl font-extrabold tracking-tight leading-none mb-0.5">10+</div>
-                <div className="text-[10px] font-medium uppercase tracking-widest opacity-70">Years in Business</div>
-              </div>
-            </div>
+            </motion.div>
 
-            {/* Desktop-only: 10+ stat card, absolute-positioned overlapping bottom-right of card */}
+            {/* Desktop 10+ badge — outside the parallax wrapper so it stays anchored */}
             <div className="hidden lg:block absolute -bottom-4 right-0 bg-[#FFC512] text-[#222222] rounded-xl px-6 py-4 shadow-xl">
               <div className="font-display text-3xl font-extrabold tracking-tight">10+</div>
               <div className="text-xs font-medium uppercase tracking-widest opacity-70">Years in Business</div>
             </div>
           </motion.div>
 
-          {/* Right — text + reasons list, slides in from right */}
+          {/* Right — text + reasons list */}
           <motion.div
             variants={slideRight}
             initial="hidden"
@@ -120,6 +135,7 @@ export default function WhySection() {
               ))}
             </motion.ul>
           </motion.div>
+
         </div>
       </div>
     </section>
