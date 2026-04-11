@@ -118,7 +118,7 @@ function buildSteps(serviceKey: string | undefined, isPackageMode: boolean): Wiz
   }
 
   if (isPackageMode) {
-    const options = (serviceKey && packagesByLane[serviceKey]) ?? allPackageOptions
+    const options = (serviceKey ? packagesByLane[serviceKey] : undefined) ?? allPackageOptions
     return [
       {
         id: 'package',
