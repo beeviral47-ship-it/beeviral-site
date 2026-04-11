@@ -70,8 +70,6 @@ const emptyCond: CondForm = {
   discovery: '',
 }
 
-type MultiField = 'currentPlatforms' | 'bookingNeeds' | 'interests'
-
 interface WizardStep {
   id: string
   question: string
@@ -111,7 +109,7 @@ function buildSteps(serviceKey: string | undefined, isPackageMode: boolean): Wiz
 
   if (isSocial) {
     return [
-      { id: 'currentPlatforms', question: 'Which platforms are you currently on?', subtext: 'Select all that apply.', type: 'multi', condField: 'currentPlatforms', options: ['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'None yet'] },
+      { id: 'currentPlatforms', question: 'Which platform are you mainly on?', type: 'single', condField: 'currentPlatforms', options: ['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'None yet'] },
       { id: 'postingFrequency', question: 'How often are you currently posting?', type: 'single', condField: 'postingFrequency', options: ['Daily', 'A few times a week', 'Once a week or less', "I'm not posting at all"] },
       { id: 'socialGoal', question: "What's your main goal?", type: 'single', condField: 'socialGoal', options: ['Get more followers', 'Generate leads and enquiries', 'Increase footfall to my business', 'Build brand awareness', 'All of the above'] },
       contact,
@@ -120,7 +118,7 @@ function buildSteps(serviceKey: string | undefined, isPackageMode: boolean): Wiz
 
   if (isSEO) {
     return [
-      { id: 'currentPlatforms', question: 'Which platforms are you currently on?', subtext: 'Select all that apply.', type: 'multi', condField: 'currentPlatforms', options: ['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'None yet'] },
+      { id: 'currentPlatforms', question: 'Which platform are you mainly on?', type: 'single', condField: 'currentPlatforms', options: ['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'None yet'] },
       { id: 'hasWebsite', question: 'Do you currently have a website?', type: 'single', condField: 'hasWebsite', options: ["Yes, and it's working well", 'Yes, but it needs improvement', "No, I don't have one"] },
       { id: 'googleBusiness', question: 'Are you on Google Business Profile?', type: 'single', condField: 'googleBusiness', options: ["Yes, it's set up and active", "Yes, but it's incomplete", "No, I'm not listed"] },
       { id: 'seoGoal', question: "What's your main goal?", type: 'single', condField: 'seoGoal', options: ['Rank higher on Google', 'Get more social media followers', 'Both equally', 'Not sure yet'] },
@@ -141,7 +139,7 @@ function buildSteps(serviceKey: string | undefined, isPackageMode: boolean): Wiz
     const steps: WizardStep[] = [
       { id: 'businessType', question: 'What type of business are you?', type: 'single', condField: 'businessType', options: ['Hair or beauty salon', 'Nail studio', 'Fitness or personal training', 'Clinic or healthcare', 'Restaurant or hospitality', 'Other appointment-based business'] },
       { id: 'currentBooking', question: 'How do you currently take bookings?', type: 'single', condField: 'currentBooking', options: ['Phone calls only', 'WhatsApp or DM', 'Third party app (Fresha, Treatwell etc.)', 'No formal system yet'] },
-      { id: 'bookingNeeds', question: 'What do you need it to handle?', subtext: 'Select all that apply.', type: 'multi', condField: 'bookingNeeds', options: ['Online booking 24/7', 'Automated confirmation emails', 'Reminder messages before appointments', 'Cancellation management', 'Multiple services in one booking', 'Staff or multi-therapist scheduling'] },
+      { id: 'bookingNeeds', question: 'What matters most to you?', type: 'single', condField: 'bookingNeeds', options: ['Online booking 24/7', 'Automated confirmation emails', 'Reminder messages before appointments', 'Cancellation management', 'Multiple services in one booking', 'Staff or multi-therapist scheduling'] },
     ]
     if (serviceKey === 'booking-elite') {
       steps.push({ id: 'needsSMS', question: 'Do you need SMS reminders as well as email?', type: 'single', condField: 'needsSMS', options: ['Yes, SMS and email both', 'Email only is fine', 'Not sure yet'] })
@@ -152,7 +150,7 @@ function buildSteps(serviceKey: string | undefined, isPackageMode: boolean): Wiz
 
   // General — no serviceKey
   return [
-    { id: 'interests', question: 'What do you need most help with?', subtext: 'Select all that apply.', type: 'multi', condField: 'interests', options: ['Social media management', 'SEO and blogging', 'Website design or rebuild', 'Booking & automation system', 'Not sure — just want advice'] },
+    { id: 'interests', question: 'What do you need most help with?', type: 'single', condField: 'interests', options: ['Social media management', 'SEO and blogging', 'Website design or rebuild', 'Booking & automation system', 'Not sure — just want advice'] },
     { id: 'hasWebsite', question: 'Do you currently have a website?', type: 'single', condField: 'hasWebsite', options: ["Yes, and I'm happy with it", 'Yes, but it needs work', 'No, I need one built'] },
     { id: 'budget', question: "What's your monthly marketing budget?", type: 'single', condField: 'budget', options: ['Under £150/month', '£150–£300/month', '£300–£500/month', '£500+/month', 'Not sure yet'] },
     { id: 'discovery', question: 'How are customers finding you right now?', type: 'single', condField: 'discovery', options: ['Word of mouth / referrals', 'Google search', 'Social media', "I'm not getting enough customers yet", 'Mix of everything'] },
@@ -241,20 +239,16 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
   }
 
   function pickSingle(field: keyof CondForm, value: string) {
-    setCond(prev => ({ ...prev, [field]: value }))
+    setCond(prev => {
+      const current = prev[field]
+      return { ...prev, [field]: Array.isArray(current) ? [value] : value }
+    })
     setTimeout(goNext, 320)
   }
 
   function pickPackage(value: string) {
     setFormState(prev => ({ ...prev, service: value }))
     setTimeout(goNext, 320)
-  }
-
-  function toggleMulti(field: MultiField, value: string) {
-    setCond(prev => {
-      const arr = prev[field] as string[]
-      return { ...prev, [field]: arr.includes(value) ? arr.filter(v => v !== value) : [...arr, value] }
-    })
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -466,43 +460,6 @@ export default function AuditModal({ open, onClose, defaultService = '', mode = 
                         </button>
                       )
                     })}
-                  </div>
-                )}
-
-                {/* ── Multi-select cards ────────────────────────────── */}
-                {step.type === 'multi' && step.condField && (
-                  <div className="space-y-2.5">
-                    {step.options!.map(opt => {
-                      const field    = step.condField as MultiField
-                      const vals     = cond[field] as string[]
-                      const selected = vals.includes(opt)
-                      return (
-                        <button
-                          key={opt}
-                          onClick={() => toggleMulti(field, opt)}
-                          className={`w-full text-left px-4 py-3.5 rounded-xl border-2 transition-all duration-150 group ${
-                            selected
-                              ? 'border-[#FFC512] bg-[#FFC512]/10 text-white'
-                              : 'border-white/10 bg-[#1a1a1a] text-white/65 hover:border-white/25 hover:text-white hover:bg-[#1d1d1d]'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className={`w-5 h-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-colors duration-150 ${
-                              selected ? 'border-[#FFC512] bg-[#FFC512]' : 'border-white/20 group-hover:border-white/40'
-                            }`}>
-                              {selected && <Check size={11} className="text-[#222222]" strokeWidth={3} />}
-                            </span>
-                            <span className="text-sm font-medium leading-snug">{opt}</span>
-                          </div>
-                        </button>
-                      )
-                    })}
-                    <button
-                      onClick={goNext}
-                      className="w-full mt-1 inline-flex items-center justify-center gap-2 bg-[#FFC512] hover:bg-[#e6b010] text-[#222222] font-semibold text-sm px-6 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95"
-                    >
-                      Continue <ArrowRight size={16} />
-                    </button>
                   </div>
                 )}
 
