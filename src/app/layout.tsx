@@ -9,14 +9,17 @@ const sora = Sora({
   subsets: ['latin'],
   weight: ['600', '700', '800'],
   variable: '--font-sora',
-  display: 'swap',
+  // 'optional' avoids CLS: if the font doesn't load within ~100ms the browser
+  // commits to the fallback without ever swapping, eliminating layout shifts.
+  // Next.js preloads the font file so it almost always wins the 100ms window.
+  display: 'optional',
 })
 
 const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
   variable: '--font-inter',
-  display: 'swap',
+  display: 'optional',
 })
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.beeviral.co.uk'

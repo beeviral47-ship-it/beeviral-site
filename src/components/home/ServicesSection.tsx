@@ -62,7 +62,6 @@ function ServiceCard({ service }: { service: typeof group1[number] }) {
     <motion.div
       variants={scaleUp}
       whileHover={cardHover}
-      style={{ willChange: 'transform' }}
     >
       <Link
         href={service.href}
